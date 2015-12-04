@@ -73,10 +73,7 @@ public class CommandBlock implements Serializable{
 		if(command != null)
 			command.execute();
 	}
-	public void viewInfo() {
-		if(command != null)
-			command.viewInfo();
-	}
+
 	
 	
 	//Getters
@@ -105,7 +102,7 @@ public class CommandBlock implements Serializable{
 	public Rectangle getDragPortion() {
 		return new Rectangle(hitbox.x, hitbox.y, WIDTH, HEIGHT/6);
 	}
-	public Rectangle getViewPortion() {
+	public Rectangle getDelPortion() {
 		return new Rectangle(hitbox.x, hitbox.y + HEIGHT/6, WIDTH/2, HEIGHT * 5/6);
 	}
 	public Rectangle getEditPortion() {

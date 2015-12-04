@@ -72,8 +72,9 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 						commands.get(i).edit();
 						return;
 					}
-					if(commands.get(i).getViewPortion().contains(e.getPoint())) {
-						commands.get(i).execute();
+					if(commands.get(i).getDelPortion().contains(e.getPoint())) {
+						if(JOptionPane.OK_OPTION==JOptionPane.showConfirmDialog(null, "Delete Command?", "Delete", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE))
+							commands.remove(i);
 						return;
 					}
 				

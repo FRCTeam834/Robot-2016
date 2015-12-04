@@ -7,5 +7,4 @@ import java.io.Serializable;
 public interface Command extends Serializable {
 	public abstract void edit();
 	public abstract void execute();
-	public abstract void viewInfo();
 }

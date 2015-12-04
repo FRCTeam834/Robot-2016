@@ -5,11 +5,6 @@ import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import javax.swing.JFileChooser;
 
-/*
- * Test class for Robot. In actual implementation, will probably
- * import the robot class so that the commands to manipulate the robot will
- * work.
- */
 public class Robot {
 	ArrayList<Command> commands = new ArrayList<Command>();
 	JFileChooser fs = new JFileChooser();
