@@ -56,14 +56,7 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 		
 		buttons.add(add);
 		
-		add.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				commands.add(new CommandBlock(new SimpleCommand("Hello World"), Color.WHITE, Color.BLACK));
-				
-			}
-			
-		});
+		add.addActionListener(this);
 
 		workArea.addMouseListener(new MouseListener() {
 			public void mouseClicked(MouseEvent e) {
@@ -189,7 +182,9 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		
+		if(e.getSource() == add) {
+			//choose file 
+		}
 		if(e.getSource() == save) {
 			FileNameExtensionFilter fil = new FileNameExtensionFilter("Auton", "aut");
 			fs.setFileFilter(fil);

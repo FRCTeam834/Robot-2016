@@ -10,7 +10,8 @@ import javax.swing.JComponent;
  * of the Command.
  * 
  * @author Daniel Qian
- * @author Dominic Rubino
+ * @author Dominick Rubino
+ * @author Josh Wentling
  * @version 1.0
  * 
  */
