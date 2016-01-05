@@ -1,5 +1,14 @@
 package commands;
 
-public class ChooseClass {
+import javax.swing.JFrame;
 
+public class ChooseClass extends JFrame{
+	public ChooseClass() {
+		
+	}
+	
+	public static void main (String [] args) {
+		
+		
+	}
 }

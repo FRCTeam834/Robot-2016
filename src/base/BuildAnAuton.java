@@ -1,6 +1,8 @@
 package base;
 
 import Testing.*;
+import commands.*;
+import commands.TurnCommand;
 
 import java.awt.event.*;
 import java.awt.geom.Line2D;
@@ -146,7 +148,10 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 						workArea.getMousePosition().y - yOffset);
 
 						if(workAreaPane.getViewport().getViewPosition().x +workAreaPane.getViewport().getExtentSize().width - 100  < commands.get(focus).getHitBox().x) {
-							workArea.setPreferredSize(new Dimension(workArea.getPreferredSize().width + 1, workArea.getPreferredSize().height) );
+							if(workAreaPane.getHorizontalScrollBar().getMaximum() == workAreaPane.getHorizontalScrollBar().getValue()) {
+								workArea.setPreferredSize(new Dimension(workArea.getPreferredSize().width + 1, workArea.getPreferredSize().height) );
+								System.out.println("ture");
+							}
 							workArea.revalidate();
 							workAreaPane.getHorizontalScrollBar().setValue(workAreaPane.getHorizontalScrollBar().getValue() + 1);
 							commands.get(focus).setX(commands.get(focus).getHitBox().x + 1);
@@ -199,6 +204,20 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == add) {
+			Object[] options= {TurnCommand.class.toString().substring(6)};
+			String o;
+			Object temp = JOptionPane.showInputDialog(this, "Choose a command to add", "Choose a command to add", 1, null, options, options[0]);
+			if(temp != null) {
+				o = (String) temp;
+				try {
+					commands.add(new CommandBlock((Command) Class.forName(o).newInstance(), Color.WHITE, Color.BLACK));
+				}
+				catch (ClassNotFoundException e1) {} 
+				catch (InstantiationException e1) {}
+				catch (IllegalAccessException e1) {}
+			}
+			
+			
 		}
 		if(e.getSource() == save) {
 			FileNameExtensionFilter fil = new FileNameExtensionFilter("Auton", "aut");

@@ -8,7 +8,7 @@ public class TurnCommand implements Command {
 	private VisualRobot robot;
 	 
 	
-	public TurnCommand(double a, double s) {
+	public TurnCommand() {
 		
 	}
 	
