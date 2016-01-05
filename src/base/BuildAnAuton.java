@@ -26,13 +26,18 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 			super.paintComponent(g);
 			Graphics2D g2 = (Graphics2D) g;
 			g2.draw(new Line2D.Double(0, this.getHeight()/2, this.getWidth(), this.getHeight()/2));
+			
+			for(int i = 0; i < this.getWidth(); i+= 50) {
+				g2.draw(new Line2D.Double(i, this.getHeight()/2 -10, i, this.getHeight()/2 + 10));
+			}
+			
 			for(CommandBlock c:commands) {
 				c.paint(g2);
 			}
 		}
 		
 		public Dimension getPreferredSize() {
-			return new Dimension(2000, this.getHeight());
+			return new Dimension(super.getPreferredSize().width, super.getPreferredSize().height);
 		}
 	};
 	
@@ -60,11 +65,14 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 	public BuildAnAuton() {
 		
 		setLayout(new BorderLayout());
+		workAreaPane.setBackground(new Color(240, 240, 240));
 		workAreaPane.setViewportView(workArea);
 		workAreaPane.getViewport().setBackground(new Color(240, 240, 240));
 		workAreaPane.setBackground(new Color(240, 240, 240));
-		
-		
+		workAreaPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+		workAreaPane.setPreferredSize(new Dimension(500, 350));
+		workArea.setPreferredSize(new Dimension(450, 0));
+
 		buttons.add(add);
 		
 		add.addActionListener(this);
@@ -114,8 +122,7 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 						commands.get(i).unsnap();
 						focus = i;
 						xOffset = e.getX() - r.x;
-						yOffset = e.getY() - r.y;
-
+						yOffset = e.getY() - r.y -1;//No idea why I had to add a -1
 						break;
 					}
 				}
@@ -129,13 +136,21 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 					workArea.repaint();	
 					
 					if(focus != -1) {
-											
+						
+					
 					try{
 						Thread.sleep(10);
 						commands.get(focus).setX(workArea.getMousePosition().x - xOffset);
 						commands.get(focus).setY(Math.abs(workArea.getMousePosition().y - yOffset + 60 - workArea.getHeight()/2) < snapGap ? 
-							workArea.getHeight()/2 - 60: 
-							workArea.getMousePosition().y - yOffset);
+						workArea.getHeight()/2 - 60: 
+						workArea.getMousePosition().y - yOffset);
+
+						if(workAreaPane.getViewport().getViewPosition().x +workAreaPane.getViewport().getExtentSize().width - 100  < commands.get(focus).getHitBox().x) {
+							workArea.setPreferredSize(new Dimension(workArea.getPreferredSize().width + 1, workArea.getPreferredSize().height) );
+							workArea.revalidate();
+							workAreaPane.getHorizontalScrollBar().setValue(workAreaPane.getHorizontalScrollBar().getValue() + 1);
+							commands.get(focus).setX(commands.get(focus).getHitBox().x + 1);
+						}
 					}
 					catch(Exception e){}
 					
@@ -157,10 +172,10 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 		save.addActionListener(this);
 		load.addActionListener(this);
 		export.addActionListener(this);
-		
+
 		add(buttons, BorderLayout.SOUTH);
 		add(workAreaPane, BorderLayout.CENTER);
-		
+	
 		validate();
 		t.start();
 	}
@@ -184,7 +199,6 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == add) {
-			commands.add(new CommandBlock(new SimpleCommand("ASDFASDF"), Color.WHITE, Color.BLACK));
 		}
 		if(e.getSource() == save) {
 			FileNameExtensionFilter fil = new FileNameExtensionFilter("Auton", "aut");
@@ -217,6 +231,7 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 	public void save(File f) {
 		try {
 			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream (f));
+			oos.writeObject(this.getSize());
 			oos.writeObject(commands);
 			oos.close();
 		}
@@ -226,9 +241,12 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 	}
 	public void open(File f) {
 		try {
-			System.out.println(f.getPath());
 			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
+			Dimension size = (Dimension) ois.readObject();
 			commands = (ArrayList<CommandBlock>) ois.readObject();
+			CommandBlock last = commands.get(commands.size() -1);
+			workArea.setPreferredSize(new Dimension(last.getHitBox().x + 100, workArea.getPreferredSize().height));
+			this.setSize(size);
 			ois.close();
 		}
 		catch(IOException exc){exc.printStackTrace();}

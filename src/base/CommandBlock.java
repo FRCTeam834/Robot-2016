@@ -133,8 +133,8 @@ public class CommandBlock implements Serializable{
 		g.fill(new RoundRectangle2D.Double(hitbox.x + WIDTH/2, hitbox.y + HEIGHT/6, WIDTH/2, HEIGHT * 5/6, 8, 8));
 		
 		g.setColor(secCol);
-		g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 14));
-		g.drawString(this.getClass().getName(), hitbox.x + 2, hitbox.y + 18);
+		g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 10));
+		g.drawString(command.getClass().getName(), hitbox.x + 2, hitbox.y + 18);
 		g.draw(new RoundRectangle2D.Double(hitbox.x, hitbox.y, WIDTH, HEIGHT/6, 8, 8));
 		g.draw(new RoundRectangle2D.Double(hitbox.x, hitbox.y + HEIGHT/6, WIDTH/2, HEIGHT * 5/6, 8, 8)); 
 		g.draw(new RoundRectangle2D.Double(hitbox.x + WIDTH/2, hitbox.y + HEIGHT/6, WIDTH/2, HEIGHT * 5/6, 8, 8));
