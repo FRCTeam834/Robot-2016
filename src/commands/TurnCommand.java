@@ -31,7 +31,6 @@ public class TurnCommand implements Command {
 		String[] labels = {"Angle", "Speed"};
 		String[] values = {Double.toString(angle), Double.toString(speed)};
 		EditFrame f = new EditFrame(labels, values);
-		System.out.println("ASDFDS");
 		
 		angle = Double.parseDouble(values[0]);
 		speed = Double.parseDouble(values[1]);

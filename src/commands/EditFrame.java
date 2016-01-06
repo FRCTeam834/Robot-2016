@@ -1,13 +1,15 @@
 package commands;
 
+import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.concurrent.locks.ReentrantLock;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class EditFrame extends JDialog implements ActionListener {
@@ -15,25 +17,31 @@ public class EditFrame extends JDialog implements ActionListener {
 		JTextField[] fields;
 		String[] values;
 		JButton done = new JButton("Done");
-
+		JPanel content = new JPanel();
 		public EditFrame(String[] l, String[] vals) {
 			this.setModalityType(JDialog.DEFAULT_MODALITY_TYPE);
 			this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			this.setLayout(new FlowLayout());
 			values = vals;
-			
+			this.setLayout(new BorderLayout());
 			labels = new JLabel[l.length];
 			fields = new JTextField[vals.length];
-			
+			content.setLayout(new GridLayout(fields.length,1));
+
 			for(int i = 0; i < l.length; i++) {
 				labels[i] = new JLabel(l[i]);
 				fields[i] = new JTextField(vals[i], 12);
-				this.add(labels[i]);
-				this.add(fields[i]);
+				
+				JPanel toAdd = new JPanel();
+				toAdd.setLayout(new FlowLayout(FlowLayout.RIGHT));
+				toAdd.add(labels[i]);
+				toAdd.add(fields[i]);
+				content.add(toAdd);
+				
 			}
-			this.add(done);
+			this.add(done, BorderLayout.SOUTH);
+			this.add(content, BorderLayout.CENTER);
 			done.addActionListener(this);
-			pack();
+			this.setSize(240, 40*fields.length + 70);
 			setVisible(true);
 		}
 
@@ -42,7 +50,6 @@ public class EditFrame extends JDialog implements ActionListener {
 			for(int i = 0; i < values.length; i++) {
 				values[i] = fields[i].getText();
 			}
-			System.out.println(values[0] + ""+ values[1]);
 			this.dispose();
 		}
 		
