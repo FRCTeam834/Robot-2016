@@ -148,10 +148,7 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 						workArea.getMousePosition().y - yOffset);
 
 						if(workAreaPane.getViewport().getViewPosition().x +workAreaPane.getViewport().getExtentSize().width - 100  < commands.get(focus).getHitBox().x) {
-							if(workAreaPane.getHorizontalScrollBar().getMaximum() == workAreaPane.getHorizontalScrollBar().getValue()) {
-								workArea.setPreferredSize(new Dimension(workArea.getPreferredSize().width + 1, workArea.getPreferredSize().height) );
-								System.out.println("ture");
-							}
+							workArea.setPreferredSize(new Dimension(workArea.getPreferredSize().width + 1, workArea.getPreferredSize().height) );
 							workArea.revalidate();
 							workAreaPane.getHorizontalScrollBar().setValue(workAreaPane.getHorizontalScrollBar().getValue() + 1);
 							commands.get(focus).setX(commands.get(focus).getHitBox().x + 1);
@@ -185,8 +182,6 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 		t.start();
 	}
 
-	
-	
 	public void place(int f) {
 		if(f != -1) {
 			CommandBlock temp = commands.get(f);
