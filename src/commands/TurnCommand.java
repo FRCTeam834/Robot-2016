@@ -33,12 +33,14 @@ public class TurnCommand implements Command {
 		EditFrame f = new EditFrame(labels, values);
 		
 		angle = Double.parseDouble(values[0]);
-		speed = Double.parseDouble(values[1]);
-
 		
+		if(Math.abs(Double.parseDouble(values[1])) <= 1.0) {
+			speed = Double.parseDouble(values[1]);
+		}
 		
 	}
 	public void execute() {
+		gyro.reset();
 		if(angle > 0) {
 			robot.setRightSide(-speed);
 			robot.setLeftSide(speed);
