@@ -1,6 +1,7 @@
 package commands;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -16,7 +17,6 @@ public class TurnCommand implements Command {
 	private double speed;
 	private VisualRobot robot;
 	private Gyro gyro;
-	
 	public TurnCommand() {
 		
 	}
@@ -27,6 +27,16 @@ public class TurnCommand implements Command {
 	}
 	
 	public void edit() {
+		
+		String[] labels = {"Angle", "Speed"};
+		String[] values = {Double.toString(angle), Double.toString(speed)};
+		EditFrame f = new EditFrame(labels, values);
+		System.out.println("ASDFDS");
+		
+		angle = Double.parseDouble(values[0]);
+		speed = Double.parseDouble(values[1]);
+
+		
 		
 	}
 	public void execute() {
@@ -51,15 +61,6 @@ public class TurnCommand implements Command {
 		
 	}
 	
-	public class EditFrame extends JFrame {
-		JLabel angle = new JLabel("Angle");
-		JLabel speed = new JLabel("Speed");
-		JTextField txtAngle = new JTextField(angle.toString(), 10);
-		JTextField txtSpeed = new JTextField(speed.toString(), 10);
-		JButton done = new JButton("Done");
-		{
-			
-		}
-	}
+	
 	
 }
