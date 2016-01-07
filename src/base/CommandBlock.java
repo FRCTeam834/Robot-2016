@@ -23,7 +23,7 @@ public class CommandBlock implements Serializable{
 	private Color primCol; //Background Color
 	private Color secCol; //Text and Outline Color
 	protected Command command; //What it will do.
-	
+	private String name = "";
 	private boolean snapped = false;
 
 	
@@ -43,6 +43,13 @@ public class CommandBlock implements Serializable{
 		primCol = primary;
 		secCol = secondary;
 		hitbox = new Rectangle(0, 0, WIDTH, HEIGHT);
+		name = c.getClass().getName();
+		
+		if(name.length() > 10) {
+			int i = name.indexOf("Command");
+			name = name.substring(9, i == -1 ? name.length() : i );
+		}
+
 	}
 	
 	/**
@@ -56,10 +63,8 @@ public class CommandBlock implements Serializable{
 	 * @param secondary		Secondary color, or text and outline color
 	 */
 	public CommandBlock(Command c, int x, int y, Color primary, Color secondary) {
-		command = c;
+		this(c, primary, secondary);
 		hitbox = new Rectangle(x, y, WIDTH, HEIGHT);
-		primCol = primary;
-		secCol = secondary;
 	}
 	
 	/*
@@ -133,8 +138,8 @@ public class CommandBlock implements Serializable{
 		g.fill(new RoundRectangle2D.Double(hitbox.x + WIDTH/2, hitbox.y + HEIGHT/6, WIDTH/2, HEIGHT * 5/6, 8, 8));
 		
 		g.setColor(secCol);
-		g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 10));
-		g.drawString(command.getClass().getName(), hitbox.x + 2, hitbox.y + 18);
+		g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
+		g.drawString(name, hitbox.x + 4, hitbox.y + 18);
 		g.draw(new RoundRectangle2D.Double(hitbox.x, hitbox.y, WIDTH, HEIGHT/6, 8, 8));
 		g.draw(new RoundRectangle2D.Double(hitbox.x, hitbox.y + HEIGHT/6, WIDTH/2, HEIGHT * 5/6, 8, 8)); 
 		g.draw(new RoundRectangle2D.Double(hitbox.x + WIDTH/2, hitbox.y + HEIGHT/6, WIDTH/2, HEIGHT * 5/6, 8, 8));

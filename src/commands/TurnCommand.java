@@ -1,12 +1,4 @@
 package commands;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.concurrent.locks.ReentrantLock;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
 
 import Config.*;
 import base.*;
@@ -30,7 +22,7 @@ public class TurnCommand implements Command {
 		
 		String[] labels = {"Angle", "Speed"};
 		String[] values = {Double.toString(angle), Double.toString(speed)};
-		EditFrame f = new EditFrame(labels, values);
+		EditDialog f = new EditDialog(labels, values);
 		
 		angle = Double.parseDouble(values[0]);
 		

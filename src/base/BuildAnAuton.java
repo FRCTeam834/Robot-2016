@@ -199,18 +199,23 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == add) {
-			Object[] options= {TurnCommand.class.toString().substring(6)};
+			Object[] options = { 
+				"Choose a Command", 
+				TurnCommand.class.toString().substring(15),
+				LightsCommand.class.toString().substring(15)};
 			String o;
 			Object temp = JOptionPane.showInputDialog(this, "Choose a command to add", "Choose a command to add", 1, null, options, options[0]);
 			if(temp != null) {
 				o = (String) temp;
 				try {
-					commands.add(new CommandBlock((Command) Class.forName(o).newInstance(), Color.WHITE, Color.BLACK));
+					commands.add(new CommandBlock((Command)Class.forName("commands." + 
+				o).newInstance(), Color.WHITE, Color.BLACK));
 				}
 				catch (ClassNotFoundException e1) {} 
 				catch (InstantiationException e1) {}
 				catch (IllegalAccessException e1) {}
 			}
+			
 			
 			
 		}
