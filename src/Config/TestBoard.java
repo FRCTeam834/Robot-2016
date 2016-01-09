@@ -9,28 +9,30 @@ import java.util.HashMap;
 
 import base.Command;
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TestBoard extends VisualRobot{
 	
-	public Gyro gyro = new Gyro();
-	public Ultrasonic distanceSensor = new UltraSonic();
-	public Encoder rightEncoder = new Encoder(,);
-	public Encoder leftEncoder = new Encoder(,);
-
+	public Gyro gyro = new Gyro(0);
+	//public Ultrasonic distanceSensor = new UltraSonic();
+	public Encoder rightEncoder = new Encoder(0,1);
+	public Encoder leftEncoder = new Encoder(2,3);
+	
 	Relay lights = new Relay(0); //turns on LEDs
 
-	Talon motor1 = new Talon(); //Left back
-	Talon motor2 = new Talon(); //left forward
-	Talon motor3 = new Talon(); //right back
-	Talon motor4 = new Talon(); //right forward 
-	TalonSRX motor5 = new TalonSRX(); //Inner
+	Talon motor1 = new Talon(0); //Left back
+	Talon motor2 = new Talon(1); //left forward
+	Talon motor3 = new Talon(2); //right back
+	Talon motor4 = new Talon(3); //right forward 
+	Talon motor5 = new Talon(4); //other
+//	TalonSRX motor6 = new TalonSRX(); //Extra
 	
 	
 	Joystick leftJoystick = new Joystick(1);
 	Joystick rightJoystick = new Joystick(2);
 	
-	Solenoid open = new Solenoid();
-	Solenoid close = new Solenoid();
+	Solenoid open = new Solenoid(1);
+	Solenoid close = new Solenoid(0);
 	
 	HashMap<String, SensorBase> sensors = new HashMap<>();
 	ArrayList<Command> commands = new ArrayList<Command>();
@@ -39,7 +41,7 @@ public class TestBoard extends VisualRobot{
 		sensors.put("rightEncoder", rightEncoder);
 		sensors.put("leftEncoder", leftEncoder);
 		sensors.put("gyro", gyro);
-		sensors.put("ultrasonic", distanceSensor);
+		//sensors.put("ultrasonic", distanceSensor);
 		
 		File f = new File("auton");
 			try {
@@ -103,8 +105,17 @@ public class TestBoard extends VisualRobot{
 	}
 
 	
-	public void operatorControl() {
-		// TODO Auto-generated method stub
+
+	
+	public void teleOpInit() {
+	}
+
+	@Override
+	public void teleOpPeriodic() {
+		SmartDashboard.putString("DB/String 1", Double.toHexString(rightEncoder.get()));
+		SmartDashboard.putString("DB/String 1", Double.toHexString(leftEncoder.get()));
+		SmartDashboard.putString("DB/String 1", Double.toHexString(gyro.getAngle()));
+
 		
 	}
 

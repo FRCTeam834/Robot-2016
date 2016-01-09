@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.*;
 public abstract class VisualRobot extends RobotBase{
 	public abstract void setLeftSide(double speed);
 	public abstract void setRightSide(double speed);
-	public abstract void setInner(double speed); //Positive left, negative right
 	public abstract void setOther(double speed);
 	public abstract void setLights(boolean on);
 	public abstract void shift(boolean on);
@@ -35,17 +34,19 @@ public abstract class VisualRobot extends RobotBase{
 		while(isDisabled()) {
 			Timer.delay(.01);
 		}
-		if (isAutonomous()) {
+		if (isAutonomous() && !isDisabled()) {
 			autonomous();
 			while (isAutonomous() && !isDisabled()) {
 				Timer.delay(.01);
 			}
 		}
-		if(isOperatorControl()) {
+		if(isOperatorControl() && !isDisabled()) {
 			teleOpInit();
 			while(isOperatorControl() && !isDisabled()) {
 				teleOpPeriodic();
 			}
 		}
+		
+		stop();
 	}	
 }
