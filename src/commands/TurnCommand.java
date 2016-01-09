@@ -9,17 +9,13 @@ public class TurnCommand implements Command {
 	private double speed;
 	private VisualRobot robot;
 	private Gyro gyro;
-	public TurnCommand() {
-		
-	}
-	
+
 	public void setRobot(VisualRobot r) {
 		robot = r;
 		gyro = (Gyro) robot.getSensors().get("gyro");
 	}
 	
 	public void edit() {
-		
 		String[] labels = {"Angle", "Speed"};
 		String[] values = {Double.toString(angle), Double.toString(speed)};
 		EditDialog f = new EditDialog(labels, values);
@@ -31,7 +27,8 @@ public class TurnCommand implements Command {
 		}
 		
 	}
-	public void execute() {
+	public void execute() throws NullPointerException {
+		if(robot.isAutonomous()) {
 		gyro.reset();
 		if(angle > 0) {
 			robot.setRightSide(-speed);
@@ -49,7 +46,7 @@ public class TurnCommand implements Command {
 			}
 			robot.stop();
 		}
-		
+		}
 		
 		
 	}

@@ -9,6 +9,6 @@ import Config.VisualRobot;
  */
 public interface Command extends Serializable {
 	public abstract void edit();
-	public abstract void execute();
+	public abstract void execute() throws NullPointerException;
 	public void setRobot(VisualRobot r);
 }

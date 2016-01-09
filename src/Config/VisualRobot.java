@@ -7,10 +7,12 @@ import edu.wpi.first.wpilibj.*;
 public abstract class VisualRobot extends RobotBase{
 	public abstract void setLeftSide(double speed);
 	public abstract void setRightSide(double speed);
+	public abstract void setInner(double speed); //Positive left, negative right
+	public abstract void setOther(double speed);
 	public abstract void setLights(boolean on);
 	public abstract void shift(boolean on);
 	public abstract void stop();
-
+	
 	/* 
 	 * IMPORTANT: Definitions for sensor keys
 	 * 	"gyro"
@@ -23,5 +25,27 @@ public abstract class VisualRobot extends RobotBase{
 	 */
 	public abstract HashMap<String, SensorBase> getSensors();
 	
+	public abstract void autonomous();
 	
+	//Iterates
+	public abstract void teleOpInit();
+	public abstract void teleOpPeriodic();
+	
+	public void startCompetition() {
+		while(isDisabled()) {
+			Timer.delay(.01);
+		}
+		if (isAutonomous()) {
+			autonomous();
+			while (isAutonomous() && !isDisabled()) {
+				Timer.delay(.01);
+			}
+		}
+		if(isOperatorControl()) {
+			teleOpInit();
+			while(isOperatorControl() && !isDisabled()) {
+				teleOpPeriodic();
+			}
+		}
+	}	
 }

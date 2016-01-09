@@ -116,8 +116,7 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 				place(temp);
 				}
 			}
-			public void mousePressed(MouseEvent e) {
-				
+			public void mousePressed(MouseEvent e) {				
 				for(int i = commands.size() - 1; i >= 0; i--) {
 					Rectangle r = commands.get(i).getDragPortion();
 					if(r.contains(e.getPoint())) {

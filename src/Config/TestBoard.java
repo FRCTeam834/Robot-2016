@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import base.Command;
 import edu.wpi.first.wpilibj.*;
@@ -16,13 +17,14 @@ public class TestBoard extends VisualRobot{
 	public Encoder rightEncoder = new Encoder(,);
 	public Encoder leftEncoder = new Encoder(,);
 
-	Relay lights = new Relay(); //turns on LEDs
+	Relay lights = new Relay(0); //turns on LEDs
 
 	Talon motor1 = new Talon(); //Left back
 	Talon motor2 = new Talon(); //left forward
 	Talon motor3 = new Talon(); //right back
 	Talon motor4 = new Talon(); //right forward 
-	Talon motor5 = new Talon(); //Extra Motor
+	TalonSRX motor5 = new TalonSRX(); //Inner
+	
 	
 	Joystick leftJoystick = new Joystick(1);
 	Joystick rightJoystick = new Joystick(2);
@@ -30,65 +32,80 @@ public class TestBoard extends VisualRobot{
 	Solenoid open = new Solenoid();
 	Solenoid close = new Solenoid();
 	
-	public TestBoard() {
-		
-	}
-	public void startCompetition() {
-		
-	}
+	HashMap<String, SensorBase> sensors = new HashMap<>();
+	ArrayList<Command> commands = new ArrayList<Command>();
 
-	public void operatorControl() {
-		
-	}
-	
-	public void autonomous() {
-		ArrayList<Command> commands = new ArrayList<Command>();
+	public TestBoard() {
+		sensors.put("rightEncoder", rightEncoder);
+		sensors.put("leftEncoder", leftEncoder);
+		sensors.put("gyro", gyro);
+		sensors.put("ultrasonic", distanceSensor);
 		
 		File f = new File("auton");
-		try {
-		ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
-		commands = (ArrayList<Command>) ois.readObject();
-		ois.close();
+			try {
+			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
+			commands = (ArrayList<Command>) ois.readObject();
+			ois.close();
+			for(Command c:commands) {
+				c.setRobot(this);
+			}
 		} 
 		catch(IOException e) {} 
 		catch (ClassNotFoundException e) {}
-		
-		
-		
-	}
-	
+
+	}	
+
 	public void setLeftSide(double speed) {
-		// TODO Auto-generated method stub
-		
+		motor1.set(speed);
+		motor2.set(speed);
 	}
 	
 	public void setRightSide(double speed) {
-		// TODO Auto-generated method stub
-		
+		motor3.set(speed);
+		motor4.set(speed);
 	}
 	
+	public void setInner(double speed) {
+		motor5.set(speed);
+	}
+
 	public void setLights(boolean on) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	public void pneumatics1(boolean on) {
-		// TODO Auto-generated method stub
-		
+		lights.set(on ? Relay.Value.kForward : Relay.Value.kOff);
 	}
 	
 	public void shift(boolean on) {
-		// TODO Auto-generated method stub
-		
+		open.set(on);
+		close.set(!on);
+
 	}
 	
 	public void stop() {
+		motor1.set(0.0);
+		motor2.set(0.0);
+		motor3.set(0.0);
+		motor4.set(0.0);
+		motor5.set(0.0);
+	}
+	
+	public HashMap<String, SensorBase> getSensors() {
+		return sensors;
+	}
+
+	
+	public void setOther(double speed) {
+
+		
+	}
+
+
+	public void autonomous() {
+		
+	}
+
+	
+	public void operatorControl() {
 		// TODO Auto-generated method stub
 		
 	}
-	
-	public Gyro getGyro() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 }
