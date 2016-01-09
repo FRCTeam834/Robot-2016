@@ -143,6 +143,9 @@ public class CommandBlock implements Serializable{
 		g.draw(new RoundRectangle2D.Double(hitbox.x, hitbox.y, WIDTH, HEIGHT/6, 8, 8));
 		g.draw(new RoundRectangle2D.Double(hitbox.x, hitbox.y + HEIGHT/6, WIDTH/2, HEIGHT * 5/6, 8, 8)); 
 		g.draw(new RoundRectangle2D.Double(hitbox.x + WIDTH/2, hitbox.y + HEIGHT/6, WIDTH/2, HEIGHT * 5/6, 8, 8));
+		g.drawString("Delete", hitbox.x + 4, hitbox.y + HEIGHT - 5);
+		g.drawString("Edit", hitbox.x + 4 + WIDTH/2, hitbox.y + HEIGHT - 5);
+		
 		
 	}
 	
