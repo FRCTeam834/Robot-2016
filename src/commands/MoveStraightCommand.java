@@ -2,14 +2,15 @@ package commands;
 
 import Config.VisualRobot;
 import base.Command;
+import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.wpilibj.CounterBase;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Gyro;
 
 public class MoveStraightCommand implements Command {
 	private VisualRobot robot;
 	private Encoder REncoder;
 	private Encoder LEncoder;
-	private Gyro gyro;
+	private AnalogGyro gyro;
 
 	private double speed;
 	private double distance;
@@ -33,10 +34,9 @@ public class MoveStraightCommand implements Command {
 	}
 
 	public void execute() throws NullPointerException{
-		gyro.reset();
 		REncoder.reset();
 		LEncoder.reset();
-		
+		gyro.reset();
 		while( (REncoder.getDistance() + LEncoder.getDistance())/2 < distance && robot.isAutonomous() && !robot.isDisabled()) {
 			double rspeed = speed;
 			double lspeed = speed;
@@ -58,7 +58,7 @@ public class MoveStraightCommand implements Command {
 	
 	public void setRobot(VisualRobot r) {
 		robot = r;
-		gyro = (Gyro) robot.getSensors().get("gyro");
+		gyro = (AnalogGyro) robot.getSensors().get("gyro");
 		REncoder = (Encoder) robot.getSensors().get("leftEncoder");
 		LEncoder = (Encoder) robot.getSensors().get("rightEncoder");
 

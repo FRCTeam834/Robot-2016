@@ -2,19 +2,19 @@ package commands;
 
 import Config.*;
 import base.*;
-import edu.wpi.first.wpilibj.Gyro;
+import edu.wpi.first.wpilibj.AnalogGyro;
 
 public class TurnCommand implements Command {
 	private double angle;
 	private double speed;
 	private VisualRobot robot;
-	private Gyro gyro;
+	private AnalogGyro gyro;
 
 	
 	
 	public void setRobot(VisualRobot r) {
 		robot = r;
-		gyro = (Gyro) robot.getSensors().get("gyro");
+		gyro = (AnalogGyro) robot.getSensors().get("gyro");
 	}
 	
 	public void edit() {

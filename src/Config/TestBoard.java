@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TestBoard extends VisualRobot{
 	
-	public Gyro gyro = new Gyro(0);
+	public AnalogGyro gyro = new AnalogGyro(0);
 	//public Ultrasonic distanceSensor = new UltraSonic();
 	public Encoder rightEncoder = new Encoder(0,1);
 	public Encoder leftEncoder = new Encoder(2,3);
@@ -25,11 +25,13 @@ public class TestBoard extends VisualRobot{
 	Talon motor3 = new Talon(2); //right back
 	Talon motor4 = new Talon(3); //right forward 
 	Talon motor5 = new Talon(4); //other
-//	TalonSRX motor6 = new TalonSRX(); //Extra
+	TalonSRX motor6 = new TalonSRX(2); //Extra
 	
+	RobotDrive robot = new RobotDrive(motor2, motor1, motor4, motor3);
 	
-	Joystick leftJoystick = new Joystick(1);
-	Joystick rightJoystick = new Joystick(2);
+	Joystick leftJoystick = new Joystick(0);
+	Joystick rightJoystick = new Joystick(1);
+	Joystick xbox = new Joystick(2);
 	
 	Solenoid open = new Solenoid(1);
 	Solenoid close = new Solenoid(0);
@@ -55,6 +57,7 @@ public class TestBoard extends VisualRobot{
 		catch(IOException e) {} 
 		catch (ClassNotFoundException e) {}
 
+		gyro.initGyro();
 	}	
 
 	public void setLeftSide(double speed) {
@@ -95,7 +98,7 @@ public class TestBoard extends VisualRobot{
 
 	
 	public void setOther(double speed) {
-
+		motor5.set(speed);
 		
 	}
 
@@ -110,12 +113,12 @@ public class TestBoard extends VisualRobot{
 	public void teleOpInit() {
 	}
 
-	@Override
 	public void teleOpPeriodic() {
+		robot.tankDrive(leftJoystick, rightJoystick);
 		SmartDashboard.putString("DB/String 1", Double.toHexString(rightEncoder.get()));
 		SmartDashboard.putString("DB/String 1", Double.toHexString(leftEncoder.get()));
 		SmartDashboard.putString("DB/String 1", Double.toHexString(gyro.getAngle()));
-
+		if(xbox.getRawButton(1));
 		
 	}
 
