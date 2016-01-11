@@ -1,6 +1,6 @@
 package commands;
 
-import Config.VisualRobot;
+import org.usfirst.frc.team834.robot.*;
 import base.Command;
 import edu.wpi.first.wpilibj.Relay;
 

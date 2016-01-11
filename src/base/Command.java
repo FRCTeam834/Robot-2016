@@ -1,7 +1,7 @@
 package base;
 import java.io.Serializable;
 
-import Config.VisualRobot;
+import org.usfirst.frc.team834.robot.VisualRobot;
 
 /**
  * Interface representing the actions that a robot can perform.

@@ -3,11 +3,9 @@ package Testing;
  * deprecated
  */
 import base.*;
-import java.awt.*;
-import java.io.Serializable;
 import javax.swing.*;
+import org.usfirst.frc.team834.robot.VisualRobot;
 
-import Config.VisualRobot;
 public class SimpleCommand implements Command {
 
 	private String message;

@@ -1,4 +1,4 @@
-package Config;
+package org.usfirst.frc.team834.robot;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,7 +11,7 @@ import base.Command;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class TestBoard extends VisualRobot{
+public class Robot extends VisualRobot{
 	
 	public AnalogGyro gyro = new AnalogGyro(0);
 	//public Ultrasonic distanceSensor = new UltraSonic();
@@ -20,12 +20,14 @@ public class TestBoard extends VisualRobot{
 	
 	Relay lights = new Relay(0); //turns on LEDs
 
+	Compressor compressor = new Compressor(0);
+	
 	Talon motor1 = new Talon(0); //Left back
 	Talon motor2 = new Talon(1); //left forward
 	Talon motor3 = new Talon(2); //right back
 	Talon motor4 = new Talon(3); //right forward 
 	Talon motor5 = new Talon(4); //other
-	TalonSRX motor6 = new TalonSRX(2); //Extra
+	//TalonSRX motor6 = new TalonSRX(2); //Extra
 	
 	RobotDrive robot = new RobotDrive(motor2, motor1, motor4, motor3);
 	
@@ -39,20 +41,24 @@ public class TestBoard extends VisualRobot{
 	HashMap<String, SensorBase> sensors = new HashMap<>();
 	ArrayList<Command> commands = new ArrayList<Command>();
 
-	public TestBoard() {
+	public Robot() {
+		super();
 		sensors.put("rightEncoder", rightEncoder);
 		sensors.put("leftEncoder", leftEncoder);
 		sensors.put("gyro", gyro);
 		//sensors.put("ultrasonic", distanceSensor);
 		
-		File f = new File("auton");
-			try {
+		File f = new File("/home/lvuser/auton.aut");
+		try {
 			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
 			commands = (ArrayList<Command>) ois.readObject();
 			ois.close();
 			for(Command c:commands) {
 				c.setRobot(this);
+				SmartDashboard.putString("DB/String 5", "asdfdsf");
+
 			}
+			
 		} 
 		catch(IOException e) {} 
 		catch (ClassNotFoundException e) {}
@@ -104,21 +110,33 @@ public class TestBoard extends VisualRobot{
 
 
 	public void autonomous() {
-		
+		int i = 0;
+		while(isAutonomous() && !isDisabled() && i < commands.size()) {
+			commands.get(i).execute();
+			i++;
+		}
 	}
-
-	
-
 	
 	public void teleOpInit() {
+		compressor.start();
 	}
 
 	public void teleOpPeriodic() {
 		robot.tankDrive(leftJoystick, rightJoystick);
-		SmartDashboard.putString("DB/String 1", Double.toHexString(rightEncoder.get()));
-		SmartDashboard.putString("DB/String 1", Double.toHexString(leftEncoder.get()));
-		SmartDashboard.putString("DB/String 1", Double.toHexString(gyro.getAngle()));
-		if(xbox.getRawButton(1));
+		SmartDashboard.putString("DB/String 1", Double.toString(rightEncoder.get()));
+		SmartDashboard.putString("DB/String 2", Double.toString(leftEncoder.get()));
+		SmartDashboard.putString("DB/String 3", Double.toString(gyro.getAngle()));
+		if(leftJoystick.getRawButton(1)) {
+			SmartDashboard.putString("DB/String 4", "light on");
+
+			lights.set(Relay.Value.kForward);
+		}			
+		else {
+			SmartDashboard.putString("DB/String 4", "lights off");
+			lights.set(Relay.Value.kOff);
+
+		}
+
 		
 	}
 

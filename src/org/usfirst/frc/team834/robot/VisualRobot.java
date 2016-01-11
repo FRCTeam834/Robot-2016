@@ -1,10 +1,10 @@
-package Config;
+package org.usfirst.frc.team834.robot;
 
 import java.util.HashMap;
 
 import edu.wpi.first.wpilibj.*;
 
-public abstract class VisualRobot extends RobotBase{
+public abstract class VisualRobot extends SampleRobot{
 	public abstract void setLeftSide(double speed);
 	public abstract void setRightSide(double speed);
 	public abstract void setOther(double speed);
@@ -12,6 +12,10 @@ public abstract class VisualRobot extends RobotBase{
 	public abstract void shift(boolean on);
 	public abstract void stop();
 	
+	
+	public VisualRobot() {
+		super();
+	}
 	/* 
 	 * IMPORTANT: Definitions for sensor keys
 	 * 	"gyro"
@@ -24,29 +28,17 @@ public abstract class VisualRobot extends RobotBase{
 	 */
 	public abstract HashMap<String, SensorBase> getSensors();
 	
+	
 	public abstract void autonomous();
 	
+	public void operatorControl() {
+		teleOpInit();
+		while(!isDisabled()) {
+			teleOpPeriodic();
+		}
+	}
 	//Iterates
 	public abstract void teleOpInit();
 	public abstract void teleOpPeriodic();
 	
-	public void startCompetition() {
-		while(isDisabled()) {
-			Timer.delay(.01);
-		}
-		if (isAutonomous() && !isDisabled()) {
-			autonomous();
-			while (isAutonomous() && !isDisabled()) {
-				Timer.delay(.01);
-			}
-		}
-		if(isOperatorControl() && !isDisabled()) {
-			teleOpInit();
-			while(isOperatorControl() && !isDisabled()) {
-				teleOpPeriodic();
-			}
-		}
-		
-		stop();
-	}	
 }

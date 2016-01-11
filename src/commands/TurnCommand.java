@@ -1,8 +1,9 @@
 package commands;
 
-import Config.*;
+import org.usfirst.frc.team834.robot.VisualRobot;
 import base.*;
 import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TurnCommand implements Command {
 	private double angle;
@@ -32,10 +33,11 @@ public class TurnCommand implements Command {
 	public void execute() throws NullPointerException {
 		gyro.reset();
 		if(angle > 0) {
-			robot.setRightSide(-speed);
-			robot.setLeftSide(speed);
 			while (gyro.getAngle() < angle && !robot.isDisabled()) {
-				
+				SmartDashboard.putString("DB/String 5", Double.toString(gyro.getAngle()));
+				robot.setRightSide(-speed);
+				robot.setLeftSide(speed);
+
 			}
 			robot.stop();
 		}

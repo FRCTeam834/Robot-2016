@@ -1,6 +1,6 @@
 package commands;
 
-import Config.VisualRobot;
+import org.usfirst.frc.team834.robot.VisualRobot;
 import base.Command;
 
 public class StrafeCommand implements Command{
