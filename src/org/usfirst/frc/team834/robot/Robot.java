@@ -13,14 +13,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends VisualRobot{
 	
-	public AnalogGyro gyro = new AnalogGyro(0);
-	//public Ultrasonic distanceSensor = new UltraSonic();
-	public Encoder rightEncoder = new Encoder(0,1);
-	public Encoder leftEncoder = new Encoder(2,3);
+	private AnalogGyro gyro = new AnalogGyro(0);
+	private AnalogInput distanceSensor = new AnalogInput(2);
+	private Encoder rightEncoder = new Encoder(0,1);
+	private Encoder leftEncoder = new Encoder(2,3);
 	
 	Relay lights = new Relay(0); //turns on LEDs
 
-	Compressor compressor = new Compressor(0);
+	Compressor compressor = new Compressor(1);
 	
 	Talon motor1 = new Talon(0); //Left back
 	Talon motor2 = new Talon(1); //left forward
@@ -46,7 +46,7 @@ public class Robot extends VisualRobot{
 		sensors.put("rightEncoder", rightEncoder);
 		sensors.put("leftEncoder", leftEncoder);
 		sensors.put("gyro", gyro);
-		//sensors.put("ultrasonic", distanceSensor);
+		sensors.put("ultrasonic", distanceSensor);
 		
 		File f = new File("/home/lvuser/auton.aut");
 		try {
@@ -59,10 +59,15 @@ public class Robot extends VisualRobot{
 
 			}
 			
-		} 
+		}  
+		
+		
 		catch(IOException e) {} 
 		catch (ClassNotFoundException e) {}
 
+		compressor.start();
+
+		
 		gyro.initGyro();
 	}	
 
@@ -118,7 +123,8 @@ public class Robot extends VisualRobot{
 	}
 	
 	public void teleOpInit() {
-		compressor.start();
+		close.set(true);
+		open.set(false);
 	}
 
 	public void teleOpPeriodic() {
@@ -126,18 +132,23 @@ public class Robot extends VisualRobot{
 		SmartDashboard.putString("DB/String 1", Double.toString(rightEncoder.get()));
 		SmartDashboard.putString("DB/String 2", Double.toString(leftEncoder.get()));
 		SmartDashboard.putString("DB/String 3", Double.toString(gyro.getAngle()));
+		SmartDashboard.putString("DB/String 4", Double.toString(512*distanceSensor.getVoltage()));
+
 		if(leftJoystick.getRawButton(1)) {
-			SmartDashboard.putString("DB/String 4", "light on");
+			SmartDashboard.putString("DB/String 5", "light on");
 
 			lights.set(Relay.Value.kForward);
 		}			
 		else {
-			SmartDashboard.putString("DB/String 4", "lights off");
+			SmartDashboard.putString("DB/String 5", "lights off");
 			lights.set(Relay.Value.kOff);
 
 		}
 
-		
+		if(rightJoystick.getRawButton(1)) {
+			open.set(!open.get());
+			close.set(!close.get());
+		}			
 	}
 
 }

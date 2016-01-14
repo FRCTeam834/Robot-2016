@@ -28,7 +28,7 @@ public class CommandBlock implements Serializable{
 
 	
 	public final int WIDTH = 120; //Width of the total shape
-	public  final int HEIGHT = 120; //Height of the total shape
+	public final int HEIGHT = 120; //Height of the total shape
 	
 
 	/**

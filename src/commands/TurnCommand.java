@@ -33,7 +33,7 @@ public class TurnCommand implements Command {
 	public void execute() throws NullPointerException {
 		gyro.reset();
 		if(angle > 0) {
-			while (gyro.getAngle() < angle && !robot.isDisabled()) {
+			while (gyro.getAngle() < angle && !robot.isDisabled() && robot.isAutonomous()) {
 				SmartDashboard.putString("DB/String 5", Double.toString(gyro.getAngle()));
 				robot.setRightSide(-speed);
 				robot.setLeftSide(speed);
@@ -44,7 +44,7 @@ public class TurnCommand implements Command {
 		else if(angle < 0) {
 			robot.setRightSide(speed);
 			robot.setLeftSide(-speed);
-			while (gyro.getAngle() > angle && !robot.isDisabled()) {
+			while (gyro.getAngle() > angle && !robot.isDisabled() && robot.isAutonomous()) {
 				
 			}
 			robot.stop();

@@ -17,7 +17,7 @@ public class LightsCommand implements Command {
 		if(values[0].equals("on")) {
 			on = true;
 		}
-		if(values[0].equals("off")) {
+		else if(values[0].equals("off")) {
 			on = false;
 			
 		}

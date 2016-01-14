@@ -50,7 +50,7 @@ public class MoveStraightCommand implements Command {
 				
 			}
 			robot.setLeftSide(lspeed);
-			robot.setLeftSide(rspeed);
+			robot.setRightSide(rspeed);
 
 		}
 	}
@@ -59,8 +59,8 @@ public class MoveStraightCommand implements Command {
 	public void setRobot(VisualRobot r) {
 		robot = r;
 		gyro = (AnalogGyro) robot.getSensors().get("gyro");
-		REncoder = (Encoder) robot.getSensors().get("leftEncoder");
-		LEncoder = (Encoder) robot.getSensors().get("rightEncoder");
+		LEncoder = (Encoder) robot.getSensors().get("leftEncoder");
+		REncoder = (Encoder) robot.getSensors().get("rightEncoder");
 
 	}
 

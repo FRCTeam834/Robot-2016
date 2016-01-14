@@ -103,17 +103,17 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 			}
 			public void mouseReleased(MouseEvent e) {
 				if(focus != -1) {
-				int temp = focus;
-				focus = -1;
-				if(Math.abs(commands.get(temp).getHitBox().y + 60 - workArea.getHeight()/2) < snapGap){
-
-					commands.get(temp).setY(workArea.getHeight()/2 - 60);
-					commands.get(temp).snap();
-				}
-				if(commands.get(temp).getHitBox().x < 0){
-					commands.get(temp).setX(0);
-				}
-				place(temp);
+					int temp = focus;
+					focus = -1;
+					if(Math.abs(commands.get(temp).getHitBox().y + 60 - workArea.getHeight()/2) < snapGap){
+	
+						commands.get(temp).setY(workArea.getHeight()/2 - 60);
+						commands.get(temp).snap();
+					}
+					if(commands.get(temp).getHitBox().x < 0){
+						commands.get(temp).setX(0);
+					}
+					place(temp);
 				}
 			}
 			public void mousePressed(MouseEvent e) {				
