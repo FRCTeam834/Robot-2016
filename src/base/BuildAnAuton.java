@@ -1,5 +1,4 @@
 package base;
-
 import Testing.*;
 import commands.*;
 import commands.TurnCommand;
@@ -124,6 +123,7 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 						focus = i;
 						xOffset = e.getX() - r.x;
 						yOffset = e.getY() - r.y -1;//No idea why I had to add a -1
+
 						break;
 					}
 				}
@@ -134,11 +134,11 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 		Thread t = new Thread(new Runnable() {
 			public void run() {
 				while(true) {
-					workArea.repaint();	
-					
+
 					if(focus != -1) {
-						
-					
+						workArea.repaint();	
+
+
 					try{
 						Thread.sleep(10);
 						commands.get(focus).setX(workArea.getMousePosition().x - xOffset);
@@ -194,6 +194,8 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 			}
 			commands.add(indexToPlace, temp);
 		}
+		workArea.repaint();	
+
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -215,8 +217,7 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 				catch (InstantiationException e1) {}
 				catch (IllegalAccessException e1) {}
 			}
-			
-			
+			workArea.repaint();	
 			
 		}
 		if(e.getSource() == save) {
