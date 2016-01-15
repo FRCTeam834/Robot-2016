@@ -113,17 +113,21 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 						commands.get(temp).setX(0);
 					}
 					place(temp);
+					workArea.repaint();	
+
 				}
 			}
 			public void mousePressed(MouseEvent e) {				
 				for(int i = commands.size() - 1; i >= 0; i--) {
 					Rectangle r = commands.get(i).getDragPortion();
 					if(r.contains(e.getPoint())) {
-						commands.get(i).unsnap();
+						CommandBlock c = commands.get(i);
+						c.unsnap();
 						focus = i;
 						xOffset = e.getX() - r.x;
 						yOffset = e.getY() - r.y -1;//No idea why I had to add a -1
-
+						System.out.println(c == null);
+						new Thread(new Move(c)).start();
 						break;
 					}
 				}
@@ -131,34 +135,6 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 			
 		}); 
 
-		Thread t = new Thread(new Runnable() {
-			public void run() {
-				while(true) {
-
-					if(focus != -1) {
-						workArea.repaint();	
-
-
-					try{
-						Thread.sleep(10);
-						commands.get(focus).setX(workArea.getMousePosition().x - xOffset);
-						commands.get(focus).setY(Math.abs(workArea.getMousePosition().y - yOffset + 60 - workArea.getHeight()/2) < snapGap ? 
-						workArea.getHeight()/2 - 60: 
-						workArea.getMousePosition().y - yOffset);
-
-						if(workAreaPane.getViewport().getViewPosition().x +workAreaPane.getViewport().getExtentSize().width - 100  < commands.get(focus).getHitBox().x) {
-							workArea.setPreferredSize(new Dimension(workArea.getPreferredSize().width + 1, workArea.getPreferredSize().height) );
-							workArea.revalidate();
-							workAreaPane.getHorizontalScrollBar().setValue(workAreaPane.getHorizontalScrollBar().getValue() + 1);
-							commands.get(focus).setX(commands.get(focus).getHitBox().x + 1);
-						}
-					}
-					catch(Exception e){}
-					
-					}
-				}
-			}
-		});
 		
 		
 		
@@ -178,7 +154,6 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 		add(workAreaPane, BorderLayout.CENTER);
 	
 		validate();
-		t.start();
 	}
 
 	public void place(int f) {
@@ -285,5 +260,40 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 		}
 		catch(IOException exc){exc.printStackTrace();}
 
+	}
+	
+	public class Move implements Runnable {
+		CommandBlock block;
+		public Move (CommandBlock c ) {
+			block = c;
+			System.out.println(c == null);
+		}
+		
+		public void run() {
+
+			while(focus != -1) {
+
+			try{
+				Thread.sleep(10);
+				block.setX(workArea.getMousePosition().x - xOffset);
+				block.setY(Math.abs(workArea.getMousePosition().y - yOffset + 60 - workArea.getHeight()/2) < snapGap ? 
+				workArea.getHeight()/2 - 60: 
+				workArea.getMousePosition().y - yOffset);
+				workArea.repaint();	
+
+				if(workAreaPane.getViewport().getViewPosition().x +workAreaPane.getViewport().getExtentSize().width - 100  < block.getHitBox().x) {
+					workArea.setPreferredSize(new Dimension(workArea.getPreferredSize().width + 1, workArea.getPreferredSize().height) );
+					workArea.revalidate();
+					workAreaPane.getHorizontalScrollBar().setValue(workAreaPane.getHorizontalScrollBar().getValue() + 1);
+					block.setX(commands.get(focus).getHitBox().x + 1);
+				}
+
+				
+			}
+			catch(Exception e){ e.printStackTrace();}
+			
+			}
+		
+		}
 	}
 }
