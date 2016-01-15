@@ -1,5 +1,6 @@
 package base;
 import Testing.*;
+import Testing.Robot;
 import commands.*;
 import commands.TurnCommand;
 
@@ -292,5 +293,15 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 
 		}
 		
+	}
+
+	public static void main(String[] args) {
+		BuildAnAuton x = new BuildAnAuton();
+		x.pack();
+		x.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		x.setVisible(true);
+		if(args.length != 0) {
+			x.open(new File(args[0]));
+		}
 	}
 }
