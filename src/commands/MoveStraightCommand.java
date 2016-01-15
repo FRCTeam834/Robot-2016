@@ -1,6 +1,7 @@
-// Author: 
+// Authors: 
 // Last Edited: 1/15/2016
 // Description: Command used for moving the robot straight forward.
+
 package commands;
 
 import org.usfirst.frc.team834.robot.VisualRobot;
