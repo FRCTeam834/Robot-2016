@@ -31,9 +31,9 @@ public class FTPTest {
 		File f = new File(filePath);
 
 		byte[] buffer = new byte[(int)f.length()];
-		int bytesRead = -1;
-		while ((bytesRead = inputStream.read(buffer)) != -1)
-			outputStream.write(buffer, 0, bytesRead);
+		
+		inputStream.read(buffer)
+		outputStream.write(bufferd);
 
 		inputStream.close();
 		outputStream.close();
