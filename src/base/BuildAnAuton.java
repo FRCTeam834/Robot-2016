@@ -7,7 +7,6 @@ import java.awt.event.*;
 import java.awt.geom.Line2D;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.awt.*;
@@ -126,7 +125,6 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 						focus = i;
 						xOffset = e.getX() - r.x;
 						yOffset = e.getY() - r.y -1;//No idea why I had to add a -1
-						System.out.println(c == null);
 						new Thread(new Move(c)).start();
 						break;
 					}
@@ -135,9 +133,6 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 			
 		}); 
 
-		
-		
-		
 		menu.add(fileMenu);
 		fileMenu.add(save);
 		fileMenu.add(load);
@@ -177,9 +172,12 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 		if(e.getSource() == add) {
 			Object[] options = { 
 				"Choose a Command", 
+				MoveStraightCommand.class.toString().substring(15),
 				TurnCommand.class.toString().substring(15),
 				LightsCommand.class.toString().substring(15),
-				MoveStraightCommand.class.toString().substring(15)};
+				MoveUntilProximity.class.toString().substring(15),
+				PneumaticsCommand.class.toString().substring(15)
+				};
 			String o;
 			Object temp = JOptionPane.showInputDialog(this, "Choose a command to add", "Choose a command to add", 1, null, options, options[0]);
 			if(temp != null) {
@@ -266,13 +264,11 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 		CommandBlock block;
 		public Move (CommandBlock c ) {
 			block = c;
-			System.out.println(c == null);
 		}
 		
 		public void run() {
 
 			while(focus != -1) {
-
 			try{
 				Thread.sleep(10);
 				block.setX(workArea.getMousePosition().x - xOffset);
@@ -290,10 +286,11 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 
 				
 			}
-			catch(Exception e){ e.printStackTrace();}
+			catch(Exception e){}
 			
 			}
-		
+
 		}
+		
 	}
 }

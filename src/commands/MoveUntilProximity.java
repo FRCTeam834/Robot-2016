@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class MoveUntilDistance implements Command {
+public class MoveUntilProximity implements Command {
 	private VisualRobot robot;
 	private double speed, distance, cFactor;
 	private AnalogInput ultrasonic; 
