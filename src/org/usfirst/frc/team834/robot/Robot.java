@@ -1,5 +1,6 @@
 package org.usfirst.frc.team834.robot;
 
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -10,7 +11,6 @@ import java.util.HashMap;
 import base.Command;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 public class Robot extends VisualRobot{
 	
 	private AnalogGyro gyro = new AnalogGyro(0);
@@ -129,10 +129,11 @@ public class Robot extends VisualRobot{
 
 	public void teleOpPeriodic() {
 		robot.tankDrive(leftJoystick, rightJoystick);
+		
 		SmartDashboard.putString("DB/String 1", Double.toString(rightEncoder.get()));
 		SmartDashboard.putString("DB/String 2", Double.toString(leftEncoder.get()));
 		SmartDashboard.putString("DB/String 3", Double.toString(gyro.getAngle()));
-		SmartDashboard.putString("DB/String 4", Double.toString(512*distanceSensor.getVoltage()));
+		SmartDashboard.putString("DB/String 4", Double.toString((512/5)*distanceSensor.getVoltage()) + "Inches");
 
 		if(leftJoystick.getRawButton(1)) {
 			SmartDashboard.putString("DB/String 5", "light on");

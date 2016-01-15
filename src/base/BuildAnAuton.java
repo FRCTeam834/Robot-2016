@@ -2,7 +2,6 @@ package base;
 import Testing.*;
 import Testing.Robot;
 import commands.*;
-import commands.TurnCommand;
 
 import java.awt.event.*;
 import java.awt.geom.Line2D;
@@ -92,7 +91,7 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 					}
 				
 				}
-				
+				workArea.repaint();
 			}
 			public void mouseEntered(MouseEvent e) {
 				
@@ -176,7 +175,7 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 				MoveStraightCommand.class.toString().substring(15),
 				TurnCommand.class.toString().substring(15),
 				LightsCommand.class.toString().substring(15),
-				MoveUntilProximity.class.toString().substring(15),
+				MoveUntilProximityCommand.class.toString().substring(15),
 				PneumaticsCommand.class.toString().substring(15)
 				};
 			String o;
@@ -192,7 +191,7 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 				catch (IllegalAccessException e1) {}
 			}
 			workArea.repaint();	
-			
+			workArea.validate();
 		}
 		if(e.getSource() == save) {
 			FileNameExtensionFilter fil = new FileNameExtensionFilter("Auton", "aut");
