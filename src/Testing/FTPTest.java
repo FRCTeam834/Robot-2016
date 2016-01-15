@@ -8,7 +8,6 @@ import java.net.URL;
 import java.net.URLConnection;
 
 public class FTPTest {
-	//http://www.codejava.net/java-se/networking/ftp/upload-files-to-ftp-server-using-urlconnection-class
 	private String host = "127.0.0.1:80",
 			userName = "12345",
 			password = "12345",
@@ -17,8 +16,8 @@ public class FTPTest {
 	
 	public FTPTest(String ip, String un, String pw, String path, String remotePath) {
 		host = ip;
-		un = userName;
-		pw = password;
+		userName = un;
+		password = pw;
 		filePath = path;
 		remoteFilePath = remotePath;
 	}
