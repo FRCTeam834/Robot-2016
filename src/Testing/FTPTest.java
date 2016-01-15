@@ -1,5 +1,6 @@
 package Testing;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -13,7 +14,6 @@ public class FTPTest {
 			password = "12345",
 			filePath = "program.jar",
 			remoteFilePath = "/programs/program.jar";
-	private final int BUFFER_SIZE = 4096;
 	
 	public FTPTest(String ip, String un, String pw, String path, String remotePath) {
 		host = ip;
@@ -28,8 +28,10 @@ public class FTPTest {
 	    URLConnection connection = url.openConnection();
 	    OutputStream outputStream = connection.getOutputStream();
 	    FileInputStream inputStream = new FileInputStream(filePath);
+	    
+	    File f = new File(filePath);
 
-	    byte[] buffer = new byte[BUFFER_SIZE];
+	    byte[] buffer = new byte[(int)f.length()];
 	    int bytesRead = -1;
 	    while ((bytesRead = inputStream.read(buffer)) != -1)
 	        outputStream.write(buffer, 0, bytesRead);
