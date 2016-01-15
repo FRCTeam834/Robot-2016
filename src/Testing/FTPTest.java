@@ -9,7 +9,7 @@ import java.net.URLConnection;
 
 public class FTPTest {
 	private String host = "127.0.0.1:80",
-			userName = "12345",
+			userName = "anonymous",
 			password = "12345",
 			filePath = "program.jar",
 			remoteFilePath = "/programs/program.jar";
@@ -23,20 +23,20 @@ public class FTPTest {
 	}
 	
 	public void save() throws IOException {
-	    URL url = new URL(formatURL());
-	    URLConnection connection = url.openConnection();
-	    OutputStream outputStream = connection.getOutputStream();
-	    FileInputStream inputStream = new FileInputStream(filePath);
+		URL url = new URL(formatURL());
+		URLConnection connection = url.openConnection();
+		OutputStream outputStream = connection.getOutputStream();
+		FileInputStream inputStream = new FileInputStream(filePath);
 	    
-	    File f = new File(filePath);
+		File f = new File(filePath);
 
-	    byte[] buffer = new byte[(int)f.length()];
-	    int bytesRead = -1;
-	    while ((bytesRead = inputStream.read(buffer)) != -1)
-	        outputStream.write(buffer, 0, bytesRead);
+		byte[] buffer = new byte[(int)f.length()];
+		int bytesRead = -1;
+		while ((bytesRead = inputStream.read(buffer)) != -1)
+			outputStream.write(buffer, 0, bytesRead);
 
-	    inputStream.close();
-	    outputStream.close();
+		inputStream.close();
+		outputStream.close();
 	}
 	
 	private String formatURL() {
