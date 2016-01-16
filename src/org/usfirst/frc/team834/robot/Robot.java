@@ -1,12 +1,17 @@
 package org.usfirst.frc.team834.robot;
 
-
+import java.awt.Point;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import com.ni.vision.NIVision;
+import com.ni.vision.NIVision.DrawMode;
+import com.ni.vision.NIVision.Image;
+import com.ni.vision.NIVision.ShapeMode;
 
 import base.Command;
 import edu.wpi.first.wpilibj.*;
@@ -38,7 +43,8 @@ public class Robot extends VisualRobot{
 	Solenoid open = new Solenoid(1, 1);
 	Solenoid close = new Solenoid(1, 0);
 	
-	CameraServer server;
+	Image image;
+	int session;
 	
 	HashMap<String, SensorBase> sensors = new HashMap<>();
 	ArrayList<Command> commands = new ArrayList<Command>();
@@ -51,10 +57,13 @@ public class Robot extends VisualRobot{
 		sensors.put("gyro", gyro);
 		sensors.put("ultrasonic", distanceSensor);
 		
-		server = CameraServer.getInstance();
-		server.setQuality(100);
-		server.startAutomaticCapture("cam0");
+		image = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
 		
+        session = NIVision.IMAQdxOpenCamera("cam0",
+                NIVision.IMAQdxCameraControlMode.CameraControlModeController);
+        NIVision.IMAQdxConfigureGrab(session);
+
+        
 		File f = new File("/home/lvuser/auton.aut");
 		try {
 			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
@@ -132,6 +141,8 @@ public class Robot extends VisualRobot{
 	public void teleOpInit() {
 		close.set(true);
 		open.set(false);
+        NIVision.IMAQdxStartAcquisition(session);
+
 	}
 
 	public void teleOpPeriodic() {
@@ -141,6 +152,12 @@ public class Robot extends VisualRobot{
 		SmartDashboard.putString("DB/String 1", Double.toString(leftEncoder.getDistance()));
 		SmartDashboard.putString("DB/String 2", Double.toString(gyro.getAngle()));
 		SmartDashboard.putString("DB/String 3", Double.toString((512/5)*distanceSensor.getVoltage()) + "Inches");
+        
+		
+		
+		NIVision.IMAQdxGrab(session, image, 1);
+
+		CameraServer.getInstance().setImage(image);
 
 		if(leftJoystick.getRawButton(1)) {
 			SmartDashboard.putString("DB/String 4", "light on");
