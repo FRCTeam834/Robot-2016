@@ -38,6 +38,8 @@ public class Robot extends VisualRobot{
 	Solenoid open = new Solenoid(1, 1);
 	Solenoid close = new Solenoid(1, 0);
 	
+	CameraServer server;
+	
 	HashMap<String, SensorBase> sensors = new HashMap<>();
 	ArrayList<Command> commands = new ArrayList<Command>();
 
@@ -49,7 +51,9 @@ public class Robot extends VisualRobot{
 		sensors.put("gyro", gyro);
 		sensors.put("ultrasonic", distanceSensor);
 		
-		CameraServer.getInstance().startAutomaticCapture("cam0");
+		server = CameraServer.getInstance();
+		server.setQuality(100);
+		server.startAutomaticCapture("cam0");
 		
 		File f = new File("/home/lvuser/auton.aut");
 		try {
