@@ -49,9 +49,9 @@ public class FTPTest {
 		byte[] buffer = new byte[(int)f.length()];
 		
 		//Read the bytes from the local file.
-		inputStream.read(buffer)
+		//inputStream.read(buffer)
 		//Save the file to the remote FTP server.
-		outputStream.write(bufferd);
+		//outputStream.write(bufferd);
 
 		//Close the streams.
 		inputStream.close();

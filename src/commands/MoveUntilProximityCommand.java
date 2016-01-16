@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class MoveUntilProximity implements Command {
+public class MoveUntilProximityCommand implements Command {
 	//Variable to represent the robot.
 	private VisualRobot robot;
 	//The speed at which the robot should travel, the distane the robot should travel, and the c factor.
@@ -38,7 +38,7 @@ public class MoveUntilProximity implements Command {
 	@Override
 	public void execute() throws NullPointerException {
 		//Set the c factor.
-		cFactor = speed / 45.00000001;
+		cFactor = speed/20.0;
 		
 		//Reset the gyro.
 		gyro.reset();
@@ -49,12 +49,19 @@ public class MoveUntilProximity implements Command {
 			double lspeed = speed, rspeed = speed;
 			
 			//If the gyro's angle is less than zero, change the speed of the right wheel.
-			if(gyro.getAngle() < 0)
+			if(gyro.getAngle() < 0) {
 				rspeed -= Math.abs(gyro.getAngle()) / cFactor;
+				if(rspeed < 0)
+					rspeed = 0;
+
+			}
 			//If the gyro's angle is more than zero, change the speed of the left wheel.
-			else if(gyro.getAngle() > 0)
+			else if(gyro.getAngle() > 0) {
 				lspeed -= Math.abs(gyro.getAngle()) / cFactor;
-			
+				if(rspeed < 0)
+					rspeed = 0;
+
+			}
 			//Set the wheel speeds.
 			robot.setLeftSide(lspeed);
 			robot.setRightSide(rspeed);

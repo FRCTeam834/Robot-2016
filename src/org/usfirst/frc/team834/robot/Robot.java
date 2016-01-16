@@ -35,12 +35,13 @@ public class Robot extends VisualRobot{
 	Joystick rightJoystick = new Joystick(1);
 	Joystick xbox = new Joystick(2);
 	
-	Solenoid open = new Solenoid(1);
-	Solenoid close = new Solenoid(0);
+	Solenoid open = new Solenoid(1, 1);
+	Solenoid close = new Solenoid(1, 0);
 	
 	HashMap<String, SensorBase> sensors = new HashMap<>();
 	ArrayList<Command> commands = new ArrayList<Command>();
 
+	boolean togglePneumatics = true;
 	public Robot() {
 		super();
 		sensors.put("rightEncoder", rightEncoder);
@@ -55,7 +56,6 @@ public class Robot extends VisualRobot{
 			ois.close();
 			for(Command c:commands) {
 				c.setRobot(this);
-				SmartDashboard.putString("DB/String 5", "asdfdsf");
 
 			}
 			
@@ -66,7 +66,8 @@ public class Robot extends VisualRobot{
 		catch (ClassNotFoundException e) {}
 
 		compressor.start();
-
+		rightEncoder.setDistancePerPulse(1.0/400.0);
+		leftEncoder.setDistancePerPulse(1.0/400.0);
 		
 		gyro.initGyro();
 	}	
@@ -130,26 +131,32 @@ public class Robot extends VisualRobot{
 	public void teleOpPeriodic() {
 		robot.tankDrive(leftJoystick, rightJoystick);
 		
-		SmartDashboard.putString("DB/String 1", Double.toString(rightEncoder.get()));
-		SmartDashboard.putString("DB/String 2", Double.toString(leftEncoder.get()));
-		SmartDashboard.putString("DB/String 3", Double.toString(gyro.getAngle()));
-		SmartDashboard.putString("DB/String 4", Double.toString((512/5)*distanceSensor.getVoltage()) + "Inches");
+		SmartDashboard.putString("DB/String 0", Double.toString(rightEncoder.getDistance()));
+		SmartDashboard.putString("DB/String 1", Double.toString(leftEncoder.getDistance()));
+		SmartDashboard.putString("DB/String 2", Double.toString(gyro.getAngle()));
+		SmartDashboard.putString("DB/String 3", Double.toString((512/5)*distanceSensor.getVoltage()) + "Inches");
 
 		if(leftJoystick.getRawButton(1)) {
-			SmartDashboard.putString("DB/String 5", "light on");
+			SmartDashboard.putString("DB/String 4", "light on");
 
 			lights.set(Relay.Value.kForward);
 		}			
 		else {
-			SmartDashboard.putString("DB/String 5", "lights off");
+			SmartDashboard.putString("DB/String 4", "lights off");
 			lights.set(Relay.Value.kOff);
 
 		}
 
 		if(rightJoystick.getRawButton(1)) {
+			if(togglePneumatics) {
 			open.set(!open.get());
 			close.set(!close.get());
+			}
+			togglePneumatics = false;
 		}			
+		else{
+			togglePneumatics = true;
+		}
 	}
 
 }

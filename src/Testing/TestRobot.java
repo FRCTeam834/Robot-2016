@@ -8,7 +8,7 @@ import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import javax.swing.JFileChooser;
 
-public class Robot {
+public class TestRobot {
 	ArrayList<Command> commands = new ArrayList<Command>();
 	JFileChooser fs = new JFileChooser();
 	public void chooseProgram() {
