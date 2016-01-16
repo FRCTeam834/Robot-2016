@@ -49,6 +49,8 @@ public class Robot extends VisualRobot{
 		sensors.put("gyro", gyro);
 		sensors.put("ultrasonic", distanceSensor);
 		
+		CameraServer.getInstance().startAutomaticCapture("cam0");
+		
 		File f = new File("/home/lvuser/auton.aut");
 		try {
 			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
