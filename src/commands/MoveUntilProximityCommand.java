@@ -50,14 +50,14 @@ public class MoveUntilProximityCommand implements Command {
 			
 			//If the gyro's angle is less than zero, change the speed of the right wheel.
 			if(gyro.getAngle() < 0) {
-				rspeed -= Math.abs(gyro.getAngle()) / cFactor;
+				rspeed -= Math.abs(gyro.getAngle()) * cFactor;
 				if(rspeed < 0)
 					rspeed = 0;
 
 			}
 			//If the gyro's angle is more than zero, change the speed of the left wheel.
 			else if(gyro.getAngle() > 0) {
-				lspeed -= Math.abs(gyro.getAngle()) / cFactor;
+				lspeed -= Math.abs(gyro.getAngle()) * cFactor;
 				if(rspeed < 0)
 					rspeed = 0;
 
