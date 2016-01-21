@@ -43,11 +43,8 @@ public class Robot extends VisualRobot{
 	Solenoid open = new Solenoid(1, 1);
 	Solenoid close = new Solenoid(1, 0);
 	
-	DigitalInput camera = new DigitalInput(9);
-	
 	Image image;
-	int session1;
-	int session2;
+	int session;
 	
 	HashMap<String, SensorBase> sensors = new HashMap<>();
 	ArrayList<Command> commands = new ArrayList<Command>();
@@ -62,13 +59,9 @@ public class Robot extends VisualRobot{
 		
 		image = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
 		
-        session1 = NIVision.IMAQdxOpenCamera("cam0",
+        session = NIVision.IMAQdxOpenCamera("cam0",
                 NIVision.IMAQdxCameraControlMode.CameraControlModeController);
-        session2 = NIVision.IMAQdxOpenCamera("cam1",
-                NIVision.IMAQdxCameraControlMode.CameraControlModeController);
-
-        NIVision.IMAQdxConfigureGrab(session1);
-        NIVision.IMAQdxConfigureGrab(session2);
+        NIVision.IMAQdxConfigureGrab(session);
 
         
 		File f = new File("/home/lvuser/auton.aut");
@@ -148,8 +141,7 @@ public class Robot extends VisualRobot{
 	public void teleOpInit() {
 		close.set(true);
 		open.set(false);
-        NIVision.IMAQdxStartAcquisition(session1);
-        NIVision.IMAQdxStartAcquisition(session2);
+        NIVision.IMAQdxStartAcquisition(session);
 
 	}
 
@@ -163,7 +155,8 @@ public class Robot extends VisualRobot{
         
 		
 		
-		NIVision.IMAQdxGrab(camera.get() ? session1 : session2, image, 1);
+		NIVision.IMAQdxGrab(session, image, 1);
+
 		CameraServer.getInstance().setImage(image);
 
 		if(leftJoystick.getRawButton(1)) {
