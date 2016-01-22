@@ -254,6 +254,8 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream (f));
 			oos.writeObject(program);
 			oos.close();
+			FTPTestBoard ftp = new FTPTestBoard(f.getName());
+			ftp.save();
 		}
 		catch(IOException exc){exc.printStackTrace();}
 
