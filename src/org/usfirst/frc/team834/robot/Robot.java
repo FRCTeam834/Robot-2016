@@ -50,7 +50,7 @@ public class Robot extends VisualRobot{
 	ArrayList<Command> commands = new ArrayList<Command>();
 
 	boolean togglePneumatics = true;
-	boolean toggleCam = true;
+	boolean toggleCam = false;
 	
 	public Robot() {
 		super();
@@ -177,25 +177,33 @@ public class Robot extends VisualRobot{
 		}
 
 		if(rightJoystick.getRawButton(2)) {
-			SmartDashboard.putString("DB/String 5", "Pressed");
 
 			if(!toggleCam) {
 				toggleCam = true;
-				NIVision.IMAQdxCloseCamera(session);
-
-
-		        session = NIVision.IMAQdxOpenCamera("cam1",
-		                NIVision.IMAQdxCameraControlMode.CameraControlModeController);
-		        NIVision.IMAQdxConfigureGrab(session);
-		        
+				
+				Thread t = new Thread(new Runnable() {
+					public void run() {		
+						NIVision.IMAQdxCloseCamera(session);
+				        session = NIVision.IMAQdxOpenCamera("cam1",
+				                NIVision.IMAQdxCameraControlMode.CameraControlModeController);
+				        NIVision.IMAQdxConfigureGrab(session);
+					}
+					
+				});
+		        t.start();
 			}
 			else {
 				toggleCam = false;
-				NIVision.IMAQdxCloseCamera(session);
-
-		        session = NIVision.IMAQdxOpenCamera("cam0",
-		                NIVision.IMAQdxCameraControlMode.CameraControlModeController);
-		        NIVision.IMAQdxConfigureGrab(session);
+				Thread t = new Thread(new Runnable() {
+					public void run() {		
+						NIVision.IMAQdxCloseCamera(session);
+				        session = NIVision.IMAQdxOpenCamera("cam0",
+				                NIVision.IMAQdxCameraControlMode.CameraControlModeController);
+				        NIVision.IMAQdxConfigureGrab(session);
+					}
+					
+				});
+		        t.start();
 
 			}
 		}
