@@ -181,6 +181,9 @@ public class Robot extends VisualRobot{
 
 			if(!toggleCam) {
 				toggleCam = true;
+				NIVision.IMAQdxCloseCamera(session);
+
+
 		        session = NIVision.IMAQdxOpenCamera("cam1",
 		                NIVision.IMAQdxCameraControlMode.CameraControlModeController);
 		        NIVision.IMAQdxConfigureGrab(session);
@@ -188,6 +191,8 @@ public class Robot extends VisualRobot{
 			}
 			else {
 				toggleCam = false;
+				NIVision.IMAQdxCloseCamera(session);
+
 		        session = NIVision.IMAQdxOpenCamera("cam0",
 		                NIVision.IMAQdxCameraControlMode.CameraControlModeController);
 		        NIVision.IMAQdxConfigureGrab(session);
