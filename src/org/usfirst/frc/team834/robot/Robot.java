@@ -50,6 +50,8 @@ public class Robot extends VisualRobot{
 	ArrayList<Command> commands = new ArrayList<Command>();
 
 	boolean togglePneumatics = true;
+	boolean toggleCam = true;
+	
 	public Robot() {
 		super();
 		sensors.put("rightEncoder", rightEncoder);
@@ -64,7 +66,7 @@ public class Robot extends VisualRobot{
         NIVision.IMAQdxConfigureGrab(session);
 
         
-		File f = new File("/home/lvuser/auton.aut");
+		File f = new File("/home/lvuser/auton.autr");
 		try {
 			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
 			commands = (ArrayList<Command>) ois.readObject();
@@ -75,8 +77,6 @@ public class Robot extends VisualRobot{
 			}
 			
 		}  
-		
-		
 		catch(IOException e) {} 
 		catch (ClassNotFoundException e) {}
 
@@ -132,9 +132,14 @@ public class Robot extends VisualRobot{
 
 	public void autonomous() {
 		int i = 0;
+		try{
 		while(isAutonomous() && !isDisabled() && i < commands.size()) {
 			commands.get(i).execute();
 			i++;
+		}
+		}
+		catch(NullPointerException e) {
+			SmartDashboard.putString("DB/String 7", "ERROR");
 		}
 	}
 	
@@ -151,8 +156,9 @@ public class Robot extends VisualRobot{
 		SmartDashboard.putString("DB/String 0", Double.toString(rightEncoder.getDistance()));
 		SmartDashboard.putString("DB/String 1", Double.toString(leftEncoder.getDistance()));
 		SmartDashboard.putString("DB/String 2", Double.toString(gyro.getAngle()));
-		SmartDashboard.putString("DB/String 3", Double.toString((512/5)*distanceSensor.getVoltage()) + "Inches");
-        
+		SmartDashboard.putString("DB/String 3", Double.toString((512/5)*distanceSensor.getVoltage()) + " Inches");
+		SmartDashboard.putString("DB/String 5", Boolean.toString(toggleCam));
+
 		
 		
 		NIVision.IMAQdxGrab(session, image, 1);
@@ -170,6 +176,25 @@ public class Robot extends VisualRobot{
 
 		}
 
+		if(rightJoystick.getRawButton(2)) {
+			SmartDashboard.putString("DB/String 5", "Pressed");
+
+			if(!toggleCam) {
+				toggleCam = true;
+		        session = NIVision.IMAQdxOpenCamera("cam1",
+		                NIVision.IMAQdxCameraControlMode.CameraControlModeController);
+		        NIVision.IMAQdxConfigureGrab(session);
+		        
+			}
+			else {
+				toggleCam = false;
+		        session = NIVision.IMAQdxOpenCamera("cam0",
+		                NIVision.IMAQdxCameraControlMode.CameraControlModeController);
+		        NIVision.IMAQdxConfigureGrab(session);
+
+			}
+		}
+		
 		if(rightJoystick.getRawButton(1)) {
 			if(togglePneumatics) {
 			open.set(!open.get());

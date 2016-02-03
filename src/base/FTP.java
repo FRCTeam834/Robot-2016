@@ -36,13 +36,14 @@ public class FTP {
 	    	
 	    	//File variable used to get the file size.
 		File f = new File(filePath);
+		
 		//Initialize the buffer to be used for I/O to the server.
 		byte[] buffer = new byte[(int)f.length()];
 		
 		//Read the bytes from the local file.
-		//inputStream.read(buffer)
+		inputStream.read(buffer);
 		//Save the file to the remote FTP server.
-		//outputStream.write(bufferd);
+		outputStream.write(buffer);
 
 		//Close the streams.
 		inputStream.close();

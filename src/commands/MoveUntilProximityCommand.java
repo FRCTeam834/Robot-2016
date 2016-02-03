@@ -39,12 +39,11 @@ public class MoveUntilProximityCommand implements Command {
 	public void execute() throws NullPointerException {
 		//Set the c factor.
 		cFactor = speed/20.0;
-		
+
 		//Reset the gyro.
 		gyro.reset();
-		
 		//Loop until the desired distance is travelled.
-		while(voltageToDistance(ultrasonic.getVoltage()) < distance && !robot.isDisabled() && robot.isAutonomous()) {
+		while(/*voltageToDistance(ultrasonic.getVoltage()) < distance &&*/ !robot.isDisabled() && robot.isAutonomous()) {
 			//Speed of the left and right wheels.
 			double lspeed = speed, rspeed = speed;
 			
@@ -65,13 +64,17 @@ public class MoveUntilProximityCommand implements Command {
 			//Set the wheel speeds.
 			robot.setLeftSide(lspeed);
 			robot.setRightSide(rspeed);
+			
+			SmartDashboard.putString("DB/String 6", Double.toString(voltageToDistance(ultrasonic.getVoltage())));
+			SmartDashboard.putString("DB/String 5", Double.toString(ultrasonic.getVoltage()));
+
 		}
 	}
 	
 	public double voltageToDistance(double voltage) {
 		//Convert voltage returned by the ultrasonic to distance in inches.
 		//http://www.maxbotix.com/documents/LV-MaxSonar-EZ_Datasheet.pdf
-		return ((5 / 512) * distance) * voltage;
+		return ((512.0 / 5.0)) * voltage;
 	}
 
 	@Override
@@ -80,6 +83,9 @@ public class MoveUntilProximityCommand implements Command {
 		robot = r;
 		ultrasonic = (AnalogInput)r.getSensors().get("ultrasonic");
 		gyro = (AnalogGyro) robot.getSensors().get("gyro");
+		SmartDashboard.putString("DB/String 9", Boolean.toString((gyro != null)));
+		SmartDashboard.putString("DB/String 8", Boolean.toString((ultrasonic != null)));
+
 	}
 
 	public MoveUntilProximityCommand() {
