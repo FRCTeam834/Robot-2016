@@ -52,6 +52,21 @@ public class TurnCommand implements Command {
 		
 	}
 	
-	
+	public TurnCommand(double a, double s) {
+		angle = a;
+		if(s > 1.0) 
+			speed = 1.0;
+		else if(s < -1.0) 
+			speed = -1.0;
+		else
+			speed = s;
+
+		
+	}
+	public TurnCommand(double a, double s, VisualRobot r) {
+		this(a,s);
+		setRobot(r);
+	}
+
 	
 }

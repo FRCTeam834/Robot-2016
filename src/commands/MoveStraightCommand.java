@@ -22,10 +22,6 @@ public class MoveStraightCommand implements Command {
 	//The speed the robot should move, the distance it should travel, and a c factor value.
 	private double speed, distance, cFactor;
 	
-	public MoveStraightCommand() {
-		//Set the cFactor upon initialization.
-	}
-	
 	public void edit() {
 		//Set labels and textbox default values for the command edit menu.
 		String[] labels = {"Distance", "Speed"};
@@ -86,5 +82,15 @@ public class MoveStraightCommand implements Command {
 		gyro = (AnalogGyro) robot.getSensors().get("gyro");
 		LEncoder = (Encoder) robot.getSensors().get("leftEncoder");
 		REncoder = (Encoder) robot.getSensors().get("rightEncoder");
+	}
+	
+	public MoveStraightCommand(double s, double d) {
+		speed = s;
+		distance = d;
+	}
+	
+	public MoveStraightCommand(double s, double d, VisualRobot r) {
+		this(s, d);
+		setRobot(r);
 	}
 }

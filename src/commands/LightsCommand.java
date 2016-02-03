@@ -36,4 +36,14 @@ public class LightsCommand implements Command {
 		//Set the robot variable.
 		robot = r;
 	}
+	
+	public LightsCommand(boolean o) {
+		on = o;
+	}
+	
+	public LightsCommand(boolean o, VisualRobot r) {
+		on = o;
+		setRobot(r);
+	}
+
 }

@@ -82,4 +82,15 @@ public class MoveUntilProximityCommand implements Command {
 		gyro = (AnalogGyro) robot.getSensors().get("gyro");
 	}
 
+	
+	public MoveUntilProximityCommand(double s, double d) {
+		speed = s;
+		distance = d;
+	}
+	
+	public MoveUntilProximityCommand(double s, double d, VisualRobot r) {
+		this(s, d);
+		setRobot(r);
+	}
+	
 }
