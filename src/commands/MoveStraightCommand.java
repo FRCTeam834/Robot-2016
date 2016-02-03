@@ -84,6 +84,9 @@ public class MoveStraightCommand implements Command {
 		REncoder = (Encoder) robot.getSensors().get("rightEncoder");
 	}
 	
+	public MoveStraightCommand() {
+	}
+	
 	public MoveStraightCommand(double s, double d) {
 		speed = s;
 		distance = d;

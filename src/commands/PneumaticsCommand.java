@@ -32,6 +32,10 @@ public class PneumaticsCommand implements Command {
 		robot = r;
 	}
 
+	public PneumaticsCommand() {
+	}
+
+	
 	public PneumaticsCommand(boolean o) {
 		isOpen = o;
 	}

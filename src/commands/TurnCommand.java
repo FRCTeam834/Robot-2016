@@ -52,6 +52,9 @@ public class TurnCommand implements Command {
 		
 	}
 	
+	public TurnCommand() {
+	}
+	
 	public TurnCommand(double a, double s) {
 		angle = a;
 		if(s > 1.0) 
@@ -63,6 +66,7 @@ public class TurnCommand implements Command {
 
 		
 	}
+	
 	public TurnCommand(double a, double s, VisualRobot r) {
 		this(a,s);
 		setRobot(r);

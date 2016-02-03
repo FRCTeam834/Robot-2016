@@ -37,6 +37,9 @@ public class LightsCommand implements Command {
 		robot = r;
 	}
 	
+	public LightsCommand() {
+	}
+
 	public LightsCommand(boolean o) {
 		on = o;
 	}

@@ -183,11 +183,11 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 				o = (String) temp;
 				try {
 					commands.add(new CommandBlock((Command)Class.forName("commands." + 
-				o).newInstance(), Color.WHITE, Color.BLACK));
+					o).newInstance(), Color.WHITE, Color.BLACK));
 				}
-				catch (ClassNotFoundException e1) {} 
-				catch (InstantiationException e1) {}
-				catch (IllegalAccessException e1) {}
+				catch (ClassNotFoundException e1) { e1.printStackTrace();} 
+				catch (InstantiationException e1) { e1.printStackTrace();}
+				catch (IllegalAccessException e1) { e1.printStackTrace();}
 			}
 			workArea.repaint();	
 			workArea.validate();
@@ -199,6 +199,9 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 				File f = fs.getSelectedFile();
 				save(f);
 			}
+			workArea.repaint();	
+			workArea.validate();
+
 		}
 		if(e.getSource() == load) {
 			FileNameExtensionFilter fil = new FileNameExtensionFilter("Auton", "aut");
@@ -210,13 +213,10 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 			
 		}
 		if(e.getSource() == export) {
-			FileNameExtensionFilter fil = new FileNameExtensionFilter("Program", "autr");
-			fs.setFileFilter(fil);
-			if(fs.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {				
-				File f = fs.getSelectedFile();
-				export(f);
-			}
-
+			String fName = JOptionPane.showInputDialog(this, "Enter the name of the program (exclude extension), \nand make sure you are connected to the roboRio",
+							"Export to RobotRio", JOptionPane.DEFAULT_OPTION);
+			
+			export(new File(fName + ".autr"));
 		}
 	}
 	
@@ -254,7 +254,7 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream (f));
 			oos.writeObject(program);
 			oos.close();
-			FTPTestBoard ftp = new FTPTestBoard(f.getName());
+			FTP ftp = new FTP(f.getName());
 			ftp.save();
 		}
 		catch(IOException exc){exc.printStackTrace();}
