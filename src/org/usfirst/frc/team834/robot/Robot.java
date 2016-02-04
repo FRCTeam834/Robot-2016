@@ -12,6 +12,7 @@ import com.ni.vision.NIVision;
 import com.ni.vision.NIVision.DrawMode;
 import com.ni.vision.NIVision.Image;
 import com.ni.vision.NIVision.ShapeMode;
+import com.ni.vision.VisionException;
 
 import base.Command;
 import edu.wpi.first.wpilibj.*;
@@ -160,9 +161,11 @@ public class Robot extends VisualRobot{
 		SmartDashboard.putString("DB/String 5", Boolean.toString(toggleCam));
 
 		
-		
+		try{
 		NIVision.IMAQdxGrab(session, image, 1);
-
+		}
+		catch(VisionException e){
+		}
 		CameraServer.getInstance().setImage(image);
 
 		if(leftJoystick.getRawButton(1)) {
