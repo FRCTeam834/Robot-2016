@@ -43,7 +43,7 @@ public class MoveUntilProximityCommand implements Command {
 		//Reset the gyro.
 		gyro.reset();
 		//Loop until the desired distance is travelled.
-		while(/*voltageToDistance(ultrasonic.getVoltage()) < distance &&*/ !robot.isDisabled() && robot.isAutonomous()) {
+		while(voltageToDistance(ultrasonic.getVoltage()) < distance && !robot.isDisabled() && robot.isAutonomous()) {
 			//Speed of the left and right wheels.
 			double lspeed = speed, rspeed = speed;
 			
@@ -74,7 +74,9 @@ public class MoveUntilProximityCommand implements Command {
 	public double voltageToDistance(double voltage) {
 		//Convert voltage returned by the ultrasonic to distance in inches.
 		//http://www.maxbotix.com/documents/LV-MaxSonar-EZ_Datasheet.pdf
-		return ((512.0 / 5.0)) * voltage;
+		//http://www.maxbotix.com/documents/MB7001_Datasheet.pdf
+		return voltage / 5.0 / 512.0;
+		//IN CASE THIS IS WRONG: http://www.chiefdelphi.com/forums/showthread.php?t=103028
 	}
 
 	@Override
