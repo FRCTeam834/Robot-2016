@@ -43,7 +43,7 @@ public class MoveUntilProximityCommand implements Command {
 		//Reset the gyro.
 		gyro.reset();
 		//Loop until the desired distance is travelled.
-		while(/*voltageToDistance(ultrasonic.getVoltage()) < distance &&*/ !robot.isDisabled() && robot.isAutonomous()) {
+		while(voltageToDistance(ultrasonic.getVoltage()) < distance && !robot.isDisabled() && robot.isAutonomous()) {
 			//Speed of the left and right wheels.
 			double lspeed = speed, rspeed = speed;
 			
