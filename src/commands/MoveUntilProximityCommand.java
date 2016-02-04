@@ -74,7 +74,9 @@ public class MoveUntilProximityCommand implements Command {
 	public double voltageToDistance(double voltage) {
 		//Convert voltage returned by the ultrasonic to distance in inches.
 		//http://www.maxbotix.com/documents/LV-MaxSonar-EZ_Datasheet.pdf
-		return ((512.0 / 5.0)) * voltage;
+		//http://www.maxbotix.com/documents/MB7001_Datasheet.pdf
+		//return ((512.0 / 5.0)) * voltage;
+		return voltage / 5.0 / 512.0;
 	}
 
 	@Override
