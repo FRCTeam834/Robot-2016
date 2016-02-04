@@ -157,7 +157,7 @@ public class Robot extends VisualRobot{
 		SmartDashboard.putString("DB/String 0", Double.toString(rightEncoder.getDistance()));
 		SmartDashboard.putString("DB/String 1", Double.toString(leftEncoder.getDistance()));
 		SmartDashboard.putString("DB/String 2", Double.toString(gyro.getAngle()));
-		SmartDashboard.putString("DB/String 3", Double.toString((512/5)*distanceSensor.getVoltage()) + " Inches");
+		SmartDashboard.putString("DB/String 3", Double.toString(distanceSensor.getVoltage() / 5.0 / 512.0) + " Inches");
 		SmartDashboard.putString("DB/String 5", Boolean.toString(toggleCam));
 
 		
