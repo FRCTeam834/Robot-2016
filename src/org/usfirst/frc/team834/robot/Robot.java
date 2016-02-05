@@ -47,6 +47,8 @@ public class Robot extends VisualRobot{
 	Image image;
 	int session;
 	
+	DigitalInput lightSensor = new DigitalInput(8);
+	
 	HashMap<String, SensorBase> sensors = new HashMap<>();
 	ArrayList<Command> commands = new ArrayList<Command>();
 
@@ -147,6 +149,7 @@ public class Robot extends VisualRobot{
 	public void teleOpInit() {
 		close.set(true);
 		open.set(false);
+		gyro.reset();
         NIVision.IMAQdxStartAcquisition(session);
 
 	}
@@ -157,9 +160,11 @@ public class Robot extends VisualRobot{
 		SmartDashboard.putString("DB/String 0", Double.toString(rightEncoder.getDistance()));
 		SmartDashboard.putString("DB/String 1", Double.toString(leftEncoder.getDistance()));
 		SmartDashboard.putString("DB/String 2", Double.toString(gyro.getAngle()));
-		SmartDashboard.putString("DB/String 3", Double.toString(distanceSensor.getVoltage() / 5.0 / 512.0) + " Inches");
+		SmartDashboard.putString("DB/String 3", Double.toString(distanceSensor.getVoltage() * 0.1024) + " Inches");
 		SmartDashboard.putString("DB/String 5", Boolean.toString(toggleCam));
-
+		SmartDashboard.putString("DB/String 6", Boolean.toString(lightSensor.get()));
+		
+		setLights(lightSensor.get());
 		
 		try{
 		NIVision.IMAQdxGrab(session, image, 1);
