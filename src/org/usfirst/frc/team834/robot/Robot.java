@@ -52,6 +52,8 @@ public class Robot extends VisualRobot{
 	HashMap<String, SensorBase> sensors = new HashMap<>();
 	ArrayList<Command> commands = new ArrayList<Command>();
 
+	boolean cam = false;
+	
 	boolean togglePneumatics = true;
 	boolean toggleCam = false;
 	
@@ -161,10 +163,8 @@ public class Robot extends VisualRobot{
 		SmartDashboard.putString("DB/String 1", Double.toString(leftEncoder.getDistance()));
 		SmartDashboard.putString("DB/String 2", Double.toString(gyro.getAngle()));
 		SmartDashboard.putString("DB/String 3", Double.toString(distanceSensor.getVoltage() * 0.1024) + " Inches");
-		SmartDashboard.putString("DB/String 5", Boolean.toString(toggleCam));
 		SmartDashboard.putString("DB/String 6", Boolean.toString(lightSensor.get()));
 		
-		setLights(lightSensor.get());
 		
 		try{
 		NIVision.IMAQdxGrab(session, image, 1);
@@ -185,35 +185,37 @@ public class Robot extends VisualRobot{
 		}
 
 		if(rightJoystick.getRawButton(2)) {
-
-			if(!toggleCam) {
-				toggleCam = true;
-				
-				Thread t = new Thread(new Runnable() {
-					public void run() {		
-						NIVision.IMAQdxCloseCamera(session);
-				        session = NIVision.IMAQdxOpenCamera("cam1",
-				                NIVision.IMAQdxCameraControlMode.CameraControlModeController);
-				        NIVision.IMAQdxConfigureGrab(session);
-					}
-					
-				});
-		        t.start();
+			if(toggleCam) {
+				if(cam) {	
+					Thread t = new Thread(new Runnable() {
+						public void run() {		
+							NIVision.IMAQdxCloseCamera(session);
+					        session = NIVision.IMAQdxOpenCamera("cam1",
+					                NIVision.IMAQdxCameraControlMode.CameraControlModeController);
+					        NIVision.IMAQdxConfigureGrab(session);
+						}
+						
+					});
+			        t.start();
+				}
+				else {
+					Thread t = new Thread(new Runnable() {
+						public void run() {		
+							NIVision.IMAQdxCloseCamera(session);
+					        session = NIVision.IMAQdxOpenCamera("cam0",
+					                NIVision.IMAQdxCameraControlMode.CameraControlModeController);
+					        NIVision.IMAQdxConfigureGrab(session);
+						}
+						
+					});
+			        t.start();
+				}
+				cam = !cam;
 			}
-			else {
-				toggleCam = false;
-				Thread t = new Thread(new Runnable() {
-					public void run() {		
-						NIVision.IMAQdxCloseCamera(session);
-				        session = NIVision.IMAQdxOpenCamera("cam0",
-				                NIVision.IMAQdxCameraControlMode.CameraControlModeController);
-				        NIVision.IMAQdxConfigureGrab(session);
-					}
-					
-				});
-		        t.start();
-
-			}
+			toggleCam = false;
+		}
+		else {
+			toggleCam = true;
 		}
 		
 		if(rightJoystick.getRawButton(1)) {
