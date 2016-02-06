@@ -48,7 +48,8 @@ public class Robot extends VisualRobot{
 	int session;
 	
 	DigitalInput lightSensor = new DigitalInput(8);
-	
+	DigitalInput switch1 = new DigitalInput(9);
+
 	HashMap<String, SensorBase> sensors = new HashMap<>();
 	ArrayList<Command> commands = new ArrayList<Command>();
 
@@ -163,8 +164,9 @@ public class Robot extends VisualRobot{
 		SmartDashboard.putString("DB/String 1", Double.toString(leftEncoder.getDistance()));
 		SmartDashboard.putString("DB/String 2", Double.toString(gyro.getAngle()));
 		SmartDashboard.putString("DB/String 3", Double.toString(distanceSensor.getVoltage() * 0.1024) + " Inches");
+		SmartDashboard.putString("DB/String 5", Boolean.toString(switch1.get()));
 		SmartDashboard.putString("DB/String 6", Boolean.toString(lightSensor.get()));
-		
+		setLights(switch1.get());
 		
 		try{
 		NIVision.IMAQdxGrab(session, image, 1);
@@ -173,16 +175,16 @@ public class Robot extends VisualRobot{
 		}
 		CameraServer.getInstance().setImage(image);
 
-		if(leftJoystick.getRawButton(1)) {
-			SmartDashboard.putString("DB/String 4", "light on");
+		//if(leftJoystick.getRawButton(1)) {
+		//	SmartDashboard.putString("DB/String 4", "light on");
 
-			lights.set(Relay.Value.kForward);
-		}			
-		else {
-			SmartDashboard.putString("DB/String 4", "lights off");
-			lights.set(Relay.Value.kOff);
+		//	lights.set(Relay.Value.kForward);
+		//}			
+		//else {
+		//	SmartDashboard.putString("DB/String 4", "lights off");
+		//	lights.set(Relay.Value.kOff);
 
-		}
+		//}
 
 		if(rightJoystick.getRawButton(2)) {
 			if(toggleCam) {
