@@ -51,6 +51,7 @@ public class MoveStraightCommand implements Command {
 			//If the gyro's angle is less than zero, change the right wheel's speed.
 			if(gyro.getAngle() < 0){
 				rspeed -= Math.abs(gyro.getAngle()) * cFactor;
+				
 			//If the gyro's angle is more than zero, change the left wheel's speed.
 				SmartDashboard.putString("DB/String 8", Double.toString(gyro.getAngle() * cFactor));
 

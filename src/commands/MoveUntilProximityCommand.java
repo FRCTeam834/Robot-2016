@@ -42,8 +42,8 @@ public class MoveUntilProximityCommand implements Command {
 
 		//Reset the gyro.
 		gyro.reset();
-		//Loop until the desired distance is travelled.
-		while(voltageToDistance(ultrasonic.getVoltage()) < distance && !robot.isDisabled() && robot.isAutonomous()) {
+		//Loop until the desired distance is traveled.
+		while(ultrasonic.getValue() * 0.125 < distance && !robot.isDisabled() && robot.isAutonomous()) {
 			//Speed of the left and right wheels.
 			double lspeed = speed, rspeed = speed;
 			
@@ -65,18 +65,9 @@ public class MoveUntilProximityCommand implements Command {
 			robot.setLeftSide(lspeed);
 			robot.setRightSide(rspeed);
 			
-			SmartDashboard.putString("DB/String 6", Double.toString(voltageToDistance(ultrasonic.getVoltage())));
-			SmartDashboard.putString("DB/String 5", Double.toString(ultrasonic.getVoltage()));
+			SmartDashboard.putString("DB/String 5", Double.toString(ultrasonic.getValue() * 0.125));
 
 		}
-	}
-	
-	public double voltageToDistance(double voltage) {
-		//Convert voltage returned by the ultrasonic to distance in inches.
-		//http://www.maxbotix.com/documents/LV-MaxSonar-EZ_Datasheet.pdf
-		//http://www.maxbotix.com/documents/MB7001_Datasheet.pdf
-		return voltage / 5.0 / 512.0;
-		//IN CASE THIS IS WRONG: http://www.chiefdelphi.com/forums/showthread.php?t=103028
 	}
 
 	@Override

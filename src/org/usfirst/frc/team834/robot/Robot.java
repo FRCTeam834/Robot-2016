@@ -47,9 +47,14 @@ public class Robot extends VisualRobot{
 	Image image;
 	int session;
 	
+	DigitalInput lightSensor = new DigitalInput(8);
+	DigitalInput switch1 = new DigitalInput(9);
+
 	HashMap<String, SensorBase> sensors = new HashMap<>();
 	ArrayList<Command> commands = new ArrayList<Command>();
 
+	boolean cam = false;
+	
 	boolean togglePneumatics = true;
 	boolean toggleCam = false;
 	
@@ -147,6 +152,7 @@ public class Robot extends VisualRobot{
 	public void teleOpInit() {
 		close.set(true);
 		open.set(false);
+		gyro.reset();
         NIVision.IMAQdxStartAcquisition(session);
 
 	}
@@ -157,9 +163,10 @@ public class Robot extends VisualRobot{
 		SmartDashboard.putString("DB/String 0", Double.toString(rightEncoder.getDistance()));
 		SmartDashboard.putString("DB/String 1", Double.toString(leftEncoder.getDistance()));
 		SmartDashboard.putString("DB/String 2", Double.toString(gyro.getAngle()));
-		SmartDashboard.putString("DB/String 3", Double.toString((512/5)*distanceSensor.getVoltage()) + " Inches");
-		SmartDashboard.putString("DB/String 5", Boolean.toString(toggleCam));
-
+		SmartDashboard.putString("DB/String 3", Double.toString(distanceSensor.getVoltage() * 0.1024) + " Inches");
+		SmartDashboard.putString("DB/String 5", Boolean.toString(switch1.get()));
+		SmartDashboard.putString("DB/String 6", Boolean.toString(lightSensor.get()));
+		setLights(switch1.get());
 		
 		try{
 		NIVision.IMAQdxGrab(session, image, 1);
@@ -168,47 +175,49 @@ public class Robot extends VisualRobot{
 		}
 		CameraServer.getInstance().setImage(image);
 
-		if(leftJoystick.getRawButton(1)) {
-			SmartDashboard.putString("DB/String 4", "light on");
+		//if(leftJoystick.getRawButton(1)) {
+		//	SmartDashboard.putString("DB/String 4", "light on");
 
-			lights.set(Relay.Value.kForward);
-		}			
-		else {
-			SmartDashboard.putString("DB/String 4", "lights off");
-			lights.set(Relay.Value.kOff);
+		//	lights.set(Relay.Value.kForward);
+		//}			
+		//else {
+		//	SmartDashboard.putString("DB/String 4", "lights off");
+		//	lights.set(Relay.Value.kOff);
 
-		}
+		//}
 
 		if(rightJoystick.getRawButton(2)) {
-
-			if(!toggleCam) {
-				toggleCam = true;
-				
-				Thread t = new Thread(new Runnable() {
-					public void run() {		
-						NIVision.IMAQdxCloseCamera(session);
-				        session = NIVision.IMAQdxOpenCamera("cam1",
-				                NIVision.IMAQdxCameraControlMode.CameraControlModeController);
-				        NIVision.IMAQdxConfigureGrab(session);
-					}
-					
-				});
-		        t.start();
+			if(toggleCam) {
+				if(cam) {	
+					Thread t = new Thread(new Runnable() {
+						public void run() {		
+							NIVision.IMAQdxCloseCamera(session);
+					        session = NIVision.IMAQdxOpenCamera("cam1",
+					                NIVision.IMAQdxCameraControlMode.CameraControlModeController);
+					        NIVision.IMAQdxConfigureGrab(session);
+						}
+						
+					});
+			        t.start();
+				}
+				else {
+					Thread t = new Thread(new Runnable() {
+						public void run() {		
+							NIVision.IMAQdxCloseCamera(session);
+					        session = NIVision.IMAQdxOpenCamera("cam0",
+					                NIVision.IMAQdxCameraControlMode.CameraControlModeController);
+					        NIVision.IMAQdxConfigureGrab(session);
+						}
+						
+					});
+			        t.start();
+				}
+				cam = !cam;
 			}
-			else {
-				toggleCam = false;
-				Thread t = new Thread(new Runnable() {
-					public void run() {		
-						NIVision.IMAQdxCloseCamera(session);
-				        session = NIVision.IMAQdxOpenCamera("cam0",
-				                NIVision.IMAQdxCameraControlMode.CameraControlModeController);
-				        NIVision.IMAQdxConfigureGrab(session);
-					}
-					
-				});
-		        t.start();
-
-			}
+			toggleCam = false;
+		}
+		else {
+			toggleCam = true;
 		}
 		
 		if(rightJoystick.getRawButton(1)) {
