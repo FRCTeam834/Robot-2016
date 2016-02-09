@@ -25,17 +25,20 @@ public class Robot extends VisualRobot{
 	private Encoder leftEncoder = new Encoder(2,3);
 	
 	Relay lights = new Relay(0); //turns on LEDs
-
-	Compressor compressor = new Compressor(1);
 	
-	Talon motor1 = new Talon(0); //Left back
-	Talon motor2 = new Talon(1); //left forward
-	Talon motor3 = new Talon(2); //right back
-	Talon motor4 = new Talon(3); //right forward 
-	Talon motor5 = new Talon(4); //other
-	//TalonSRX motor6 = new TalonSRX(2); //Extra
+	CANTalon[] motors = new CANTalon[9];
+	/* 0: Front Left
+	 * 1: Rear Left
+	 * 2: Front Right
+	 * 3: Rear Right
+	 * 4: Intake (roll)
+	 * 5: Intake arm (pitch)
+	 * 6: Back arm
+	 * 7: Scissor
+	 * 8: Winch
+	 */
 	
-	RobotDrive robot = new RobotDrive(motor2, motor1, motor4, motor3);
+	RobotDrive robot = new RobotDrive(motors[0], motors[1], motors[2], motors[3]);
 	
 	Joystick leftJoystick = new Joystick(0);
 	Joystick rightJoystick = new Joystick(1);
@@ -48,14 +51,12 @@ public class Robot extends VisualRobot{
 	int session;
 	
 	DigitalInput lightSensor = new DigitalInput(8);
-	DigitalInput switch1 = new DigitalInput(9);
 
 	HashMap<String, SensorBase> sensors = new HashMap<>();
 	ArrayList<Command> commands = new ArrayList<Command>();
 
 	boolean cam = false;
 	
-	boolean togglePneumatics = true;
 	boolean toggleCam = false;
 	
 	public Robot() {
@@ -64,6 +65,9 @@ public class Robot extends VisualRobot{
 		sensors.put("leftEncoder", leftEncoder);
 		sensors.put("gyro", gyro);
 		sensors.put("ultrasonic", distanceSensor);
+		
+		for(int i = 0; i < motors.length; i++)
+			motors[i] = new CANTalon(i);
 		
 		image = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
 		
@@ -79,14 +83,11 @@ public class Robot extends VisualRobot{
 			ois.close();
 			for(Command c:commands) {
 				c.setRobot(this);
-
 			}
-			
 		}  
 		catch(IOException e) {} 
 		catch (ClassNotFoundException e) {}
 
-		compressor.start();
 		rightEncoder.setDistancePerPulse(1.0/400.0);
 		leftEncoder.setDistancePerPulse(1.0/400.0);
 		
@@ -94,19 +95,19 @@ public class Robot extends VisualRobot{
 	}	
 
 	public void setLeftSide(double speed) {
-		motor1.set(speed);
-		motor2.set(speed);
+		if(speed < -1 || speed > 1)
+			return;
+		motors[0].set(speed);
+		motors[1].set(speed);
 	}
 	
 	public void setRightSide(double speed) {
-		motor3.set(speed);
-		motor4.set(speed);
+		if(speed < -1 || speed > 1)
+			return;
+		motors[2].set(speed);
+		motors[3].set(speed);
 	}
 	
-	public void setInner(double speed) {
-		motor5.set(speed);
-	}
-
 	public void setLights(boolean on) {
 		lights.set(on ? Relay.Value.kForward : Relay.Value.kOff);
 	}
@@ -114,15 +115,12 @@ public class Robot extends VisualRobot{
 	public void shift(boolean on) {
 		open.set(on);
 		close.set(!on);
-
 	}
 	
 	public void stop() {
-		motor1.set(0.0);
-		motor2.set(0.0);
-		motor3.set(0.0);
-		motor4.set(0.0);
-		motor5.set(0.0);
+		for(CANTalon m: motors) {
+			m.set(0.0);
+		}
 	}
 	
 	public HashMap<String, SensorBase> getSensors() {
@@ -130,19 +128,13 @@ public class Robot extends VisualRobot{
 	}
 
 	
-	public void setOther(double speed) {
-		motor5.set(speed);
-		
-	}
-
-
 	public void autonomous() {
 		int i = 0;
 		try{
-		while(isAutonomous() && !isDisabled() && i < commands.size()) {
-			commands.get(i).execute();
-			i++;
-		}
+			while(isAutonomous() && !isDisabled() && i < commands.size()) {
+				commands.get(i).execute();
+				i++;
+			}
 		}
 		catch(NullPointerException e) {
 			SmartDashboard.putString("DB/String 7", "ERROR");
@@ -164,8 +156,7 @@ public class Robot extends VisualRobot{
 		SmartDashboard.putString("DB/String 1", Double.toString(leftEncoder.getDistance()));
 		SmartDashboard.putString("DB/String 2", Double.toString(gyro.getAngle()));
 		SmartDashboard.putString("DB/String 3", Double.toString(distanceSensor.getVoltage() * 0.1024) + " Inches");
-		SmartDashboard.putString("DB/String 5", Boolean.toString(switch1.get()));
-		SmartDashboard.putString("DB/String 6", Boolean.toString(lightSensor.get()));
+		SmartDashboard.putString("DB/String 5", Boolean.toString(lightSensor.get()));
 		setLights(lightSensor.get());
 		
 		try{
@@ -174,17 +165,6 @@ public class Robot extends VisualRobot{
 		catch(VisionException e){
 		}
 		CameraServer.getInstance().setImage(image);
-
-		//if(leftJoystick.getRawButton(1)) {
-		//	SmartDashboard.putString("DB/String 4", "light on");
-
-		//	lights.set(Relay.Value.kForward);
-		//}			
-		//else {
-		//	SmartDashboard.putString("DB/String 4", "lights off");
-		//	lights.set(Relay.Value.kOff);
-
-		//}
 
 		if(rightJoystick.getRawButton(2)) {
 			if(toggleCam) {
@@ -220,16 +200,26 @@ public class Robot extends VisualRobot{
 			toggleCam = true;
 		}
 		
-		if(rightJoystick.getRawButton(1)) {
-			if(togglePneumatics) {
-			open.set(!open.get());
-			close.set(!close.get());
-			}
-			togglePneumatics = false;
-		}			
-		else{
-			togglePneumatics = true;
-		}
 	}
 
+	public void setRollIntake(double speed)
+	{
+		motors[4].set(speed);
+	}
+	public void setPitchIntake(double speed)
+	{
+		motors[5].set(speed);
+	}
+	public void setBackArm(double speed)
+	{
+		motors[6].set(speed);
+	}
+	public void setScissors(double speed)
+	{
+		motors[7].set(speed);
+	}
+	public void setWinch(double speed)
+	{
+		motors[8].set(speed);
+	}
 }
