@@ -17,7 +17,7 @@ import com.ni.vision.VisionException;
 import base.Command;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-public class Robot extends VisualRobot{
+public class TestBoard extends VisualRobot{
 	
 	private AnalogGyro gyro = new AnalogGyro(0);
 	private AnalogInput distanceSensor = new AnalogInput(2);
@@ -58,7 +58,7 @@ public class Robot extends VisualRobot{
 	boolean togglePneumatics = true;
 	boolean toggleCam = false;
 	
-	public Robot() {
+	public TestBoard() {
 		super();
 		sensors.put("rightEncoder", rightEncoder);
 		sensors.put("leftEncoder", leftEncoder);
