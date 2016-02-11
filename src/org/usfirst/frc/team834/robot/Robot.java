@@ -23,16 +23,20 @@ public class Robot extends VisualRobot{
 	private AnalogInput distanceSensor = new AnalogInput(2);
 	private Encoder rightEncoder = new Encoder(0,1);
 	private Encoder leftEncoder = new Encoder(2,3);
+	private Encoder backArmEncoder = new Encoder(4, 5);
+	private DigitalInput topArmInput = new DigitalInput(6);
+	private DigitalInput bottomArmInput = new DigitalInput(7);
 	
-	Relay lights = new Relay(0); //turns on LEDs
+	Relay lights1 = new Relay(0); //turns on LEDs
+	Relay ligths2 = new Relay(1); 
 	
 	CANTalon[] motors = new CANTalon[9];
 	/* 0: Front Left
 	 * 1: Rear Left
 	 * 2: Front Right
 	 * 3: Rear Right
-	 * 4: Intake (roll)
-	 * 5: Intake arm (pitch)
+	 * 4: Intake
+	 * 5: Intake arm
 	 * 6: Back arm
 	 * 7: Scissor
 	 * 8: Winch
@@ -43,10 +47,7 @@ public class Robot extends VisualRobot{
 	Joystick leftJoystick = new Joystick(0);
 	Joystick rightJoystick = new Joystick(1);
 	Joystick xbox = new Joystick(2);
-	
-	Solenoid open = new Solenoid(1, 1);
-	Solenoid close = new Solenoid(1, 0);
-	
+		
 	Image image;
 	int session;
 	
@@ -65,6 +66,8 @@ public class Robot extends VisualRobot{
 		sensors.put("leftEncoder", leftEncoder);
 		sensors.put("gyro", gyro);
 		sensors.put("ultrasonic", distanceSensor);
+		sensors.put("topArmInput", topArmInput);
+		sensors.put("bottomArmInput", bottomArmInput);
 		
 		for(int i = 0; i < motors.length; i++)
 			motors[i] = new CANTalon(i);
@@ -108,13 +111,11 @@ public class Robot extends VisualRobot{
 		motors[3].set(speed);
 	}
 	
-	public void setLights(boolean on) {
-		lights.set(on ? Relay.Value.kForward : Relay.Value.kOff);
-	}
+	//public void setLights(boolean on) {
+	//	lights.set(on ? Relay.Value.kForward : Relay.Value.kOff);
+	//}
 	
 	public void shift(boolean on) {
-		open.set(on);
-		close.set(!on);
 	}
 	
 	public void stop() {
@@ -142,8 +143,6 @@ public class Robot extends VisualRobot{
 	}
 	
 	public void teleOpInit() {
-		close.set(true);
-		open.set(false);
 		gyro.reset();
         NIVision.IMAQdxStartAcquisition(session);
 
@@ -202,11 +201,11 @@ public class Robot extends VisualRobot{
 		
 	}
 
-	public void setRollIntake(double speed)
+	public void setTreads(double speed)
 	{
 		motors[4].set(speed);
 	}
-	public void setPitchIntake(double speed)
+    public void setArm(double speed)
 	{
 		motors[5].set(speed);
 	}
@@ -221,5 +220,15 @@ public class Robot extends VisualRobot{
 	public void setWinch(double speed)
 	{
 		motors[8].set(speed);
+	}
+	public boolean isDisabled()
+	{
+		return isDisabled();
+	}
+
+	@Override
+	public void setLights(boolean on) {
+		// TODO Auto-generated method stub
+		
 	}
 }

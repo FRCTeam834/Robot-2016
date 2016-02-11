@@ -11,6 +11,13 @@ public abstract class VisualRobot extends SampleRobot{
 	public abstract void shift(boolean on);
 	public abstract void stop();
 	
+	public abstract void setTreads(double speed);
+    public abstract void setArm(double speed);
+	public abstract void setBackArm(double speed);
+	public abstract void setScissors(double speed);
+	public abstract void setWinch(double speed);
+	public abstract boolean isDisabled();
+	
 	
 	public VisualRobot() {
 		super();
