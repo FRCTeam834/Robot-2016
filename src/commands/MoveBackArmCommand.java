@@ -1,11 +1,11 @@
 package commands;
 
-import org.usfirst.frc.team834.robot.*;
+import org.usfirst.frc.team834.robot.Robot;
+import org.usfirst.frc.team834.robot.VisualRobot;
 
-import base.Command;
 import edu.wpi.first.wpilibj.DigitalInput;
 
-public class MoveFeederArmCommand implements Command {
+public class MoveBackArmCommand {
 	private Robot robot;
 	private DigitalInput topArmInput, bottomArmInput;
 	private boolean direction; //true is up, false is down
@@ -37,10 +37,10 @@ public class MoveFeederArmCommand implements Command {
 		bottomArmInput = (DigitalInput)robot.getSensors().get("bottomArmInput");
 	}
 	
-	public MoveFeederArmCommand() {
+	public MoveBackArmCommand() {
 	}
 	
-	public MoveFeederArmCommand(boolean dir) {
+	public MoveBackArmCommand(boolean dir) {
 		direction = dir;
 	}
 }
