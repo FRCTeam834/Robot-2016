@@ -37,10 +37,10 @@ public class MoveFeederArmCommand implements Command {
 		bottomArmInput = (DigitalInput)robot.getSensors().get("bottomArmInput");
 	}
 	
-	public MoveArmCommand() {
+	public MoveFeederArmCommand() {
 	}
 	
-	public MoveArmCommand(boolean dir) {
+	public MoveFeederArmCommand(boolean dir) {
 		direction = dir;
 	}
 }
