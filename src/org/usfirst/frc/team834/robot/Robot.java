@@ -51,7 +51,7 @@ public class Robot extends VisualRobot{
 	Joystick leftJoystick = new Joystick(0);
 	Joystick rightJoystick = new Joystick(1);
 	Joystick xbox = new Joystick(2);
-		
+	Joystick buttons = new Joystick(3);
 	Image image;
 	int session;
 	
@@ -95,21 +95,21 @@ public class Robot extends VisualRobot{
 		catch(IOException e) {} 
 		catch (ClassNotFoundException e) {}
 
-		rightEncoder.setDistancePerPulse(1.0/400.0);
-		leftEncoder.setDistancePerPulse(1.0/400.0);
+		rightEncoder.setDistancePerPulse(3.02*Math.PI); //inches
+		leftEncoder.setDistancePerPulse(3.02*Math.PI);
 		
 		robotGyro.initGyro();
 	}	
 
 	public void setLeftSide(double speed) {
-		if(speed < -1 || speed > 1)
+		if(speed < -1.0 || speed > 1.0)
 			return;
 		motors[0].set(speed);
 		motors[1].set(speed);
 	}
 	
 	public void setRightSide(double speed) {
-		if(speed < -1 || speed > 1)
+		if(speed < -1.0 || speed > 1.0)
 			return;
 		motors[2].set(speed);
 		motors[3].set(speed);
@@ -160,10 +160,9 @@ public class Robot extends VisualRobot{
 		SmartDashboard.putString("DB/String 2", Double.toString(robotGyro.getAngle()));
 		SmartDashboard.putString("DB/String 3", Double.toString(distanceSensor.getVoltage() * 0.1024) + " Inches");
 		SmartDashboard.putString("DB/String 5", Boolean.toString(lightSensor.get()));
-		setLights(lightSensor.get());
 		
 		try{
-		NIVision.IMAQdxGrab(session, image, 1);
+			NIVision.IMAQdxGrab(session, image, 1);
 		}
 		catch(VisionException e){
 		}
@@ -226,7 +225,19 @@ public class Robot extends VisualRobot{
 		motors[8].set(speed);
 	}
 
-	public void setLights(boolean on) {
-		
+	public void setBlueLights(boolean on) {
+		lights1.set(on ? Relay.Value.kForward : Relay.Value.kOff);
+	}
+	public void setWhiteLights(boolean on) {
+		lights1.set(on ? Relay.Value.kForward : Relay.Value.kOff);
+	}
+	public void checkIntake() {
+		if(lightSensor.get()) {
+			motors[4].set(0.0);
+		}
+		if(!lightSensor.get()) {
+			motors[4].set(1.0);
+		}
+
 	}
 }
