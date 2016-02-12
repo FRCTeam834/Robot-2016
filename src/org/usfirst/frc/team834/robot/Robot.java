@@ -36,8 +36,8 @@ public class Robot extends VisualRobot{
 	 * 1: Rear Left
 	 * 2: Front Right
 	 * 3: Rear Right
-	 * 4: Intake treads
-	 * 5: Intake arm
+	 * 4: Intake
+	 * 5: feeder arm
 	 * 6: Back arm
 	 * 7: Scissor
 	 * 8: Winch
@@ -202,11 +202,11 @@ public class Robot extends VisualRobot{
 		
 	}
 
-	public void setTreads(double speed)
+	public void setIntake(double speed)
 	{
 		motors[4].set(speed);
 	}
-    public void setArm(double speed)
+    public void setFeederArm(double speed)
 	{
 		motors[5].set(speed);
 	}

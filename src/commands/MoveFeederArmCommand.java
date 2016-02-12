@@ -1,6 +1,6 @@
 package commands;
 
-import org.usfirst.frc.team834.robot.VisualRobot;
+import org.usfirst.frc.team834.robot.*;
 
 import base.Command;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -23,7 +23,7 @@ public class MoveFeederArmCommand implements Command {
 		
 		if(direction) 
 			while(!topArmInput.get())
-				robot.setArm(SPEED);
+				(Robot)robot.setArm(SPEED);
 		else if(!direction)
 			while(!bottomArmInput.get())
 				robot.setArm(-SPEED);

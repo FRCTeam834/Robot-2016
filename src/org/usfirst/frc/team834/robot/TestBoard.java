@@ -232,40 +232,4 @@ public class TestBoard extends VisualRobot{
 		}
 	}
 
-	@Override
-	public void setTreads(double speed) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setArm(double speed) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setBackArm(double speed) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setScissors(double speed) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setWinch(double speed) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean isDisabled() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 }
