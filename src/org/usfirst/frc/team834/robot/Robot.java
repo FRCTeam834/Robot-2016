@@ -35,7 +35,7 @@ public class Robot extends VisualRobot{
 	 * 1: Rear Left
 	 * 2: Front Right
 	 * 3: Rear Right
-	 * 4: Intake
+	 * 4: Intake treads
 	 * 5: Intake arm
 	 * 6: Back arm
 	 * 7: Scissor

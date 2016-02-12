@@ -5,7 +5,7 @@ import org.usfirst.frc.team834.robot.VisualRobot;
 import base.Command;
 import edu.wpi.first.wpilibj.DigitalInput;
 
-public class MoveArmCommand implements Command {
+public class MoveFeederArmCommand implements Command {
 	private VisualRobot robot;
 	private DigitalInput topArmInput, bottomArmInput;
 	private boolean direction; //true is up, false is down
