@@ -3,13 +3,12 @@ package commands;
 import org.usfirst.frc.team834.robot.VisualRobot;
 
 import edu.wpi.first.wpilibj.AnalogGyro;
-import edu.wpi.first.wpilibj.DigitalInput;
 
 public class MoveAlongCurveCommand {
 	private VisualRobot robot;
 	private boolean direction; //true is cw, false is ccw
 	private double radius, speed, angle;
-	private final double WIDTH = 69696969;
+	private final double WIDTH = 24.0;
 	private AnalogGyro gyro;
 	
 	public void edit() {
@@ -25,15 +24,18 @@ public class MoveAlongCurveCommand {
 
 	public void execute() throws NullPointerException {
 		gyro.reset();
-		if(direction)
-			while(angle < gyro.getAngle())
-			{
-				robot.setLeftSide();
-			}
-		else
+		
+		if(!direction)
 			while(angle > gyro.getAngle())
 			{
-				
+				robot.setLeftSide(speed * (radius / (radius + WIDTH)));
+				robot.setRightSide(speed);
+			}
+		else
+			while(angle < gyro.getAngle())
+			{
+				robot.setLeftSide(speed);
+				robot.setRightSide(speed * (radius / (radius + WIDTH)));
 			}
 	}
 
