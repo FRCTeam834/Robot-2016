@@ -20,16 +20,19 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends VisualRobot{
 	
-	private AnalogGyro gyro = new AnalogGyro(0);
+	private AnalogGyro robotGyro = new AnalogGyro(0);
+	private AnalogGyro armGyro = new AnalogGyro(1);
 	private AnalogInput distanceSensor = new AnalogInput(2);
+	
 	private Encoder rightEncoder = new Encoder(0,1);
 	private Encoder leftEncoder = new Encoder(2,3);
-	private Encoder backArmEncoder = new Encoder(4, 5);
-	private DigitalInput topArmInput = new DigitalInput(6);
-	private DigitalInput bottomArmInput = new DigitalInput(7);
+	private DigitalInput topArmInput = new DigitalInput(4);
+	private DigitalInput bottomArmInput = new DigitalInput(5);
+	private DigitalInput lightSensor = new DigitalInput(6);
+
 	
-	Relay lights1 = new Relay(0); //turns on LEDs
-	Relay ligths2 = new Relay(1); 
+	private Relay lights1 = new Relay(0); //turns on LEDs
+	private Relay ligths2 = new Relay(1); 
 	
 	CANTalon[] motors = new CANTalon[9];
 	/* 0: Front Left
@@ -52,8 +55,6 @@ public class Robot extends VisualRobot{
 	Image image;
 	int session;
 	
-	DigitalInput lightSensor = new DigitalInput(8);
-
 	HashMap<String, SensorBase> sensors = new HashMap<>();
 	ArrayList<Command> commands = new ArrayList<Command>();
 
@@ -65,10 +66,12 @@ public class Robot extends VisualRobot{
 		super();
 		sensors.put("rightEncoder", rightEncoder);
 		sensors.put("leftEncoder", leftEncoder);
-		sensors.put("gyro", gyro);
+		sensors.put("gyro", robotGyro);
 		sensors.put("ultrasonic", distanceSensor);
 		sensors.put("topArmInput", topArmInput);
 		sensors.put("bottomArmInput", bottomArmInput);
+		sensors.put("armGyro", armGyro);
+		sensors.put("tripwire", lightSensor);
 		
 		for(int i = 0; i < motors.length; i++)
 			motors[i] = new CANTalon(i);
@@ -95,7 +98,7 @@ public class Robot extends VisualRobot{
 		rightEncoder.setDistancePerPulse(1.0/400.0);
 		leftEncoder.setDistancePerPulse(1.0/400.0);
 		
-		gyro.initGyro();
+		robotGyro.initGyro();
 	}	
 
 	public void setLeftSide(double speed) {
@@ -144,7 +147,7 @@ public class Robot extends VisualRobot{
 	}
 	
 	public void teleOpInit() {
-		gyro.reset();
+		robotGyro.reset();
         NIVision.IMAQdxStartAcquisition(session);
 
 	}
@@ -154,7 +157,7 @@ public class Robot extends VisualRobot{
 		
 		SmartDashboard.putString("DB/String 0", Double.toString(rightEncoder.getDistance()));
 		SmartDashboard.putString("DB/String 1", Double.toString(leftEncoder.getDistance()));
-		SmartDashboard.putString("DB/String 2", Double.toString(gyro.getAngle()));
+		SmartDashboard.putString("DB/String 2", Double.toString(robotGyro.getAngle()));
 		SmartDashboard.putString("DB/String 3", Double.toString(distanceSensor.getVoltage() * 0.1024) + " Inches");
 		SmartDashboard.putString("DB/String 5", Boolean.toString(lightSensor.get()));
 		setLights(lightSensor.get());
@@ -222,14 +225,8 @@ public class Robot extends VisualRobot{
 	{
 		motors[8].set(speed);
 	}
-	public boolean isDisabled()
-	{
-		return isDisabled();
-	}
 
-	@Override
 	public void setLights(boolean on) {
-		// TODO Auto-generated method stub
 		
 	}
 }
