@@ -2,6 +2,7 @@ package commands;
 
 import org.usfirst.frc.team834.robot.VisualRobot;
 
+import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 public class MoveAlongCurveCommand {
@@ -9,6 +10,7 @@ public class MoveAlongCurveCommand {
 	private boolean direction; //true is cw, false is ccw
 	private double radius, speed, angle;
 	private final double WIDTH = 69696969;
+	private AnalogGyro gyro;
 	
 	public void edit() {
 		String[] labels = {"Direction", "Radius", "Speed", "Angle"};
@@ -22,10 +24,21 @@ public class MoveAlongCurveCommand {
 	}
 
 	public void execute() throws NullPointerException {
-		
+		gyro.reset();
+		if(direction)
+			while(angle < gyro.getAngle())
+			{
+				robot.setLeftSide();
+			}
+		else
+			while(angle > gyro.getAngle())
+			{
+				
+			}
 	}
 
 	public void setRobot(VisualRobot r) {
 		robot = r;
+		gyro = (AnalogGyro)robot.getSensors().get("gyro");
 	}
 }
