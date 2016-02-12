@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.Relay;
 
 public class LightsCommand implements Command {
 	//Variable to represent the robot.
-	private VisualRobot robot;
+	private Robot robot;
 	//Boolean to determine whether or not the lights should be on.
 	private boolean on;
 	
@@ -29,12 +29,14 @@ public class LightsCommand implements Command {
 
 	public void execute() throws NullPointerException {
 		//Set the lights to the "on" boolean upon executing.
-		robot.setLights(on);
+		robot.setBlueLights(on);
+		robot.setWhiteLights(on);
+
 	}
 
 	public void setRobot(VisualRobot r) {
 		//Set the robot variable.
-		robot = r;
+		robot = (Robot) r;
 	}
 	
 	public LightsCommand() {
