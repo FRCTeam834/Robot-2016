@@ -22,7 +22,6 @@ public class Robot extends VisualRobot{
 	
 	private AnalogGyro robotGyro = new AnalogGyro(0);
 	private AnalogGyro armGyro = new AnalogGyro(1);
-	private AnalogInput distanceSensor = new AnalogInput(2);
 	
 	private Encoder rightEncoder = new Encoder(0,1);
 	private Encoder leftEncoder = new Encoder(2,3);
@@ -62,12 +61,12 @@ public class Robot extends VisualRobot{
 	
 	boolean toggleCam = false;
 	
+	
 	public Robot() {
 		super();
 		sensors.put("rightEncoder", rightEncoder);
 		sensors.put("leftEncoder", leftEncoder);
 		sensors.put("gyro", robotGyro);
-		sensors.put("ultrasonic", distanceSensor);
 		sensors.put("topArmInput", topArmInput);
 		sensors.put("bottomArmInput", bottomArmInput);
 		sensors.put("armGyro", armGyro);
@@ -142,7 +141,6 @@ public class Robot extends VisualRobot{
 			}
 		}
 		catch(NullPointerException e) {
-			SmartDashboard.putString("DB/String 7", "ERROR");
 		}
 	}
 	
@@ -158,7 +156,6 @@ public class Robot extends VisualRobot{
 		SmartDashboard.putString("DB/String 0", Double.toString(rightEncoder.getDistance()));
 		SmartDashboard.putString("DB/String 1", Double.toString(leftEncoder.getDistance()));
 		SmartDashboard.putString("DB/String 2", Double.toString(robotGyro.getAngle()));
-		SmartDashboard.putString("DB/String 3", Double.toString(distanceSensor.getVoltage() * 0.1024) + " Inches");
 		SmartDashboard.putString("DB/String 5", Boolean.toString(lightSensor.get()));
 		
 		try{
