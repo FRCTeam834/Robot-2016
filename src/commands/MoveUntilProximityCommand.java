@@ -4,6 +4,7 @@
 
 package commands;
 
+import org.usfirst.frc.team834.robot.Robot;
 import org.usfirst.frc.team834.robot.VisualRobot;
 import base.*;
 import edu.wpi.first.wpilibj.AnalogGyro;
@@ -12,7 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class MoveUntilProximityCommand implements Command {
 	//Variable to represent the robot.
-	private VisualRobot robot;
+	private Robot robot;
 	//The speed at which the robot should travel, the distane the robot should travel, and the c factor.
 	private double speed, distance, cFactor;
 	//Variable to represent the ultrasonic.
@@ -73,7 +74,7 @@ public class MoveUntilProximityCommand implements Command {
 	@Override
 	public void setRobot(VisualRobot r) {
 		//Set the robot, ultrasonic, and gyro variables.
-		robot = r;
+		robot = (Robot)r;
 		ultrasonic = (AnalogInput)r.getSensors().get("ultrasonic");
 		gyro = (AnalogGyro) robot.getSensors().get("gyro");
 		SmartDashboard.putString("DB/String 9", Boolean.toString((gyro != null)));
@@ -84,13 +85,15 @@ public class MoveUntilProximityCommand implements Command {
 	public MoveUntilProximityCommand() {
 	}
 	
-	public MoveUntilProximityCommand(double s, double d) {
+	/**
+	 * 
+	 * @param dist The distance of which to move.
+	 * @param s The speed at which to move.
+	 * @param r The robot.
+	 */
+	public MoveUntilProximityCommand(double dist, double s, VisualRobot r) {
+		distance = dist;
 		speed = s;
-		distance = d;
-	}
-	
-	public MoveUntilProximityCommand(double s, double d, VisualRobot r) {
-		this(s, d);
 		setRobot(r);
 	}
 	

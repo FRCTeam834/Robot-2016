@@ -1,5 +1,6 @@
 package commands;
 
+import org.usfirst.frc.team834.robot.Robot;
 import org.usfirst.frc.team834.robot.VisualRobot;
 import base.*;
 import edu.wpi.first.wpilibj.AnalogGyro;
@@ -7,11 +8,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TurnCommand implements Command {
 	private double angle, speed;
-	private VisualRobot robot;
+	private Robot robot;
 	private AnalogGyro gyro;
 	
 	public void setRobot(VisualRobot r) {
-		robot = r;
+		robot = (Robot)r;
 		gyro = (AnalogGyro) robot.getSensors().get("gyro");
 	}
 	
@@ -55,20 +56,20 @@ public class TurnCommand implements Command {
 	public TurnCommand() {
 	}
 	
-	public TurnCommand(double a, double s) {
-		angle = a;
+	/**
+	 * 
+	 * @param ang The angle of which to turn.
+	 * @param s The speed at which to turn.
+	 * @param r The robot.
+	 */
+	public TurnCommand(double ang, double s, VisualRobot r) {
+		angle = ang;
 		if(s > 1.0) 
 			speed = 1.0;
 		else if(s < -1.0) 
 			speed = -1.0;
 		else
 			speed = s;
-
-		
-	}
-	
-	public TurnCommand(double a, double s, VisualRobot r) {
-		this(a,s);
 		setRobot(r);
 	}
 

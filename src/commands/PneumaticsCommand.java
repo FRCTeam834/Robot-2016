@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class PneumaticsCommand implements Command {
-	private VisualRobot robot;
+	private Robot robot;
 	private boolean isOpen;
 
 	public void edit() {
@@ -29,17 +29,17 @@ public class PneumaticsCommand implements Command {
 	}
 
 	public void setRobot(VisualRobot r) {
-		robot = r;
+		robot = (Robot)r;
 	}
 
 	public PneumaticsCommand() {
 	}
 
-	
-	public PneumaticsCommand(boolean o) {
-		isOpen = o;
-	}
-	
+	/**
+	 * 
+	 * @param o Whether the pneumatics should be open or close.
+	 * @param r The robot.
+	 */
 	public PneumaticsCommand(boolean o, VisualRobot r) {
 		isOpen = o;
 		setRobot(r);

@@ -40,7 +40,13 @@ public class MoveFeederArmCommand implements Command {
 	public MoveFeederArmCommand() {
 	}
 	
-	public MoveFeederArmCommand(boolean dir) {
+	/**
+	 * 
+	 * @param dir The direction in which to move.
+	 * @param r The robot.
+	 */
+	public MoveFeederArmCommand(boolean dir, VisualRobot r) {
 		direction = dir;
+		setRobot(r);
 	}
 }
