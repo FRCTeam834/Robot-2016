@@ -47,6 +47,9 @@ public class MoveAlongCurveCommand implements Command {
 		gyro = (AnalogGyro)robot.getSensors().get("gyro");
 	}
 	
+	public MoveAlongCurveCommand() {
+	}
+
 	/**
 	 * 
 	 * @param dir The direction in which to move.
@@ -55,8 +58,7 @@ public class MoveAlongCurveCommand implements Command {
 	 * @param ang The angle to move to.
 	 * @param r The robot.
 	 */
-	public MoveAlongCurveCommand(boolean dir, double rad, double s, double ang, VisualRobot r)
-	{
+	public MoveAlongCurveCommand(boolean dir, double rad, double s, double ang, VisualRobot r) {
 		direction = dir;
 		radius = rad;
 		speed = s;
