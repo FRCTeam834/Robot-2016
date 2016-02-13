@@ -43,22 +43,23 @@ public class MoveToPointCommand {
 		gyro = (AnalogGyro)robot.getSensors().get("gyro");
 	}
 	
-	public MoveAlongCurveCommand() {
+	private double getDistance()
+	{
+		//assuming the robot is at 0,0
+		return Math.sqrt(displacementX * displacementX + displacementY * displacementY);
+	}
+	private double getAngle()
+	{
+		
+	}
+	
+	public MoveToPointCommand() {
 	}
 
-	/**
-	 * 
-	 * @param dir The direction in which to move.
-	 * @param rad The radius of the robot.
-	 * @param s The speed at which to move.
-	 * @param ang The angle to move to.
-	 * @param r The robot.
-	 */
-	public MoveAlongCurveCommand(boolean dir, double rad, double s, double ang, VisualRobot r) {
-		direction = dir;
-		radius = rad;
+	public MoveToPointCommand(double dx, double dy, double s, VisualRobot r) {
+		displacementX = dx;
+		displacementY = dx;
 		speed = s;
-		angle = ang;
 		setRobot(r);
 	}
 }
