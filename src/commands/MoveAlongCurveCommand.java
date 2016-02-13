@@ -2,9 +2,10 @@ package commands;
 
 import org.usfirst.frc.team834.robot.VisualRobot;
 
+import base.Command;
 import edu.wpi.first.wpilibj.AnalogGyro;
 
-public class MoveAlongCurveCommand {
+public class MoveAlongCurveCommand implements Command {
 	private VisualRobot robot;
 	private boolean direction; //true is cw, false is ccw
 	private double radius, speed, angle;

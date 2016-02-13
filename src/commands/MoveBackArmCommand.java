@@ -3,10 +3,11 @@ package commands;
 import org.usfirst.frc.team834.robot.Robot;
 import org.usfirst.frc.team834.robot.VisualRobot;
 
+import base.Command;
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.DigitalInput;
 
-public class MoveBackArmCommand {
+public class MoveBackArmCommand implements Command{
 	private Robot robot;
 	private AnalogGyro gyro;
 	private boolean direction; //true is up, false is down

@@ -179,7 +179,8 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 				MoveBackArmCommand.class.toString().substring(15)	
 			};
 			String o;
-			Object temp = JOptionPane.showInputDialog(this, "Choose a command to add", "Choose a command to add", 1, null, options, options[0]);
+			Object temp = JOptionPane.showInputDialog(null, "Choose a command to add", "Choose a command to add", 1, null, options, options[0]);
+			
 			if(temp != null) {
 				o = (String) temp;
 				try {
@@ -191,7 +192,7 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 				catch (IllegalAccessException e1) { e1.printStackTrace();}
 			}
 			workArea.repaint();	
-			workArea.validate();
+			this.revalidate();
 		}
 		if(e.getSource() == save) {
 			FileNameExtensionFilter fil = new FileNameExtensionFilter("Auton", "aut");
@@ -243,7 +244,7 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 			ois.close();
 		}
 		catch(IOException exc){exc.printStackTrace();}
-		catch(ClassNotFoundException exc) {System.out.println("Error 2");}
+		catch(ClassNotFoundException exc) {}
 	}
 	public void export(File f) {
 		ArrayList<Command> program = new ArrayList<Command>();
@@ -273,11 +274,13 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 			while(focus != -1) {
 			try{
 				Thread.sleep(10);
-				block.setX(workArea.getMousePosition().x - xOffset);
-				block.setY(Math.abs(workArea.getMousePosition().y - yOffset + 60 - workArea.getHeight()/2) < snapGap ? 
-				workArea.getHeight()/2 - 60: 
-				workArea.getMousePosition().y - yOffset);
-				workArea.repaint();	
+				int mousex = workArea.getMousePosition().x;
+				int mousey = workArea.getMousePosition().y;
+				
+				block.setX(mousex - xOffset);
+				block.setY(Math.abs(mousey - yOffset + 60 - workArea.getHeight()/2) < snapGap ? 
+					workArea.getHeight()/2 - 60: 
+					mousey - yOffset);
 
 				if(workAreaPane.getViewport().getViewPosition().x +workAreaPane.getViewport().getExtentSize().width - 100  < block.getHitBox().x) {
 					workArea.setPreferredSize(new Dimension(workArea.getPreferredSize().width + 1, workArea.getPreferredSize().height) );
@@ -286,7 +289,9 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 					block.setX(commands.get(focus).getHitBox().x + 1);
 				}
 
+				workArea.repaint();
 				
+
 			}
 			catch(Exception e){}
 			
