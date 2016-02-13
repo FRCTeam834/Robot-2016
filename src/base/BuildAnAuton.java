@@ -24,12 +24,16 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			Graphics2D g2 = (Graphics2D) g;
-			g2.draw(new Line2D.Double(0, this.getHeight()/2, this.getWidth(), this.getHeight()/2));
 			
-			for(int i = 0; i < this.getWidth(); i+= 50) {
-				g2.draw(new Line2D.Double(i, this.getHeight()/2 -10, i, this.getHeight()/2 + 10));
+			for(int i = 1; i <= numThreads; i++){
+				g2.draw(new Line2D.Double(0, i*this.getHeight()/(numThreads + 1), this.getWidth(), i*this.getHeight()/(numThreads + 1)));
+				
+				for(int j = 0; j < this.getWidth(); j+= 50) {
+					g2.draw(new Line2D.Double(j, i*this.getHeight()/(numThreads + 1) -10, j, i*this.getHeight()/(numThreads+1) + 10));
+				}
+				
 			}
-			
+
 			for(CommandBlock c:commands) {
 				c.paint(g2);
 			}
@@ -59,6 +63,8 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 	private int focus = -1;
 	
 	private int snapGap = 60;
+	int numThreads = 1;
+	
 	
 	public BuildAnAuton() {
 		
@@ -177,7 +183,8 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 				TurnCommand.class.toString().substring(15),
 				LightsCommand.class.toString().substring(15),
 				MoveFeederArmCommand.class.toString().substring(15),
-				MoveBackArmCommand.class.toString().substring(15)	
+				MoveBackArmCommand.class.toString().substring(15),
+				
 			};
 			String o;
 			Object temp = JOptionPane.showInputDialog(null, "Choose a command to add", "Choose a command to add", 1, null, options, options[0]);
@@ -220,6 +227,10 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 							"Export to RobotRio", JOptionPane.DEFAULT_OPTION);
 			
 			export(new File(fName + ".autr"));
+		}
+		
+		if(e.getSource() == newThread) {
+			
 		}
 	}
 	

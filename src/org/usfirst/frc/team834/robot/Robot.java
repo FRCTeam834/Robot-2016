@@ -58,7 +58,6 @@ public class Robot extends VisualRobot{
 	ArrayList<Command> commands = new ArrayList<Command>();
 
 	boolean cam = false;
-	
 	boolean toggleCam = false;
 	
 	
