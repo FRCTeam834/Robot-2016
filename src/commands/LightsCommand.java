@@ -39,6 +39,10 @@ public class LightsCommand implements Command {
 		robot = (Robot) r;
 	}
 
+	public LightsCommand() {
+  	}
+
+	
 	/**
 	 * 
 	 * @param o whether the lights will turn on or off
