@@ -176,9 +176,8 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 				TurnCommand.class.toString().substring(15),
 				LightsCommand.class.toString().substring(15),
 				MoveFeederArmCommand.class.toString().substring(15),
-				MoveBackArmCommand.class.toString().substring(15)
-				
-				};
+				MoveBackArmCommand.class.toString().substring(15)	
+			};
 			String o;
 			Object temp = JOptionPane.showInputDialog(this, "Choose a command to add", "Choose a command to add", 1, null, options, options[0]);
 			if(temp != null) {
