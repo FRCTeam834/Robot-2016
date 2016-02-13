@@ -280,10 +280,16 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 					mousey - yOffset);
 
 				if(workAreaPane.getViewport().getViewPosition().x +workAreaPane.getViewport().getExtentSize().width - 100  < block.getHitBox().x) {
-					workArea.setPreferredSize(new Dimension(workArea.getPreferredSize().width + 1, workArea.getPreferredSize().height) );
+					if(workAreaPane.getHorizontalScrollBar().getValue() + workAreaPane.getHorizontalScrollBar().getWidth() >= workArea.getPreferredSize().width - 1)
+						workArea.setPreferredSize(new Dimension(workArea.getPreferredSize().width + 1, workArea.getPreferredSize().height) );
 					workArea.revalidate();
 					workAreaPane.getHorizontalScrollBar().setValue(workAreaPane.getHorizontalScrollBar().getValue() + 1);
 					block.setX(commands.get(focus).getHitBox().x + 1);
+				}
+				else if(workAreaPane.getViewport().getViewPosition().x > block.getHitBox().x) {
+					workArea.revalidate();
+					workAreaPane.getHorizontalScrollBar().setValue(workAreaPane.getHorizontalScrollBar().getValue() - 1);
+					block.setX(commands.get(focus).getHitBox().x - 1);
 				}
 
 				workArea.repaint();
