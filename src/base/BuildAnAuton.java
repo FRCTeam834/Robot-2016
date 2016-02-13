@@ -57,12 +57,15 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 	private JLabel add = new JLabel("Add:");
 	private JButton newCommand = new JButton("Command");
 	private JButton newThread = new JButton("Thread");
+	private JLabel delete = new JLabel("Delete:");
+	private JButton delThread = new JButton("Thread");
+
 	
 	private int xOffset;
 	private int yOffset;
 	private int focus = -1;
 	
-	private int snapGap = 60;
+	private int snapGap = 30;
 	int numThreads = 1;
 	
 	
@@ -80,8 +83,12 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 		buttons.add(add);
 		buttons.add(newCommand);
 		buttons.add(newThread);
+		buttons.add(delete);
+		buttons.add(delThread);
+		
 		newCommand.addActionListener(this);
 		newThread.addActionListener(this);
+		delThread.addActionListener(this);
 		
 		workArea.addMouseListener(new MouseListener() {
 			public void mouseClicked(MouseEvent e) {
@@ -109,11 +116,7 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 				if(focus != -1) {
 					int temp = focus;
 					focus = -1;
-					if(Math.abs(commands.get(temp).getHitBox().y + 60 - workArea.getHeight()/2) < snapGap){
-	
-						commands.get(temp).setY(workArea.getHeight()/2 - 60);
-						commands.get(temp).snap();
-					}
+
 					if(commands.get(temp).getHitBox().x < 0){
 						commands.get(temp).setX(0);
 					}
@@ -230,7 +233,16 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 		}
 		
 		if(e.getSource() == newThread) {
-			
+			if(numThreads < 3)
+			numThreads += 1;
+			this.revalidate();
+			this.repaint();
+		}
+		if(e.getSource() == delThread) {
+			if(numThreads > 1)
+			numThreads -= 1;
+			this.revalidate();
+			this.repaint();
 		}
 	}
 	
@@ -259,22 +271,26 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 		catch(ClassNotFoundException exc) {}
 	}
 	public void export(File f) {
-		ArrayList<Command> program = new ArrayList<Command>();
+		ArrayList<Command> program = new ArrayList<>();
+		ArrayList<Integer> threads = new ArrayList<>();
 		for(CommandBlock c: commands) {
-			if(c.isSnapped())
+			if(c.getSnapped() != -1) {
 				program.add(c.getCommand());
+				threads.add(c.getSnapped());
+			}
 		}
 		try {
 			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream (f));
 			oos.writeObject(program);
+			oos.writeObject(threads);
 			oos.close();
 			FTP ftp = new FTP(f.getName());
 			ftp.save();
 		}
 		catch(IOException exc){exc.printStackTrace();}
 
+		
 	}
-	
 	public class Move implements Runnable {
 		CommandBlock block;
 		public Move (CommandBlock c ) {
@@ -289,11 +305,19 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 				int mousex = workArea.getMousePosition().x;
 				int mousey = workArea.getMousePosition().y;
 				
+				
 				block.setX(mousex - xOffset);
-				block.setY(Math.abs(mousey - yOffset + 60 - workArea.getHeight()/2) < snapGap ? 
-					workArea.getHeight()/2 - 60: 
-					mousey - yOffset);
-
+				
+				int y = mousey-yOffset;
+				for(int i = 0; i < numThreads; i++) {
+					if(Math.abs(mousey - yOffset + 60 - ((i+1)* workArea.getHeight())/(numThreads + 1))< snapGap) {
+						block.snap(i);
+						y = (i+1)* workArea.getHeight()/(numThreads+1) - 60;
+					}
+				}
+				block.setY(y);
+				
+				
 				if(workAreaPane.getViewport().getViewPosition().x +workAreaPane.getViewport().getExtentSize().width - 100  < block.getHitBox().x) {
 					if(workAreaPane.getHorizontalScrollBar().getValue() + workAreaPane.getHorizontalScrollBar().getWidth() >= workArea.getPreferredSize().width - 1)
 						workArea.setPreferredSize(new Dimension(workArea.getPreferredSize().width + 1, workArea.getPreferredSize().height) );

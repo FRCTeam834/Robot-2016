@@ -24,7 +24,7 @@ public class CommandBlock implements Serializable{
 	private Color secCol; //Text and Outline Color
 	protected Command command; //What it will do.
 	private String name = "";
-	private boolean snapped = false;
+	private int snapped = 0;
 
 	
 	public final int WIDTH = 120; //Width of the total shape
@@ -116,13 +116,13 @@ public class CommandBlock implements Serializable{
 		return new Rectangle(hitbox.x + WIDTH/2, hitbox.y + HEIGHT/6, WIDTH/2, HEIGHT * 5/6);
 	}
 	
-	public void snap() {
-		snapped = true;
+	public void snap(int t) {
+		snapped = t;
 	}
 	public void unsnap() {
-		snapped = false;
+		snapped = -1;
 	}
-	public boolean isSnapped() {
+	public int getSnapped() {
 		return snapped;
 	}
 	
