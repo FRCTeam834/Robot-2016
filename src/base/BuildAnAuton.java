@@ -35,9 +35,6 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 			}
 		}
 		
-		public Dimension getPreferredSize() {
-			return new Dimension(super.getPreferredSize().width, super.getPreferredSize().height);
-		}
 	};
 	
 	private JScrollPane workAreaPane = new JScrollPane();
@@ -70,7 +67,7 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 		workAreaPane.setBackground(new Color(240, 240, 240));
 		workAreaPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 		workAreaPane.setPreferredSize(new Dimension(500, 350));
-		workArea.setPreferredSize(new Dimension(450, 0));
+		workArea.setPreferredSize(new Dimension(1000, 0));
 
 		buttons.add(add);
 		
