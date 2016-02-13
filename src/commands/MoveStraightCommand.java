@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class MoveStraightCommand implements Command {
 	//Variable to represent the robot.
-	private Robot robot;
+	private VisualRobot robot;
 	//Left and right encoders used to get distance travelled by the wheels.
 	private Encoder LEncoder, REncoder;
 	//Gyro variable used for getting the rotation of the robot.
@@ -80,7 +80,7 @@ public class MoveStraightCommand implements Command {
 	
 	public void setRobot(VisualRobot r) {
 		//Initialize robot variable, gyro variable, and encoder variables.
-		robot = (Robot)r;
+		robot = r;
 		gyro = (AnalogGyro) robot.getSensors().get("gyro");
 		LEncoder = (Encoder) robot.getSensors().get("leftEncoder");
 		REncoder = (Encoder) robot.getSensors().get("rightEncoder");

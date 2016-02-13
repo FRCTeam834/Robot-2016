@@ -8,11 +8,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TurnCommand implements Command {
 	private double angle, speed;
-	private Robot robot;
+	private VisualRobot robot;
 	private AnalogGyro gyro;
 	
 	public void setRobot(VisualRobot r) {
-		robot = (Robot)r;
+		robot = r;
 		gyro = (AnalogGyro) robot.getSensors().get("gyro");
 	}
 	
