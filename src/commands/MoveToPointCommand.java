@@ -45,12 +45,11 @@ public class MoveToPointCommand {
 	
 	private double getDistance()
 	{
-		//assuming the robot is at 0,0
 		return Math.sqrt(displacementX * displacementX + displacementY * displacementY);
 	}
 	private double getAngle()
 	{
-		
+		return Math.atan2(displacementY, displacementX) * 180 / Math.PI;
 	}
 	
 	public MoveToPointCommand() {
