@@ -38,14 +38,12 @@ public class LightsCommand implements Command {
 		//Set the robot variable.
 		robot = (Robot) r;
 	}
-	
-	public LightsCommand() {
-	}
 
-	public LightsCommand(boolean o) {
-		on = o;
-	}
-	
+	/**
+	 * 
+	 * @param o whether the lights will turn on or off
+	 * @param r robot
+	 */
 	public LightsCommand(boolean o, VisualRobot r) {
 		on = o;
 		setRobot(r);

@@ -19,7 +19,7 @@ public class MoveBackArmCommand implements Command{
 		String[] values = {Boolean.toString(direction), Double.toString(angle)};
 		EditDialog d = new EditDialog(labels,values);		
 		
-		direction = Boolean.parseBoolean(values[0]);
+		direction = values[0] == "up";
 		angle = Double.parseDouble(values[1]);
 	}
 
@@ -40,8 +40,15 @@ public class MoveBackArmCommand implements Command{
 	
 	public MoveBackArmCommand() {
 	}
-	
-	public MoveBackArmCommand(boolean dir) {
+	/**
+	 * 
+	 * @param dir The direction in which to move the arm.
+	 * @param ang The angle to move the arm to.
+	 * @param r The robot.
+	 */
+	public MoveBackArmCommand(boolean dir, double ang, VisualRobot r) {
 		direction = dir;
+		angle = ang;
+		setRobot(r);
 	}
 }

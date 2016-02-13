@@ -1,12 +1,13 @@
 package commands;
 
+import org.usfirst.frc.team834.robot.Robot;
 import org.usfirst.frc.team834.robot.VisualRobot;
 
 import base.Command;
 import edu.wpi.first.wpilibj.AnalogGyro;
 
 public class MoveAlongCurveCommand implements Command {
-	private VisualRobot robot;
+	private Robot robot;
 	private boolean direction; //true is cw, false is ccw
 	private double radius, speed, angle;
 	private final double WIDTH = 24.0;
@@ -40,8 +41,26 @@ public class MoveAlongCurveCommand implements Command {
 			}
 	}
 
+
 	public void setRobot(VisualRobot r) {
-		robot = r;
+		robot = (Robot)r;
 		gyro = (AnalogGyro)robot.getSensors().get("gyro");
+	}
+	
+	/**
+	 * 
+	 * @param dir The direction in which to move.
+	 * @param rad The radius of the robot.
+	 * @param s The speed at which to move.
+	 * @param ang The angle to move to.
+	 * @param r The robot.
+	 */
+	public MoveAlongCurveCommand(boolean dir, double rad, double s, double ang, VisualRobot r)
+	{
+		direction = dir;
+		radius = rad;
+		speed = s;
+		angle = ang;
+		setRobot(r);
 	}
 }

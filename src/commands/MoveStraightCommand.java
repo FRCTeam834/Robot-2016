@@ -4,6 +4,7 @@
 
 package commands;
 
+import org.usfirst.frc.team834.robot.Robot;
 import org.usfirst.frc.team834.robot.VisualRobot;
 import base.Command;
 import edu.wpi.first.wpilibj.AnalogGyro;
@@ -13,7 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class MoveStraightCommand implements Command {
 	//Variable to represent the robot.
-	private VisualRobot robot;
+	private Robot robot;
 	//Left and right encoders used to get distance travelled by the wheels.
 	private Encoder LEncoder, REncoder;
 	//Gyro variable used for getting the rotation of the robot.
@@ -79,7 +80,7 @@ public class MoveStraightCommand implements Command {
 	
 	public void setRobot(VisualRobot r) {
 		//Initialize robot variable, gyro variable, and encoder variables.
-		robot = r;
+		robot = (Robot)r;
 		gyro = (AnalogGyro) robot.getSensors().get("gyro");
 		LEncoder = (Encoder) robot.getSensors().get("leftEncoder");
 		REncoder = (Encoder) robot.getSensors().get("rightEncoder");
@@ -88,13 +89,15 @@ public class MoveStraightCommand implements Command {
 	public MoveStraightCommand() {
 	}
 	
-	public MoveStraightCommand(double s, double d) {
+	/**
+	 * 
+	 * @param dist The distance to move.
+	 * @param s The speed at which to move.
+	 * @param r The robot.
+	 */
+	public MoveStraightCommand(double dist, double s, VisualRobot r) {
+		distance = dist;
 		speed = s;
-		distance = d;
-	}
-	
-	public MoveStraightCommand(double s, double d, VisualRobot r) {
-		this(s, d);
 		setRobot(r);
 	}
 }
