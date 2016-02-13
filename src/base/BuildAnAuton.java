@@ -186,7 +186,7 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 				o = (String) temp;
 				try {
 					commands.add(new CommandBlock((Command)Class.forName("commands." + 
-					o).newInstance(), Color.WHITE, Color.BLACK));
+					o).newInstance(), workAreaPane.getHorizontalScrollBar().getValue(), 0, Color.WHITE, Color.BLACK));
 				}
 				catch (ClassNotFoundException e1) { e1.printStackTrace();} 
 				catch (InstantiationException e1) { e1.printStackTrace();}
