@@ -50,7 +50,9 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 
 	
 	private JPanel buttons = new JPanel();
-	private JButton add = new JButton("add");
+	private JLabel add = new JLabel("Add:");
+	private JButton newCommand = new JButton("Command");
+	private JButton newThread = new JButton("Thread");
 	
 	private int xOffset;
 	private int yOffset;
@@ -70,9 +72,11 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 		workArea.setPreferredSize(new Dimension(1000, 0));
 
 		buttons.add(add);
+		buttons.add(newCommand);
+		buttons.add(newThread);
+		newCommand.addActionListener(this);
+		newThread.addActionListener(this);
 		
-		add.addActionListener(this);
-
 		workArea.addMouseListener(new MouseListener() {
 			public void mouseClicked(MouseEvent e) {
 				for(int i = commands.size() - 1; i >= 0; i--) {
@@ -165,7 +169,7 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == add) {
+		if(e.getSource() == newCommand) {
 			Object[] options = { 
 				"Choose a Command", 
 				MoveStraightCommand.class.toString().substring(15),
