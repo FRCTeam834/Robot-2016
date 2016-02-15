@@ -24,9 +24,16 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			Graphics2D g2 = (Graphics2D) g;
+			g2.draw(new Line2D.Double(0, this.getHeight()/(numThreads + 1), this.getWidth(), this.getHeight()/(numThreads + 1)));
+			for(int j = 0; j < this.getWidth(); j+= 50) {
+				g2.draw(new Line2D.Double(j, this.getHeight()/(numThreads + 1) -10, j, this.getHeight()/(numThreads+1) + 10));
+			}
 			
-			for(int i = 1; i <= numThreads; i++){
-				g2.draw(new Line2D.Double(0, i*this.getHeight()/(numThreads + 1), this.getWidth(), i*this.getHeight()/(numThreads + 1)));
+			for(int i = 1; i < numThreads; i++){
+				
+				CommandBlock start = getFromMain(threadStarts[i]);
+				
+				g2.draw(new Line2D.Double(start == null ? 0 : start.getHitBox().x ,(i+1)*this.getHeight()/(numThreads + 1), this.getWidth(), (i+1)*this.getHeight()/(numThreads + 1)));
 				
 				for(int j = 0; j < this.getWidth(); j+= 50) {
 					g2.draw(new Line2D.Double(j, i*this.getHeight()/(numThreads + 1) -10, j, i*this.getHeight()/(numThreads+1) + 10));
@@ -61,7 +68,7 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 	private JButton delThread = new JButton("Thread");
 
 	private JPanel threadPanel = new JPanel();
-	private JTextField[] threadNums = new JTextField[1];
+	private JTextField[] txtThreadStarts = new JTextField[1];
 	
 	private int xOffset;
 	private int yOffset;
@@ -69,7 +76,7 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 	
 	private int snapGap = 30;
 	int numThreads = 1;
-	int[] threadStarts = new int[1];
+	int[] threadStarts = {0};
 	
 	
 	public BuildAnAuton() {
@@ -92,6 +99,11 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 		newCommand.addActionListener(this);
 		newThread.addActionListener(this);
 		delThread.addActionListener(this);
+		
+		threadPanel.setLayout(new GridLayout(1, 1));
+		txtThreadStarts[0] = new JTextField(3);
+		txtThreadStarts[0].setVisible(false);
+		threadPanel.add(txtThreadStarts[0]);
 		
 		workArea.addMouseListener(new MouseListener() {
 			public void mouseClicked(MouseEvent e) {
@@ -154,16 +166,12 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 		add(menu, BorderLayout.NORTH);
 	
 		
-		threadPanel.setLayout(new GridLayout(1, 1));
-		threadNums[0] = new JTextField(3);
-		threadNums[0].setVisible(false);
-		threadPanel.add(threadNums[0]);
 		
 		
 		save.addActionListener(this);
 		load.addActionListener(this);
 		export.addActionListener(this);
-
+		help.addActionListener(this);
 		add(workAreaPane, BorderLayout.CENTER);
 		add(threadPanel, BorderLayout.WEST);
 		add(buttons, BorderLayout.SOUTH);
@@ -247,11 +255,12 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 			if(numThreads < 4) {
 				numThreads += 1;
 				threadStarts = Arrays.copyOf(threadStarts, numThreads);
-				threadNums = Arrays.copyOf(threadNums, numThreads);
+				txtThreadStarts = Arrays.copyOf(txtThreadStarts, numThreads);
 				threadPanel.setLayout(new GridLayout(numThreads , 1));
-				threadNums[numThreads-1] = new JTextField(3);
-				threadNums[numThreads-1].setText(JOptionPane.showInputDialog("Enter which command to run with"));
-				threadPanel.add(threadNums[numThreads-1]);
+				txtThreadStarts[numThreads-1] = new JTextField(3);
+				txtThreadStarts[numThreads-1].setText(JOptionPane.showInputDialog("Enter which command(Integer) to run with"));
+				threadStarts[numThreads-1] = Integer.parseInt(txtThreadStarts[numThreads-1].getText());
+				threadPanel.add(txtThreadStarts[numThreads-1]);
 				
 				this.revalidate(); 
 				this.repaint();
@@ -261,8 +270,8 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 			if(numThreads > 1) {
 				numThreads -= 1;
 				threadStarts = Arrays.copyOf(threadStarts, numThreads);
-				threadNums = Arrays.copyOf(threadNums, numThreads);
-				threadPanel.remove(threadNums[numThreads-1]);
+				txtThreadStarts = Arrays.copyOf(txtThreadStarts, numThreads);
+				threadPanel.remove(txtThreadStarts[numThreads-1]);
 				threadPanel.setLayout(new GridLayout(numThreads , 1));
 				this.revalidate();
 				this.repaint();
@@ -276,6 +285,7 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream (f));
 			oos.writeObject(this.getSize());
 			oos.writeObject(commands);
+			oos.writeObject(txtThreadStarts);
 			oos.close();
 		}
 		catch(IOException exc) {
@@ -296,21 +306,36 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 		catch(ClassNotFoundException exc) {}
 	}
 	public void export(File f) {
-		ArrayList<Command> program = new ArrayList<>();
-		
-		for(int i = 0; i < numThreads; i++) {
-			for(CommandBlock c: commands) {
-			}
-			try {
-				ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream (f));
+		ObjectOutputStream oos;
+		try {
+			oos = new ObjectOutputStream(new FileOutputStream (f));
+
+			oos.writeInt(numThreads);
+			
+			
+			for(int i = 0; i < numThreads; i++) {
+
+				ArrayList<Command> program = new ArrayList<>();
+				try {
+				threadStarts[i] = Integer.parseInt(txtThreadStarts[i].getText());
+				}catch (Exception e){}
+				oos.writeInt(threadStarts[i]);
+				
+				for(CommandBlock c: commands) {
+					if (c.getSnapped() == i) {
+						program.add(c.getCommand());
+					}
+				}
 				oos.writeObject(program);
-				oos.close();
 				FTP ftp = new FTP(f.getName());
 				ftp.save();
+			
+	
 			}
-			catch(IOException exc){exc.printStackTrace();}
+			oos.close();
 
 		}
+		catch(IOException exc){exc.printStackTrace();}
 
 		
 	}
