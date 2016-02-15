@@ -31,12 +31,12 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 			
 			for(int i = 1; i < numThreads; i++){
 				
-				CommandBlock start = getFromMain(threadStarts[i]);
+				CommandBlock reference = getFromMain(threadStarts[i]);
+				int start = reference == null ? 0 : reference.getHitBox().x;
+				g2.draw(new Line2D.Double(start ,(i+1)*this.getHeight()/(numThreads + 1), this.getWidth(), (i+1)*this.getHeight()/(numThreads + 1)));
 				
-				g2.draw(new Line2D.Double(start == null ? 0 : start.getHitBox().x ,(i+1)*this.getHeight()/(numThreads + 1), this.getWidth(), (i+1)*this.getHeight()/(numThreads + 1)));
-				
-				for(int j = 0; j < this.getWidth(); j+= 50) {
-					g2.draw(new Line2D.Double(j, i*this.getHeight()/(numThreads + 1) -10, j, i*this.getHeight()/(numThreads+1) + 10));
+				for(int j = start; j < this.getWidth(); j+= 50) {
+					g2.draw(new Line2D.Double(j, (i+1)*this.getHeight()/(numThreads + 1) -10, j, (i+1)*this.getHeight()/(numThreads+1) + 10));
 				}
 				
 			}
@@ -75,8 +75,8 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 	private int focus = -1;
 	
 	private int snapGap = 30;
-	int numThreads = 1;
-	int[] threadStarts = {0};
+	private int numThreads = 1;
+	private int[] threadStarts = {0};
 	
 	
 	public BuildAnAuton() {
@@ -197,6 +197,7 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
+	
 		if(e.getSource() == newCommand) {
 			Object[] options = { 
 				"Choose a Command", 
@@ -357,8 +358,12 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 				block.setX(mousex - xOffset);
 				
 				int y = mousey-yOffset;
+				
 				for(int i = 0; i < numThreads; i++) {
-					if(Math.abs(mousey - yOffset + 60 - ((i+1)* workArea.getHeight())/(numThreads + 1))< snapGap) {
+					CommandBlock reference = getFromMain(threadStarts[i]);
+					int start = reference == null ? 0 : reference.getHitBox().x;
+
+					if(Math.abs(y + 60 - ((i+1)* workArea.getHeight())/(numThreads + 1))< snapGap && mousex - xOffset >= start) {
 						block.snap(i);
 						y = (i+1)* workArea.getHeight()/(numThreads+1) - 60;
 					}
@@ -388,9 +393,19 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 			}
 
 		}
-		
+	
 	}
 
+	public class HandleThreadChange implements ActionListener {
+
+		public void actionPerformed(ActionEvent e) {
+			for(int i = 0; i < numThreads; i++) {
+				if(e.getSource().equals(th[]))
+			}
+		}
+		
+	}
+	
 	private CommandBlock getFromMain(int i) {
 		int counter = 0;
 		for(CommandBlock c: commands) {
