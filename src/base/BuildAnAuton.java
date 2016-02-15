@@ -260,7 +260,7 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 				threadPanel.setLayout(new GridLayout(numThreads , 1));
 				txtThreadStarts[numThreads-1] = new JTextField(3);
 				txtThreadStarts[numThreads-1].setText(JOptionPane.showInputDialog("Enter which command(Integer) to run with"));
-				threadStarts[numThreads-1] = Integer.parseInt(txtThreadStarts[numThreads-1].getText());
+				threadStarts[numThreads-1] = Integer.parseInt(txtThreadStarts[numThreads-1].getText()) - 1;
 				threadPanel.add(txtThreadStarts[numThreads-1]);
 				
 				this.revalidate(); 
@@ -359,7 +359,12 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 				
 				int y = mousey-yOffset;
 				
-				for(int i = 0; i < numThreads; i++) {
+				if(Math.abs(y + 60 - (workArea.getHeight())/(numThreads + 1))< snapGap) {
+					block.snap(0);
+					y = workArea.getHeight()/(numThreads+1) - 60;
+				}
+
+				for(int i = 1; i < numThreads; i++) {
 					CommandBlock reference = getFromMain(threadStarts[i]);
 					int start = reference == null ? 0 : reference.getHitBox().x;
 
@@ -399,8 +404,12 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 	public class HandleThreadChange implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-			for(int i = 0; i < numThreads; i++) {
-				if(e.getSource().equals(th[]))
+			for(int i = 1; i < numThreads; i++) {
+				JTextField temp = txtThreadStarts[i];
+				if(e.getSource().equals(temp)) {
+					int newStart = Integer.parseInt(temp.getText());
+					threadStarts[i] = newStart;
+				}
 			}
 		}
 		
