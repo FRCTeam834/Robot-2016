@@ -291,6 +291,7 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 		try {
 			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream (f));
 			oos.writeObject(this.getSize());
+			oos.writeObject(workArea.getPreferredSize());
 			oos.writeObject(commands);
 			oos.writeObject(txtThreadStarts);
 			oos.close();
@@ -302,11 +303,29 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 	public void open(File f) {
 		try {
 			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
-			Dimension size = (Dimension) ois.readObject();
+			Dimension windowSize = (Dimension) ois.readObject();
+			Dimension workAreaSize = (Dimension) ois.readObject();
+			
 			commands = (ArrayList<CommandBlock>) ois.readObject();
-			CommandBlock last = commands.get(commands.size() -1);
-			workArea.setPreferredSize(new Dimension(last.getHitBox().x + 100, workArea.getPreferredSize().height));
-			this.setSize(size);
+			txtThreadStarts = (JTextField[]) ois.readObject();
+			numThreads = txtThreadStarts.length;
+			threadStarts = Arrays.copyOf(threadStarts, numThreads);
+			for(int i = 1; i< txtThreadStarts.length; i++) {
+				threadStarts[i] = Integer.parseInt(txtThreadStarts[i].getText()) - 1;
+			}
+			threadPanel.setLayout(new GridLayout(numThreads, 1));
+			threadPanel.removeAll();
+			for(int i = 0; i< txtThreadStarts.length; i++) {
+				threadPanel.add(txtThreadStarts[i]);
+				txtThreadStarts[i].addActionListener(threadChangeList);
+			}
+			
+			
+			workArea.setPreferredSize(workAreaSize);
+			this.setSize(windowSize);
+			
+			this.revalidate();
+			this.repaint();
 			ois.close();
 		}
 		catch(IOException exc){exc.printStackTrace();}

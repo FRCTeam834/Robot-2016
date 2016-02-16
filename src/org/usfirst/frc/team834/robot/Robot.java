@@ -33,7 +33,7 @@ public class Robot extends VisualRobot{
 	private Relay lights1 = new Relay(0); //turns on LEDs
 	private Relay ligths2 = new Relay(1); 
 	
-	Talon[] motors = new Talon[9];
+	CANTalon[] motors = new CANTalon[9];
 	/* 0: Front Left
 	 * 1: Rear Left
 	 * 2: Front Right
@@ -70,7 +70,7 @@ public class Robot extends VisualRobot{
 		sensors.put("tripwire", lightSensor);
 		
 		for(int i = 0; i < motors.length; i++)
-			motors[i] = new Talon(i);
+			motors[i] = new CANTalon(i);
 		robot = new RobotDrive(motors[0], motors[1], motors[2], motors[3]);
 
 		image = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
@@ -120,9 +120,6 @@ public class Robot extends VisualRobot{
 	}
 	
 	public void stop() {
-		for(Talon m: motors) {
-			m.set(0.0);
-		}
 	}
 	
 	public HashMap<String, SensorBase> getSensors() {
