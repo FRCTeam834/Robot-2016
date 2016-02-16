@@ -32,7 +32,7 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 			for(int i = 1; i < numThreads; i++){
 				
 				CommandBlock reference = getFromMain(threadStarts[i]);
-				int start = reference == null ? 0 : reference.getHitBox().x;
+				int start = reference == null ? commands.isEmpty() ? 0:commands.get(commands.size() -1).getHitBox().x + 120 : reference.getHitBox().x;
 				g2.draw(new Line2D.Double(start ,(i+1)*this.getHeight()/(numThreads + 1), this.getWidth(), (i+1)*this.getHeight()/(numThreads + 1)));
 				
 				for(int j = start; j < this.getWidth(); j+= 50) {
@@ -78,6 +78,7 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 	private int numThreads = 1;
 	private int[] threadStarts = {0};
 	
+	private HandleThreadChange threadChangeList = new HandleThreadChange();
 	
 	public BuildAnAuton() {
 		
@@ -254,13 +255,16 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 		
 		if(e.getSource() == newThread) {
 			if(numThreads < 4) {
+				int tempStart = Integer.parseInt(JOptionPane.showInputDialog("Enter which command(Integer) to run with"));
+				
 				numThreads += 1;
 				threadStarts = Arrays.copyOf(threadStarts, numThreads);
 				txtThreadStarts = Arrays.copyOf(txtThreadStarts, numThreads);
 				threadPanel.setLayout(new GridLayout(numThreads , 1));
-				txtThreadStarts[numThreads-1] = new JTextField(3);
-				txtThreadStarts[numThreads-1].setText(JOptionPane.showInputDialog("Enter which command(Integer) to run with"));
-				threadStarts[numThreads-1] = Integer.parseInt(txtThreadStarts[numThreads-1].getText()) - 1;
+				txtThreadStarts[numThreads-1] = new JTextField(3);				
+				txtThreadStarts[numThreads-1].addActionListener(threadChangeList);
+				txtThreadStarts[numThreads-1].setText(Integer.toString(tempStart));
+				threadStarts[numThreads-1] = tempStart - 1;
 				threadPanel.add(txtThreadStarts[numThreads-1]);
 				
 				this.revalidate(); 
@@ -270,9 +274,9 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 		if(e.getSource() == delThread) {
 			if(numThreads > 1) {
 				numThreads -= 1;
+				threadPanel.remove(txtThreadStarts[numThreads]);
 				threadStarts = Arrays.copyOf(threadStarts, numThreads);
 				txtThreadStarts = Arrays.copyOf(txtThreadStarts, numThreads);
-				threadPanel.remove(txtThreadStarts[numThreads-1]);
 				threadPanel.setLayout(new GridLayout(numThreads , 1));
 				this.revalidate();
 				this.repaint();
@@ -320,7 +324,7 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 				try {
 				threadStarts[i] = Integer.parseInt(txtThreadStarts[i].getText());
 				}catch (Exception e){}
-				oos.writeInt(threadStarts[i]);
+				oos.writeInt(new Integer(threadStarts[i]));
 				
 				for(CommandBlock c: commands) {
 					if (c.getSnapped() == i) {
@@ -377,8 +381,11 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 				
 				
 				if(workAreaPane.getViewport().getViewPosition().x +workAreaPane.getViewport().getExtentSize().width - 100  < block.getHitBox().x) {
-					if(workAreaPane.getHorizontalScrollBar().getValue() + workAreaPane.getHorizontalScrollBar().getWidth() >= workArea.getPreferredSize().width - 1)
+					if(workAreaPane.getHorizontalScrollBar().getValue() + workAreaPane.getHorizontalScrollBar().getWidth() >= workArea.getPreferredSize().width - 1
+							|| workAreaPane.getWidth() > workArea.getPreferredSize().width) {
 						workArea.setPreferredSize(new Dimension(workArea.getPreferredSize().width + 1, workArea.getPreferredSize().height) );
+						System.out.println("Growing");
+					}
 					workArea.revalidate();
 					workAreaPane.getHorizontalScrollBar().setValue(workAreaPane.getHorizontalScrollBar().getValue() + 1);
 					block.setX(commands.get(focus).getHitBox().x + 1);
