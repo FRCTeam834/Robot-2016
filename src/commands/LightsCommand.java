@@ -7,6 +7,7 @@ package commands;
 import org.usfirst.frc.team834.robot.*;
 import base.Command;
 import edu.wpi.first.wpilibj.Relay;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class LightsCommand implements Command {
 	//Variable to represent the robot.
@@ -31,6 +32,7 @@ public class LightsCommand implements Command {
 		//Set the lights to the "on" boolean upon executing.
 		robot.setBlueLights(on);
 		robot.setWhiteLights(on);
+
 
 	}
 

@@ -33,7 +33,7 @@ public class Robot extends VisualRobot{
 	private Relay lights1 = new Relay(0); //turns on LEDs
 	private Relay ligths2 = new Relay(1); 
 	
-	CANTalon[] motors = new CANTalon[9];
+	Talon[] motors = new Talon[9];
 	/* 0: Front Left
 	 * 1: Rear Left
 	 * 2: Front Right
@@ -44,8 +44,7 @@ public class Robot extends VisualRobot{
 	 * 7: Scissor
 	 * 8: Winch
 	 */
-	
-	RobotDrive robot = new RobotDrive(motors[0], motors[1], motors[2], motors[3]);
+	RobotDrive robot;
 	
 	Joystick leftJoystick = new Joystick(0);
 	Joystick rightJoystick = new Joystick(1);
@@ -71,8 +70,9 @@ public class Robot extends VisualRobot{
 		sensors.put("tripwire", lightSensor);
 		
 		for(int i = 0; i < motors.length; i++)
-			motors[i] = new CANTalon(i);
-		
+			motors[i] = new Talon(i);
+		robot = new RobotDrive(motors[0], motors[1], motors[2], motors[3]);
+
 		image = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
 		
         session = NIVision.IMAQdxOpenCamera("cam0",
@@ -120,7 +120,7 @@ public class Robot extends VisualRobot{
 	}
 	
 	public void stop() {
-		for(CANTalon m: motors) {
+		for(Talon m: motors) {
 			m.set(0.0);
 		}
 	}
@@ -132,9 +132,9 @@ public class Robot extends VisualRobot{
 	
 	public void autonomous() {
 		try {
-			File f = new File("/home/lvuser/auton.autr"); //Select file
+			File f = new File("/home/lvuser/blah.autr"); //Select file
 			ObjectInputStream ois;
-			ois = new ObjectInputStream(new FileInputStream("blah.autr"));
+			ois = new ObjectInputStream(new FileInputStream(f));
 			int numThreads = ois.readInt();
 			int[] threadStarts = new int[numThreads];
 			Thread[] threads = new Thread[numThreads];
@@ -143,26 +143,39 @@ public class Robot extends VisualRobot{
 			threadStarts[0] = ois.readInt();
 			ArrayList<Command> main = (ArrayList<Command>) ois.readObject();
 
+			
 			for(int thread = 1; thread < numThreads; thread++ ) {
 				threadStarts[thread] = ois.readInt();
-				threads[thread] = new Thread(new RunCommands((ArrayList<Command>) ois.readObject()));
+				ArrayList<Command> commands= (ArrayList<Command>) ois.readObject();
+				for(Command c: commands) {
+					c.setRobot(this);
+				}
+				threads[thread] = new Thread(new RunCommands(commands));
 			}
+			
+			for(Command c: main)
+				c.setRobot(this);
+
+
 			
 			
 			int i = 0;
 			while(isAutonomous() && !isDisabled() && i < main.size()) {
-				main.get(i).execute();
-				for(int start : threadStarts) {
-					if (start == i){
+				try {
+				for(int start = 1; start < threadStarts.length; start++) {
+					if (threadStarts[start] == i){
 						threads[i].start();
 					}
 						
 				}
-				i++;
+				
+				main.get(i).execute();
+				i++; }
+				catch(NullPointerException e) {}
 			}
 
 		} 
-		catch (IOException e) {} 
+		catch (IOException e) {SmartDashboard.putString("DB/String 0", e.toString());} 
 		catch (ClassNotFoundException e) {} 
 		
 		

@@ -204,11 +204,13 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 				"Choose a Command", 
 				MoveStraightCommand.class.toString().substring(15),
 				MoveAlongCurveCommand.class.toString().substring(15),
+				MoveToPointCommand.class.toString().substring(15),
 				TurnCommand.class.toString().substring(15),
 				LightsCommand.class.toString().substring(15),
+				DelayCommand.class.toString().substring(15),
 				MoveFeederArmCommand.class.toString().substring(15),
 				MoveBackArmCommand.class.toString().substring(15),
-				
+				ShootCommand.class.toString().substring(15)
 			};
 			String o;
 			Object temp = JOptionPane.showInputDialog(null, "Choose a command to add", "Choose a command to add", 1, null, options, options[0]);
@@ -322,7 +324,7 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 
 				ArrayList<Command> program = new ArrayList<>();
 				try {
-				threadStarts[i] = Integer.parseInt(txtThreadStarts[i].getText());
+				threadStarts[i] = Integer.parseInt(txtThreadStarts[i].getText()) - 1;
 				}catch (Exception e){}
 				oos.writeInt(new Integer(threadStarts[i]));
 				

@@ -54,15 +54,12 @@ public class MoveStraightCommand implements Command {
 				rspeed -= Math.abs(gyro.getAngle()) * cFactor;
 				
 			//If the gyro's angle is more than zero, change the left wheel's speed.
-				SmartDashboard.putString("DB/String 8", Double.toString(gyro.getAngle() * cFactor));
-
 				if(rspeed < 0)
 					rspeed = 0;
 
 			}
 			else if(gyro.getAngle() > 0) {
 				lspeed -= Math.abs(gyro.getAngle()) * cFactor;
-				SmartDashboard.putString("DB/String 8", Double.toString(gyro.getAngle() * cFactor));
 
 				if(lspeed < 0)
 					lspeed = 0;
@@ -71,9 +68,7 @@ public class MoveStraightCommand implements Command {
 			robot.setLeftSide(lspeed);
 			robot.setRightSide(rspeed);
 			
-			SmartDashboard.putString("DB/String 0", Double.toString(REncoder.getDistance()));
-			SmartDashboard.putString("DB/String 1", Double.toString(LEncoder.getDistance()));
-			SmartDashboard.putString("DB/String 2", Double.toString(gyro.getAngle()));
+
 
 		}
 	}

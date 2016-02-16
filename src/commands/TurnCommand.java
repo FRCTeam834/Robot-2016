@@ -29,6 +29,7 @@ public class TurnCommand implements Command {
 		
 	}
 	public void execute() throws NullPointerException {
+		
 		gyro.reset();
 		
 		if(angle > 0) {
