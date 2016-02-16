@@ -55,7 +55,6 @@ public class Robot extends VisualRobot{
 	int session;
 	
 	HashMap<String, SensorBase> sensors = new HashMap<>();
-	ArrayList<Command> commands = new ArrayList<Command>();
 
 	boolean cam = false;
 	boolean toggleCam = false;
@@ -80,18 +79,18 @@ public class Robot extends VisualRobot{
                 NIVision.IMAQdxCameraControlMode.CameraControlModeController);
         NIVision.IMAQdxConfigureGrab(session);
 
-        
-		File f = new File("/home/lvuser/auton.autr");
-		try {
-			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
-			commands = (ArrayList<Command>) ois.readObject();
-			ois.close();
-			for(Command c:commands) {
-				c.setRobot(this);
-			}
-		}  
-		catch(IOException e) {} 
-		catch (ClassNotFoundException e) {}
+//        
+//		File f = new File("/home/lvuser/auton.autr");
+//		try {
+//			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
+//			commands = (ArrayList<Command>) ois.readObject();
+//			ois.close();
+//			for(Command c:commands) {
+//				c.setRobot(this);
+//			}
+//		}  
+//		catch(IOException e) {} 
+//		catch (ClassNotFoundException e) {}
 
 		rightEncoder.setDistancePerPulse(3.02*Math.PI); //inches
 		leftEncoder.setDistancePerPulse(3.02*Math.PI);
@@ -132,15 +131,41 @@ public class Robot extends VisualRobot{
 
 	
 	public void autonomous() {
-		int i = 0;
-		try{
-			while(isAutonomous() && !isDisabled() && i < commands.size()) {
-				commands.get(i).execute();
+		try {
+			File f = new File("/home/lvuser/auton.autr"); //Select file
+			ObjectInputStream ois;
+			ois = new ObjectInputStream(new FileInputStream("blah.autr"));
+			int numThreads = ois.readInt();
+			int[] threadStarts = new int[numThreads];
+			Thread[] threads = new Thread[numThreads];
+
+			
+			threadStarts[0] = ois.readInt();
+			ArrayList<Command> main = (ArrayList<Command>) ois.readObject();
+
+			for(int thread = 1; thread < numThreads; thread++ ) {
+				threadStarts[thread] = ois.readInt();
+				threads[thread] = new Thread(new RunCommands((ArrayList<Command>) ois.readObject()));
+			}
+			
+			
+			int i = 0;
+			while(isAutonomous() && !isDisabled() && i < main.size()) {
+				main.get(i).execute();
+				for(int start : threadStarts) {
+					if (start == i){
+						threads[i].start();
+					}
+						
+				}
 				i++;
 			}
-		}
-		catch(NullPointerException e) {
-		}
+
+		} 
+		catch (IOException e) {} 
+		catch (ClassNotFoundException e) {} 
+		
+		
 	}
 	
 	public void teleOpInit() {

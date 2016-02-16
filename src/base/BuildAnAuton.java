@@ -32,7 +32,7 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 			for(int i = 1; i < numThreads; i++){
 				
 				CommandBlock reference = getFromMain(threadStarts[i]);
-				int start = reference == null ? commands.isEmpty() ? 0:commands.get(commands.size() -1).getHitBox().x + 120 : reference.getHitBox().x;
+				int start = reference == null ? commands.isEmpty() ? 0:commands.get(commands.size() -1).getHitBox().x + 130 : reference.getHitBox().x;
 				g2.draw(new Line2D.Double(start ,(i+1)*this.getHeight()/(numThreads + 1), this.getWidth(), (i+1)*this.getHeight()/(numThreads + 1)));
 				
 				for(int j = start; j < this.getWidth(); j+= 50) {
@@ -332,12 +332,11 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 					}
 				}
 				oos.writeObject(program);
-				FTP ftp = new FTP(f.getName());
-				ftp.save();
-			
 	
 			}
 			oos.close();
+			FTP ftp = new FTP(f.getName());
+			ftp.save();
 
 		}
 		catch(IOException exc){exc.printStackTrace();}
