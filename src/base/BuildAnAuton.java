@@ -384,7 +384,6 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 					if(workAreaPane.getHorizontalScrollBar().getValue() + workAreaPane.getHorizontalScrollBar().getWidth() >= workArea.getPreferredSize().width - 1
 							|| workAreaPane.getWidth() > workArea.getPreferredSize().width) {
 						workArea.setPreferredSize(new Dimension(workArea.getPreferredSize().width + 1, workArea.getPreferredSize().height) );
-						System.out.println("Growing");
 					}
 					workArea.revalidate();
 					workAreaPane.getHorizontalScrollBar().setValue(workAreaPane.getHorizontalScrollBar().getValue() + 1);
