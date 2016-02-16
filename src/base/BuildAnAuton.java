@@ -413,8 +413,9 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 			for(int i = 1; i < numThreads; i++) {
 				JTextField temp = txtThreadStarts[i];
 				if(e.getSource().equals(temp)) {
-					int newStart = Integer.parseInt(temp.getText());
+					int newStart = Integer.parseInt(temp.getText()) - 1;
 					threadStarts[i] = newStart;
+					workArea.repaint();
 				}
 			}
 		}
