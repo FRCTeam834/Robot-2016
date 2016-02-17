@@ -3,11 +3,12 @@ package commands;
 import org.usfirst.frc.team834.robot.Robot;
 import org.usfirst.frc.team834.robot.VisualRobot;
 
+import base.Command;
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class MoveToPointCommand {
+public class MoveToPointCommand implements Command {
 	private Robot robot;
 	private double displacementX, displacementY, speed;
 	private AnalogGyro gyro;

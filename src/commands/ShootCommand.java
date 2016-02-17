@@ -3,9 +3,10 @@ package commands;
 import org.usfirst.frc.team834.robot.Robot;
 import org.usfirst.frc.team834.robot.VisualRobot;
 
+import base.Command;
 import edu.wpi.first.wpilibj.Timer;
 
-public class ShootCommand {
+public class ShootCommand implements Command{
 	private Robot robot;
 	private double time;
 	private final double SPEED = -1.0;

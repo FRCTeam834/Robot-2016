@@ -32,7 +32,19 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 			for(int i = 1; i < numThreads; i++){
 				
 				CommandBlock reference = getFromMain(threadStarts[i]);
-				int start = reference == null ? commands.isEmpty() ? 0:commands.get(commands.size() -1).getHitBox().x + 130 : reference.getHitBox().x;
+				
+				int start = 0;
+				if(reference == null) {
+					CommandBlock last = getLastFromMain();
+					if(last != null) {
+						start = last.getHitBox().x + last.WIDTH;
+					}
+				}
+				else {
+					start = reference.getHitBox().x;
+				}
+				
+				
 				g2.draw(new Line2D.Double(start ,(i+1)*this.getHeight()/(numThreads + 1), this.getWidth(), (i+1)*this.getHeight()/(numThreads + 1)));
 				
 				for(int j = start; j < this.getWidth(); j+= 50) {
@@ -210,7 +222,8 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 				DelayCommand.class.toString().substring(15),
 				MoveFeederArmCommand.class.toString().substring(15),
 				MoveBackArmCommand.class.toString().substring(15),
-				ShootCommand.class.toString().substring(15)
+				ShootCommand.class.toString().substring(15),
+				FeederCommand.class.toString().substring(15)
 			};
 			String o;
 			Object temp = JOptionPane.showInputDialog(null, "Choose a command to add", "Choose a command to add", 1, null, options, options[0]);
@@ -453,6 +466,16 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 			}
 		}
 		return null;
+	}
+	
+	private CommandBlock getLastFromMain() {
+		CommandBlock last = null;
+		for(CommandBlock c: commands) {
+			if(c.getSnapped() == 0) {
+				last = c;
+			}
+		}
+		return last;
 	}
 	
 	public static void main(String[] args) {
