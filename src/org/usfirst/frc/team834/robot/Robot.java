@@ -168,8 +168,20 @@ public class Robot extends VisualRobot{
 				}
 				
 				main.get(i).execute();
-				i++; }
+				
+				i++; 
+				
+				
+				}
 				catch(NullPointerException e) {}
+			}
+			
+			//Starts any ohter threads
+			for(int start = 1; start < threadStarts.length; start++) {
+				if (threadStarts[start] >= i){
+					threads[i].start();
+				}
+					
 			}
 
 		} 
