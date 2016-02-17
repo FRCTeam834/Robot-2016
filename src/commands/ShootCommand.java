@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.Timer;
 public class ShootCommand {
 	private Robot robot;
 	private double time;
-	private final double SPEED = 69;
+	private final double SPEED = -1.0;
 	
 	public void edit() {
 		String[] labels = {"Time"};

@@ -69,6 +69,7 @@ public class Robot extends VisualRobot{
 		sensors.put("armGyro", armGyro);
 		sensors.put("tripwire", lightSensor);
 		
+		
 		for(int i = 0; i < motors.length; i++)
 			motors[i] = new CANTalon(i);
 		robot = new RobotDrive(motors[0], motors[1], motors[2], motors[3]);
