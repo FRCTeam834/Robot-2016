@@ -145,9 +145,8 @@ public class Robot extends VisualRobot{
 			for(int thread = 1; thread < numThreads; thread++ ) {
 				threadStarts[thread] = ois.readInt();
 				ArrayList<Command> commands= (ArrayList<Command>) ois.readObject();
-				for(Command c: commands) {
+				for(Command c: commands)
 					c.setRobot(this);
-				}
 				threads[thread] = new Thread(new RunCommands(commands));
 			}
 			
@@ -160,18 +159,11 @@ public class Robot extends VisualRobot{
 			int i = 0;
 			while(isAutonomous() && !isDisabled() && i < main.size()) {
 				try {
-				for(int start = 1; start < threadStarts.length; start++) {
-					if (threadStarts[start] == i){
-						threads[i].start();
-					}
-						
-				}
-				
-				main.get(i).execute();
-				
-				i++; 
-				
-				
+					for(int start = 1; start < threadStarts.length; start++)
+						if (threadStarts[start] == i)
+							threads[i].start();
+					main.get(i).execute();
+					i++;
 				}
 				catch(NullPointerException e) {}
 			}
