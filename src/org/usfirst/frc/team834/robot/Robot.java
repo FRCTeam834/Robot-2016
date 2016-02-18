@@ -176,7 +176,7 @@ public class Robot extends VisualRobot{
 				catch(NullPointerException e) {}
 			}
 			
-			//Starts any ohter threads
+			//Starts any other threads
 			for(int start = 1; start < threadStarts.length; start++) {
 				if (threadStarts[start] >= i){
 					threads[i].start();
