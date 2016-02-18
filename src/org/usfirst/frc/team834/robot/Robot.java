@@ -21,13 +21,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends VisualRobot{
 	
 	private AnalogGyro robotGyro = new AnalogGyro(0);
-	private AnalogGyro armGyro = new AnalogGyro(1);
+	private AnalogGyro backArmGyro = new AnalogGyro(1);
+	private AnalogGyro feederArmGyro = new AnalogGyro(2);
 	
 	private Encoder rightEncoder = new Encoder(0,1);
 	private Encoder leftEncoder = new Encoder(2,3);
-	private DigitalInput topArmInput = new DigitalInput(4);
-	private DigitalInput bottomArmInput = new DigitalInput(5);
-	private DigitalInput lightSensor = new DigitalInput(6);
+	private DigitalInput lightSensor = new DigitalInput(5);
 
 	
 	private Relay lights1 = new Relay(0); //turns on LEDs
@@ -64,9 +63,7 @@ public class Robot extends VisualRobot{
 		sensors.put("rightEncoder", rightEncoder);
 		sensors.put("leftEncoder", leftEncoder);
 		sensors.put("gyro", robotGyro);
-		sensors.put("topArmInput", topArmInput);
-		sensors.put("bottomArmInput", bottomArmInput);
-		sensors.put("armGyro", armGyro);
+		sensors.put("backArmGyro", backArmGyro);
 		sensors.put("tripwire", lightSensor);
 		
 		

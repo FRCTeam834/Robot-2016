@@ -19,7 +19,7 @@ public class EditDialog extends JDialog implements ActionListener {
 		JButton done = new JButton("Done");
 		JPanel content = new JPanel();
 		public EditDialog(String[] l, String[] vals) {
-			this.setModalityType(JDialog.DEFAULT_MODALITY_TYPE);
+			this.setModal(false);
 			this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			values = vals;
 			this.setLayout(new BorderLayout());

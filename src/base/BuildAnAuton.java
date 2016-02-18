@@ -123,16 +123,17 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 				for(int i = commands.size() - 1; i >= 0; i--) {
 					if(commands.get(i).getEditPortion().contains(e.getPoint())) {
 						commands.get(i).edit();
+						workArea.repaint();	
 						return;
 					}
 					if(commands.get(i).getDelPortion().contains(e.getPoint())) {
 						if(JOptionPane.OK_OPTION==JOptionPane.showConfirmDialog(null, "Delete Command?", "Delete", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE))
 							commands.remove(i);
+						workArea.repaint();	
 						return;
 					}
 				
 				}
-				workArea.repaint();
 			}
 			public void mouseEntered(MouseEvent e) {
 				
@@ -149,11 +150,10 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 						commands.get(temp).setX(0);
 					}
 					place(temp);
-					workArea.repaint();	
 
 				}
 			}
-			public void mousePressed(MouseEvent e) {				
+			public void mousePressed(MouseEvent e) {		
 				for(int i = commands.size() - 1; i >= 0; i--) {
 					Rectangle r = commands.get(i).getDragPortion();
 					if(r.contains(e.getPoint())) {
@@ -249,7 +249,7 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 				save(f);
 			}
 			workArea.repaint();	
-			workArea.validate();
+			this.revalidate();
 
 		}
 		if(e.getSource() == load) {

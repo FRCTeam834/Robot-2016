@@ -35,7 +35,7 @@ public class MoveBackArmCommand implements Command{
 
 	public void setRobot(VisualRobot r) {
 		robot = (Robot) r;
-		gyro = (AnalogGyro)robot.getSensors().get("armGyro");
+		gyro = (AnalogGyro)robot.getSensors().get("backArmGyro");
 	}
 	
 	public MoveBackArmCommand() {
