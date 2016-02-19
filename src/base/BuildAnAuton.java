@@ -15,6 +15,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.URI;
 import java.util.*;
 
 public class BuildAnAuton extends JFrame implements ActionListener {
@@ -25,37 +26,31 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 			super.paintComponent(g);
 			Graphics2D g2 = (Graphics2D) g;
 			g2.draw(new Line2D.Double(0, this.getHeight()/(numThreads + 1), this.getWidth(), this.getHeight()/(numThreads + 1)));
-			for(int j = 0; j < this.getWidth(); j+= 50) {
+			for(int j = 0; j < this.getWidth(); j+= 50)
 				g2.draw(new Line2D.Double(j, this.getHeight()/(numThreads + 1) -10, j, this.getHeight()/(numThreads+1) + 10));
-			}
 			
 			for(int i = 1; i < numThreads; i++){
-				
 				CommandBlock reference = getFromMain(threadStarts[i]);
 				
 				int start = 0;
 				if(reference == null) {
 					CommandBlock last = getLastFromMain();
-					if(last != null) {
+					if(last != null)
 						start = last.getHitBox().x + last.WIDTH;
-					}
 				}
-				else {
+				else
 					start = reference.getHitBox().x;
-				}
 				
 				
 				g2.draw(new Line2D.Double(start ,(i+1)*this.getHeight()/(numThreads + 1), this.getWidth(), (i+1)*this.getHeight()/(numThreads + 1)));
 				
-				for(int j = start; j < this.getWidth(); j+= 50) {
+				for(int j = start; j < this.getWidth(); j+= 50)
 					g2.draw(new Line2D.Double(j, (i+1)*this.getHeight()/(numThreads + 1) -10, j, (i+1)*this.getHeight()/(numThreads+1) + 10));
-				}
-				
 			}
 
-			for(CommandBlock c:commands) {
+			for(CommandBlock c:commands)
 				c.paint(g2);
-			}
+
 		}
 		
 	};
@@ -68,7 +63,7 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 	private JMenuItem load = new JMenuItem("Load");
 	private JMenuItem export = new JMenuItem("Export");
 	private JMenu helpMenu = new JMenu("Help");
-	private JMenuItem help = new JMenu("Help");
+	private JMenuItem help = new JMenuItem("Help");
 	JFileChooser fs = new JFileChooser();
 
 	
@@ -150,7 +145,6 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 						commands.get(temp).setX(0);
 					}
 					place(temp);
-
 				}
 			}
 			public void mousePressed(MouseEvent e) {		
@@ -198,11 +192,9 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 			int xtoswap = temp.getHitBox().x;
 			int indexToPlace = 0;
 			commands.remove(temp);
-			for (int i = 0; i < commands.size(); i++) {
-				if(xtoswap > commands.get(i).getHitBox().x) {
+			for (int i = 0; i < commands.size(); i++)
+				if(xtoswap > commands.get(i).getHitBox().x)
 					indexToPlace += 1;
-				}
-			}
 			commands.add(indexToPlace, temp);
 		}
 		workArea.repaint();	
@@ -210,7 +202,6 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-	
 		if(e.getSource() == newCommand) {
 			Object[] options = { 
 				"Choose a Command", 
@@ -241,7 +232,7 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 			workArea.repaint();	
 			this.revalidate();
 		}
-		if(e.getSource() == save) {
+		else if(e.getSource() == save) {
 			FileNameExtensionFilter fil = new FileNameExtensionFilter("Auton", "aut");
 			fs.setFileFilter(fil);
 			if(fs.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {				
@@ -252,7 +243,7 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 			this.revalidate();
 
 		}
-		if(e.getSource() == load) {
+		else if(e.getSource() == load) {
 			FileNameExtensionFilter fil = new FileNameExtensionFilter("Auton", "aut");
 			fs.setFileFilter(fil);
 			if(fs.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
@@ -261,14 +252,13 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 			}
 			
 		}
-		if(e.getSource() == export) {
+		else if(e.getSource() == export) {
 			String fName = JOptionPane.showInputDialog(this, "Enter the name of the program (exclude extension), \nand make sure you are connected to the roboRio",
 							"Export to RobotRio", JOptionPane.DEFAULT_OPTION);
 			
 			export(new File(fName + ".autr"));
 		}
-		
-		if(e.getSource() == newThread) {
+		else if(e.getSource() == newThread) {
 			if(numThreads < 4) {
 				int tempStart = Integer.parseInt(JOptionPane.showInputDialog("Enter which command(Integer) to run with"));
 				
@@ -286,7 +276,15 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 				this.repaint();
 			}
 		}
-		if(e.getSource() == delThread) {
+		else if(e.getSource() == help) {
+			System.out.println("clicked");
+			try {
+				java.awt.Desktop.getDesktop().browse(URI.create("https://raw.githubusercontent.com/FRCTeam834/Robot-2015/master/Build-an-Auton%20Tutorial?token=AP8A9G4dGEWEL4EyhQ6bmfoD9VNr27wvks5Wz55nwA%3D%3D"));
+			} catch (IOException e1) {
+				
+			}
+		}
+		else if(e.getSource() == delThread) {
 			if(numThreads > 1) {
 				numThreads -= 1;
 				threadPanel.remove(txtThreadStarts[numThreads]);
@@ -360,11 +358,9 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 				}catch (Exception e){}
 				oos.writeInt(new Integer(threadStarts[i]));
 				
-				for(CommandBlock c: commands) {
-					if (c.getSnapped() == i) {
+				for(CommandBlock c: commands)
+					if (c.getSnapped() == i)
 						program.add(c.getCommand());
-					}
-				}
 				oos.writeObject(program);
 	
 			}
@@ -457,24 +453,20 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 	
 	private CommandBlock getFromMain(int i) {
 		int counter = 0;
-		for(CommandBlock c: commands) {
+		for(CommandBlock c: commands)
 			if(c.getSnapped() == 0) {
-				if(counter == i) {
+				if(counter == i)
 					return c;
-				}
 				counter++;
 			}
-		}
 		return null;
 	}
 	
 	private CommandBlock getLastFromMain() {
 		CommandBlock last = null;
-		for(CommandBlock c: commands) {
-			if(c.getSnapped() == 0) {
+		for(CommandBlock c: commands)
+			if(c.getSnapped() == 0)
 				last = c;
-			}
-		}
 		return last;
 	}
 	
@@ -483,8 +475,7 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 		x.pack();
 		x.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		x.setVisible(true);
-		if(args.length != 0) {
+		if(args.length != 0)
 			x.open(new File(args[0]));
-		}
 	}
 }
