@@ -3,17 +3,17 @@ package commands;
 import org.usfirst.frc.team834.robot.Robot;
 import org.usfirst.frc.team834.robot.VisualRobot;
 import base.*;
-import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.wpilibj.GyroBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TurnCommand implements Command {
 	private double angle, speed;
 	private VisualRobot robot;
-	private AnalogGyro gyro;
+	private GyroBase gyro;
 	
 	public void setRobot(VisualRobot r) {
 		robot = r;
-		gyro = (AnalogGyro) robot.getSensors().get("gyro");
+		gyro = (GyroBase) robot.getSensors().get("gyro");
 	}
 	
 	public void edit() {

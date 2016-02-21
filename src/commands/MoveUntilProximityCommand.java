@@ -7,7 +7,7 @@ package commands;
 import org.usfirst.frc.team834.robot.Robot;
 import org.usfirst.frc.team834.robot.VisualRobot;
 import base.*;
-import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.wpilibj.GyroBase;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -19,7 +19,7 @@ public class MoveUntilProximityCommand implements Command {
 	//Variable to represent the ultrasonic.
 	private AnalogInput ultrasonic; 
 	//Variable to represent the gyroscope.
-	private AnalogGyro gyro;
+	private GyroBase gyro;
 	
 	@Override
 	public void edit() {
@@ -76,7 +76,7 @@ public class MoveUntilProximityCommand implements Command {
 		//Set the robot, ultrasonic, and gyro variables.
 		robot = (Robot)r;
 		ultrasonic = (AnalogInput)r.getSensors().get("ultrasonic");
-		gyro = (AnalogGyro) robot.getSensors().get("gyro");
+		gyro = (GyroBase) robot.getSensors().get("gyro");
 		SmartDashboard.putString("DB/String 9", Boolean.toString((gyro != null)));
 		SmartDashboard.putString("DB/String 8", Boolean.toString((ultrasonic != null)));
 

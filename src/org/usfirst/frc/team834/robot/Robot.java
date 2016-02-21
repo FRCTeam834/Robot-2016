@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends VisualRobot{
 	
-	private AnalogGyro robotGyro;
+	private ADXRS450_Gyro robotGyro;
 	private AnalogGyro backArmGyro;
 	private AnalogGyro feederArmGyro;
 	
@@ -69,9 +69,8 @@ public class Robot extends VisualRobot{
 		sensors.put("backArmGyro", backArmGyro);
 		sensors.put("tripwire", lightSensor);
 		
-//		robotGyro = new AnalogGyro(0);
-//		backArmGyro = new AnalogGyro(1);
-//		feederArmGyro = new AnalogGyro(2);
+//		backArmGyro = new AnalogGyro(0);
+//		feederArmGyro = new AnalogGyro(1);
 //		
 //		rightEncoder = new Encoder(0,1);
 //		leftEncoder = new Encoder(2,3);

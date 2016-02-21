@@ -4,14 +4,14 @@ import org.usfirst.frc.team834.robot.Robot;
 import org.usfirst.frc.team834.robot.VisualRobot;
 
 import base.Command;
-import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.wpilibj.GyroBase;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class MoveToPointCommand implements Command {
 	private Robot robot;
 	private double displacementX, displacementY, speed;
-	private AnalogGyro gyro;
+	private GyroBase gyro;
 	private Encoder LEncoder, REncoder;
 	
 	public void edit() {
@@ -62,7 +62,7 @@ public class MoveToPointCommand implements Command {
 
 	public void setRobot(VisualRobot r) {
 		robot = (Robot)r;
-		gyro = (AnalogGyro)robot.getSensors().get("gyro");
+		gyro = (GyroBase)robot.getSensors().get("gyro");
 		LEncoder = (Encoder) robot.getSensors().get("leftEncoder");
 		REncoder = (Encoder) robot.getSensors().get("rightEncoder");
 	}
