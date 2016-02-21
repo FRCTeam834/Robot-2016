@@ -20,19 +20,19 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends VisualRobot{
 	
-	private AnalogGyro robotGyro = new AnalogGyro(0);
-	private AnalogGyro backArmGyro = new AnalogGyro(1);
-	private AnalogGyro feederArmGyro = new AnalogGyro(2);
+	private AnalogGyro robotGyro;
+	private AnalogGyro backArmGyro;
+	private AnalogGyro feederArmGyro;
 	
-	private Encoder rightEncoder = new Encoder(0,1);
-	private Encoder leftEncoder = new Encoder(2,3);
-	private DigitalInput lightSensor = new DigitalInput(5);
+	private Encoder rightEncoder;
+	private Encoder leftEncoder;
+	private DigitalInput lightSensor;
 
 	
-	private Relay lights1 = new Relay(0); //turns on LEDs
-	private Relay ligths2 = new Relay(1); 
+	private Relay lights1; //turns on LEDs
+	private Relay ligths2; 
 	
-	CANTalon[] motors = new CANTalon[9];
+	CANTalon[] motors = new CANTalon[8];
 	/* 0: Front Left
 	 * 1: Rear Left
 	 * 2: Front Right
@@ -41,8 +41,10 @@ public class Robot extends VisualRobot{
 	 * 5: feeder arm
 	 * 6: Back arm
 	 * 7: Scissor
-	 * 8: Winch
+	 * 8: Winch (not there)
 	 */
+	Talon winch;
+	
 	RobotDrive robot;
 	
 	Joystick leftJoystick = new Joystick(0);
@@ -58,24 +60,39 @@ public class Robot extends VisualRobot{
 	boolean toggleCam = false;
 	
 	
-	public Robot() {
-		super();
+	
+	
+	public void robotInit() {
 		sensors.put("rightEncoder", rightEncoder);
 		sensors.put("leftEncoder", leftEncoder);
 		sensors.put("gyro", robotGyro);
 		sensors.put("backArmGyro", backArmGyro);
 		sensors.put("tripwire", lightSensor);
 		
+//		robotGyro = new AnalogGyro(0);
+//		backArmGyro = new AnalogGyro(1);
+//		feederArmGyro = new AnalogGyro(2);
+//		
+//		rightEncoder = new Encoder(0,1);
+//		leftEncoder = new Encoder(2,3);
+//		lightSensor = new DigitalInput(5);
+//
+//		lights1 = new Relay(0); //turns on LEDs
+//		ligths2 = new Relay(1); 
 		
-		for(int i = 0; i < motors.length; i++)
+		winch = new Talon(0);
+		
+		for(int i = 0; i < motors.length; i++) {
 			motors[i] = new CANTalon(i);
+		}
+		
 		robot = new RobotDrive(motors[0], motors[1], motors[2], motors[3]);
 
-		image = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
-		
-        session = NIVision.IMAQdxOpenCamera("cam0",
-                NIVision.IMAQdxCameraControlMode.CameraControlModeController);
-        NIVision.IMAQdxConfigureGrab(session);
+//		image = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
+//		
+//        session = NIVision.IMAQdxOpenCamera("cam0",
+//                NIVision.IMAQdxCameraControlMode.CameraControlModeController);
+//        NIVision.IMAQdxConfigureGrab(session);
 
 //        
 //		File f = new File("/home/lvuser/auton.autr");
@@ -90,10 +107,12 @@ public class Robot extends VisualRobot{
 //		catch(IOException e) {} 
 //		catch (ClassNotFoundException e) {}
 
-		rightEncoder.setDistancePerPulse(3.02*Math.PI); //inches
-		leftEncoder.setDistancePerPulse(3.02*Math.PI);
-		
-		robotGyro.initGyro();
+//		rightEncoder.setDistancePerPulse(3.02*Math.PI); //inches
+//		leftEncoder.setDistancePerPulse(3.02*Math.PI);
+//		
+//		robotGyro.initGyro();
+//		backArmGyro.initGyro();
+//		feederArmGyro.initGyro();
 	}	
 
 	public void setLeftSide(double speed) {
@@ -181,59 +200,93 @@ public class Robot extends VisualRobot{
 	}
 	
 	public void teleOpInit() {
-		robotGyro.reset();
-        NIVision.IMAQdxStartAcquisition(session);
+//		robotGyro.reset();
+//		NIVision.IMAQdxStartAcquisition(session);
 
 	}
 
 	public void teleOpPeriodic() {
 		robot.tankDrive(leftJoystick, rightJoystick);
-		
-		SmartDashboard.putString("DB/String 0", Double.toString(rightEncoder.getDistance()));
-		SmartDashboard.putString("DB/String 1", Double.toString(leftEncoder.getDistance()));
-		SmartDashboard.putString("DB/String 2", Double.toString(robotGyro.getAngle()));
-		SmartDashboard.putString("DB/String 5", Boolean.toString(lightSensor.get()));
-		
-		try{
-			NIVision.IMAQdxGrab(session, image, 1);
-		}
-		catch(VisionException e){
-		}
-		CameraServer.getInstance().setImage(image);
 
-		if(rightJoystick.getRawButton(2)) {
-			if(toggleCam) {
-				if(cam) {	
-					Thread t = new Thread(new Runnable() {
-						public void run() {		
-							NIVision.IMAQdxCloseCamera(session);
-					        session = NIVision.IMAQdxOpenCamera("cam1",
-					                NIVision.IMAQdxCameraControlMode.CameraControlModeController);
-					        NIVision.IMAQdxConfigureGrab(session);
-						}
-						
-					});
-			        t.start();
-				}
-				else {
-					Thread t = new Thread(new Runnable() {
-						public void run() {		
-							NIVision.IMAQdxCloseCamera(session);
-					        session = NIVision.IMAQdxOpenCamera("cam0",
-					                NIVision.IMAQdxCameraControlMode.CameraControlModeController);
-					        NIVision.IMAQdxConfigureGrab(session);
-						}
-						
-					});
-			        t.start();
-				}
-				cam = !cam;
-			}
-			toggleCam = false;
+		if(xbox.getRawButton(1)) 
+			motors[4].set(1);
+		else if(xbox.getRawButton(2)) 
+			motors[4].set(-1);
+		else{
+			motors[4].set(0);
 		}
-		else {
-			toggleCam = true;
+		
+		if(xbox.getRawButton(3)) 
+			motors[5].set(.2);
+		else if(xbox.getRawButton(4)) 
+			motors[5].set(-.2);
+		else{
+			motors[5].set(0);
 		}
+		
+		
+		if(xbox.getRawButton(5)) 
+			motors[6].set(.8);
+		else if(xbox.getRawButton(6)) 
+			motors[6].set(-.8);
+		else{
+			motors[6].set(0);
+		}
+		
+		if(rightJoystick.getRawButton(1)) 
+			motors[7].set(1);
+		else if(rightJoystick.getRawButton(2)) 
+			motors[7].set(1);
+		else{
+			motors[7].set(0);
+		}
+
+		
+//		SmartDashboard.putString("DB/String 0", Double.toString(rightEncoder.getDistance()));
+//		SmartDashboard.putString("DB/String 1", Double.toString(leftEncoder.getDistance()));
+//		SmartDashboard.putString("DB/String 2", Double.toString(robotGyro.getAngle()));
+//		SmartDashboard.putString("DB/String 5", Boolean.toString(lightSensor.get()));
+		
+//		try{
+//			NIVision.IMAQdxGrab(session, image, 1);
+//		}
+//		catch(VisionException e){
+//		}
+//		CameraServer.getInstance().setImage(image);
+
+//		if(rightJoystick.getRawButton(2)) {
+//			if(toggleCam) {
+//				if(cam) {	
+//					Thread t = new Thread(new Runnable() {
+//						public void run() {		
+//							NIVision.IMAQdxCloseCamera(session);
+//					        session = NIVision.IMAQdxOpenCamera("cam1",
+//					                NIVision.IMAQdxCameraControlMode.CameraControlModeController);
+//					        NIVision.IMAQdxConfigureGrab(session);
+//						}
+//						
+//					});
+//			        t.start();
+//				}
+//				else {
+//					Thread t = new Thread(new Runnable() {
+//						public void run() {		
+//							NIVision.IMAQdxCloseCamera(session);
+//					        session = NIVision.IMAQdxOpenCamera("cam0",
+//					                NIVision.IMAQdxCameraControlMode.CameraControlModeController);
+//					        NIVision.IMAQdxConfigureGrab(session);
+//						}
+//						
+//					});
+//			        t.start();
+//				}
+//				cam = !cam;
+//			}
+//			toggleCam = false;
+//		}
+//		else {
+//			toggleCam = true;
+//		}
 		
 	}
 
