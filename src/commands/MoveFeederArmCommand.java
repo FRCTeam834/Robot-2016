@@ -11,24 +11,25 @@ public class MoveFeederArmCommand implements Command {
 	private AnalogGyro gyro;
 	private boolean direction; //true is up, false is down
 	private double angle;
-	private final double SPEED = 0.3;
+	private double speed = 0.3;
 	
 	public void edit() {
-		String[] labels = {"Direction", "Angle"};
-		String[] values = {Boolean.toString(direction), Double.toString(angle)};
+		String[] labels = {"Direction", "Angle", "Speed"};
+		String[] values = {Boolean.toString(direction), Double.toString(angle), Double.toString(speed)};
 		EditDialog d = new EditDialog(labels,values);		
 		
 		direction = values[0] == "up";
 		angle = Double.parseDouble(values[1]);
+		speed = Double.parseDouble(values[2]);
 	}
 
 	public void execute() throws NullPointerException {
 		if(direction)
 			while(gyro.getAngle() < angle)
-				robot.setBackArm(SPEED);
+				robot.setBackArm(speed);
 		else
 			while(gyro.getAngle() > angle)
-				robot.setBackArm(-SPEED);
+				robot.setBackArm(-speed);
 	}
 
 	public void setRobot(VisualRobot r) {
