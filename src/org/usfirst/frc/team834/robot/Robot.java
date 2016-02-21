@@ -16,6 +16,7 @@ import com.ni.vision.NIVision.ShapeMode;
 import com.ni.vision.VisionException;
 
 import base.Command;
+import commands.*;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends VisualRobot{
@@ -30,7 +31,7 @@ public class Robot extends VisualRobot{
 
 	
 	private Relay lights1; //turns on LEDs
-	private Relay ligths2; 
+	private Relay lights2; 
 	
 	CANTalon[] motors = new CANTalon[8];
 	/* 0: Front Left
@@ -67,22 +68,29 @@ public class Robot extends VisualRobot{
 		sensors.put("leftEncoder", leftEncoder);
 		sensors.put("gyro", robotGyro);
 		sensors.put("backArmGyro", backArmGyro);
+		sensors.put("feederArmGyro", feederArmGyro);
 		sensors.put("tripwire", lightSensor);
 		
-//		backArmGyro = new AnalogGyro(0);
-//		feederArmGyro = new AnalogGyro(1);
-//		
-//		rightEncoder = new Encoder(0,1);
-//		leftEncoder = new Encoder(2,3);
-//		lightSensor = new DigitalInput(5);
-//
+		backArmGyro = new AnalogGyro(0);
+		feederArmGyro = new AnalogGyro(1);
+		robotGyro = new ADXRS450_Gyro();
+
+		
+		
+		rightEncoder = new Encoder(0,1);
+		leftEncoder = new Encoder(2,3);
+		lightSensor = new DigitalInput(4);
+		
 //		lights1 = new Relay(0); //turns on LEDs
 //		ligths2 = new Relay(1); 
 		
-		winch = new Talon(0);
 		
 		for(int i = 0; i < motors.length; i++) {
+			
 			motors[i] = new CANTalon(i);
+			if(i <= 3){
+				motors[i].setInverted(true);
+			}
 		}
 		
 		robot = new RobotDrive(motors[0], motors[1], motors[2], motors[3]);
@@ -109,9 +117,9 @@ public class Robot extends VisualRobot{
 //		rightEncoder.setDistancePerPulse(3.02*Math.PI); //inches
 //		leftEncoder.setDistancePerPulse(3.02*Math.PI);
 //		
-//		robotGyro.initGyro();
-//		backArmGyro.initGyro();
-//		feederArmGyro.initGyro();
+		robotGyro.calibrate();
+		backArmGyro.initGyro();
+		feederArmGyro.initGyro();
 	}	
 
 	public void setLeftSide(double speed) {
@@ -144,56 +152,61 @@ public class Robot extends VisualRobot{
 
 	
 	public void autonomous() {
-		try {
-			File f = new File("/home/lvuser/blah.autr"); //Select file
-			ObjectInputStream ois;
-			ois = new ObjectInputStream(new FileInputStream(f));
-			int numThreads = ois.readInt();
-			int[] threadStarts = new int[numThreads];
-			Thread[] threads = new Thread[numThreads];
+//		try {
+//			File f = new File("/home/lvuser/blah.autr"); //Select file
+//			ObjectInputStream ois;
+//			ois = new ObjectInputStream(new FileInputStream(f));
+//			int numThreads = ois.readInt();
+//			int[] threadStarts = new int[numThreads];
+//			Thread[] threads = new Thread[numThreads];
+//
+//			
+//			threadStarts[0] = ois.readInt();
+//			ArrayList<Command> main = (ArrayList<Command>) ois.readObject();
+//
+//			
+//			for(int thread = 1; thread < numThreads; thread++ ) {
+//				threadStarts[thread] = ois.readInt();
+//				ArrayList<Command> commands= (ArrayList<Command>) ois.readObject();
+//				for(Command c: commands)
+//					c.setRobot(this);
+//				threads[thread] = new Thread(new RunCommands(commands));
+//			}
+//			
+//			for(Command c: main)
+//				c.setRobot(this);
 
-			
-			threadStarts[0] = ois.readInt();
-			ArrayList<Command> main = (ArrayList<Command>) ois.readObject();
+			ArrayList<Command> main = new ArrayList<>();
+			main.add(new DelayCommand(5));
+			main.add(new MoveStraightCommand(10, .4, this));
+			main.add(new TurnCommand(90, .4, this));
+			main.add(new MoveToPointCommand(4, 5, .4, this));
 
-			
-			for(int thread = 1; thread < numThreads; thread++ ) {
-				threadStarts[thread] = ois.readInt();
-				ArrayList<Command> commands= (ArrayList<Command>) ois.readObject();
-				for(Command c: commands)
-					c.setRobot(this);
-				threads[thread] = new Thread(new RunCommands(commands));
-			}
-			
-			for(Command c: main)
-				c.setRobot(this);
-
-
-			
-			
 			int i = 0;
 			while(isAutonomous() && !isDisabled() && i < main.size()) {
-				try {
-					for(int start = 1; start < threadStarts.length; start++)
-						if (threadStarts[start] == i)
-							threads[i].start();
-					main.get(i).execute();
-					i++;
-				}
-				catch(NullPointerException e) {}
+//				try {
+//					for(int start = 1; start < threadStarts.length; start++)
+//						if (threadStarts[start] == i)
+//							threads[i].start();
+//					main.get(i).execute();
+//					i++;
+//				}
+//				catch(NullPointerException e) {}
+				main.get(i).execute();
+				i++;
 			}
 			
 			//Starts any other threads
-			for(int start = 1; start < threadStarts.length; start++) {
-				if (threadStarts[start] >= i){
-					threads[i].start();
-				}
-					
-			}
+//			for(int start = 1; start < threadStarts.length; start++) {
+//				if (threadStarts[start] >= i){
+//					threads[i].start();
+//				}
+//					
+//			}
 
-		} 
-		catch (IOException e) {SmartDashboard.putString("DB/String 0", e.toString());} 
-		catch (ClassNotFoundException e) {} 
+//		} 
+//		catch (IOException e) {} 
+//		catch (ClassNotFoundException e) {} 
 		
 		
 	}
@@ -209,25 +222,26 @@ public class Robot extends VisualRobot{
 
 		if(xbox.getRawButton(1)) 
 			motors[4].set(1);
-		else if(xbox.getRawButton(2)) 
-			motors[4].set(-1);
-		else{
+		else if(!lightSensor.get()) 
 			motors[4].set(0);
+		else{
+			motors[4].set(-1);
+
 		}
 		
 		if(xbox.getRawButton(3)) 
-			motors[5].set(.2);
+			motors[5].set(.4);
 		else if(xbox.getRawButton(4)) 
-			motors[5].set(-.2);
+			motors[5].set(-.4);
 		else{
 			motors[5].set(0);
 		}
 		
 		
 		if(xbox.getRawButton(5)) 
-			motors[6].set(.8);
+			motors[6].set(1);
 		else if(xbox.getRawButton(6)) 
-			motors[6].set(-.8);
+			motors[6].set(-1);
 		else{
 			motors[6].set(0);
 		}
@@ -235,16 +249,18 @@ public class Robot extends VisualRobot{
 		if(rightJoystick.getRawButton(1)) 
 			motors[7].set(1);
 		else if(rightJoystick.getRawButton(2)) 
-			motors[7].set(1);
+			motors[7].set(-1);
 		else{
 			motors[7].set(0);
 		}
 
 		
-//		SmartDashboard.putString("DB/String 0", Double.toString(rightEncoder.getDistance()));
-//		SmartDashboard.putString("DB/String 1", Double.toString(leftEncoder.getDistance()));
-//		SmartDashboard.putString("DB/String 2", Double.toString(robotGyro.getAngle()));
-//		SmartDashboard.putString("DB/String 5", Boolean.toString(lightSensor.get()));
+		SmartDashboard.putString("DB/String 0", "RightEncoder: " + Double.toString(rightEncoder.getDistance()));
+		SmartDashboard.putString("DB/String 1", "LeftEncoder: " + Double.toString(leftEncoder.getDistance()));
+		SmartDashboard.putString("DB/String 2", "RobotGyro: " + Double.toString(robotGyro.getAngle()));
+		SmartDashboard.putString("DB/String 3", "FrontGyro: " + Double.toString(feederArmGyro.getAngle()));
+		SmartDashboard.putString("DB/String 4", "BackGyro: " + Double.toString(backArmGyro.getAngle()));
+		SmartDashboard.putString("DB/String 5", "LightSensort: " + Boolean.toString(lightSensor.get()));
 		
 //		try{
 //			NIVision.IMAQdxGrab(session, image, 1);
@@ -314,7 +330,7 @@ public class Robot extends VisualRobot{
 		lights1.set(on ? Relay.Value.kForward : Relay.Value.kOff);
 	}
 	public void setWhiteLights(boolean on) {
-		lights1.set(on ? Relay.Value.kForward : Relay.Value.kOff);
+		lights2.set(on ? Relay.Value.kForward : Relay.Value.kOff);
 	}
 	public void checkIntake() {
 		if(lightSensor.get()) {
