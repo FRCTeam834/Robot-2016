@@ -4,10 +4,13 @@
 
 package commands;
 
+import org.usfirst.frc.team834.robot.Robot;
 import org.usfirst.frc.team834.robot.VisualRobot;
 import base.Command;
-import edu.wpi.first.wpilibj.GyroBase;
+import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.wpilibj.CounterBase;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class MoveStraightCommand implements Command {
 	//Variable to represent the robot.
@@ -15,7 +18,7 @@ public class MoveStraightCommand implements Command {
 	//Left and right encoders used to get distance travelled by the wheels.
 	private Encoder LEncoder, REncoder;
 	//Gyro variable used for getting the rotation of the robot.
-	private GyroBase gyro;
+	private AnalogGyro gyro;
 	
 	//The speed the robot should move, the distance it should travel, and a c factor value.
 	private double speed, distance, cFactor;
@@ -30,7 +33,7 @@ public class MoveStraightCommand implements Command {
 		distance = Double.parseDouble(values[0]);
 		
 		//If speed is less than or equal to one, set speed to the second textboxe's value.
-		if(Math.abs(Double.parseDouble(values[1])) <= 1.0)
+		if(Double.parseDouble(values[1]) <= 1.0 && Double.parseDouble(values[1]) >= -1.0)
 			speed = Double.parseDouble(values[1]);
 	}
 
@@ -42,7 +45,7 @@ public class MoveStraightCommand implements Command {
 		cFactor = speed / 45.0;
 
 		//While loop to end once the desired distance is travelled.
-		while((REncoder.getDistance() + LEncoder.getDistance()) / 2 < distance && robot.isAutonomous() && !robot.isDisabled()) {
+		while(Math.abs(REncoder.getDistance() + LEncoder.getDistance()) / 2 < distance && robot.isAutonomous() && !robot.isDisabled()) {
 			//Speed of left and right wheels.
 			double lspeed = speed, rspeed = speed;
 			
@@ -73,7 +76,7 @@ public class MoveStraightCommand implements Command {
 	public void setRobot(VisualRobot r) {
 		//Initialize robot variable, gyro variable, and encoder variables.
 		robot = r;
-		gyro = (GyroBase) robot.getSensors().get("gyro");
+		gyro = (AnalogGyro) robot.getSensors().get("gyro");
 		LEncoder = (Encoder) robot.getSensors().get("leftEncoder");
 		REncoder = (Encoder) robot.getSensors().get("rightEncoder");
 	}

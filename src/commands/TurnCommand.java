@@ -3,17 +3,17 @@ package commands;
 import org.usfirst.frc.team834.robot.Robot;
 import org.usfirst.frc.team834.robot.VisualRobot;
 import base.*;
-import edu.wpi.first.wpilibj.GyroBase;
+import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TurnCommand implements Command {
 	private double angle, speed;
 	private VisualRobot robot;
-	private GyroBase gyro;
+	private AnalogGyro gyro;
 	
 	public void setRobot(VisualRobot r) {
 		robot = r;
-		gyro = (GyroBase) robot.getSensors().get("gyro");
+		gyro = (AnalogGyro) robot.getSensors().get("gyro");
 	}
 	
 	public void edit() {
@@ -32,26 +32,14 @@ public class TurnCommand implements Command {
 		
 		gyro.reset();
 		
-		if(angle > 0) {
-			while (gyro.getAngle() < angle && !robot.isDisabled() && robot.isAutonomous()) {
-				robot.setRightSide(-speed);
-				robot.setLeftSide(speed);
+		if(angle != 0) {
+			while (angle > 0 ? gyro.getAngle() < angle : gyro.getAngle() > angle && !robot.isDisabled() && robot.isAutonomous()) {
+				robot.setRightSide(angle > 0 ? -speed : speed);
+				robot.setLeftSide(angle > 0 ? speed : -speed);
 				SmartDashboard.putString("DB/String 2", Double.toString(gyro.getAngle()));
-
 			}
 			robot.stop();
 		}
-		else if(angle < 0) {
-			while (gyro.getAngle() > angle && !robot.isDisabled() && robot.isAutonomous()) {
-				robot.setRightSide(speed);
-				robot.setLeftSide(-speed);
-				SmartDashboard.putString("DB/String 2", Double.toString(gyro.getAngle()));
-
-			}
-			robot.stop();
-		}
-		
-		
 	}
 	
 	public TurnCommand() {
