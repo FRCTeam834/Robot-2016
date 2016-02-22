@@ -119,7 +119,7 @@ public class Robot extends VisualRobot{
 
 		rightEncoder.setDistancePerPulse(3.02*Math.PI); //inches
 		leftEncoder.setDistancePerPulse(3.02*Math.PI);
-		scissorsEncoder.setDistancePerPulse(1/8*Math.PI);
+		scissorsEncoder.setDistancePerPulse(1/8);
 //		
 		robotGyro.calibrate();
 		backArmGyro.initGyro();
