@@ -27,6 +27,7 @@ public class Robot extends VisualRobot{
 	
 	private Encoder rightEncoder;
 	private Encoder leftEncoder;
+	private Encoder scissorsEncoder;
 	private DigitalInput lightSensor;
 
 	
@@ -70,6 +71,7 @@ public class Robot extends VisualRobot{
 		sensors.put("backArmGyro", backArmGyro);
 		sensors.put("feederArmGyro", feederArmGyro);
 		sensors.put("tripwire", lightSensor);
+		sensors.put("scissorsEncoder", scissorsEncoder);
 		
 		backArmGyro = new AnalogGyro(0);
 		feederArmGyro = new AnalogGyro(1);
@@ -80,6 +82,7 @@ public class Robot extends VisualRobot{
 		rightEncoder = new Encoder(0,1);
 		leftEncoder = new Encoder(2,3);
 		lightSensor = new DigitalInput(4);
+		scissorsEncoder = new Encoder(5, 6);
 		
 //		lights1 = new Relay(0); //turns on LEDs
 //		ligths2 = new Relay(1); 
@@ -114,8 +117,9 @@ public class Robot extends VisualRobot{
 //		catch(IOException e) {} 
 //		catch (ClassNotFoundException e) {}
 
-//		rightEncoder.setDistancePerPulse(3.02*Math.PI); //inches
-//		leftEncoder.setDistancePerPulse(3.02*Math.PI);
+		rightEncoder.setDistancePerPulse(3.02*Math.PI); //inches
+		leftEncoder.setDistancePerPulse(3.02*Math.PI);
+		scissorsEncoder.setDistancePerPulse(1/8*Math.PI);
 //		
 		robotGyro.calibrate();
 		backArmGyro.initGyro();
