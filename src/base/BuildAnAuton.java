@@ -120,6 +120,7 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 					if(commands.get(i).getEditPortion().contains(e.getPoint())) {
 						commands.get(i).edit();
 						workArea.repaint();	
+						workArea.requestFocus();
 						return;
 					}
 					if(commands.get(i).getDelPortion().contains(e.getPoint())) {

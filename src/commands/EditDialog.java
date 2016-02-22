@@ -19,7 +19,7 @@ public class EditDialog extends JDialog implements ActionListener {
 		JButton done = new JButton("Done");
 		JPanel content = new JPanel();
 		public EditDialog(String[] l, String[] vals) {
-			this.setModal(false);
+			this.setModal(true);
 			this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			values = vals;
 			this.setLayout(new BorderLayout());
@@ -57,11 +57,12 @@ public class EditDialog extends JDialog implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			
 			for(int i = 0; i < values.length; i++) {
 				values[i] = fields[i].getText();
 			}
 			this.dispose();
-		}
-		
+
+ 		}		
 
 }
