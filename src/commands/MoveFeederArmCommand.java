@@ -16,10 +16,10 @@ public class MoveFeederArmCommand implements Command {
 	
 	public void edit() {
 		String[] labels = {"Direction", "Angle", "Speed", "Timeout"};
-		String[] values = {Boolean.toString(direction), Double.toString(angle), Double.toString(speed), Integer.toString(timeout)};
+		String[] values = {direction ? "up" : "down", Double.toString(angle), Double.toString(speed), Integer.toString(timeout)};
 		EditDialog d = new EditDialog(labels,values);		
 		
-		direction = values[0] == "up";
+		direction = values[0].equals("up");
 		angle = Double.parseDouble(values[1]);
 		speed = Double.parseDouble(values[2]);
 		timeout = Integer.parseInt(values[3]);
@@ -48,9 +48,11 @@ public class MoveFeederArmCommand implements Command {
 	 * @param ang The angle to move the arm to.
 	 * @param r The robot.
 	 */
-	public MoveFeederArmCommand(boolean dir, double ang, VisualRobot r) {
+	public MoveFeederArmCommand(boolean dir, double ang, double spd,VisualRobot r) {
 		direction = dir;
+		speed = spd;
 		angle = ang;
+		timeout = 3000;
 		setRobot(r);
 	}
 }

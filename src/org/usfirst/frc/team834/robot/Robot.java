@@ -185,30 +185,55 @@ public class Robot extends VisualRobot{
 			main.add(new MoveStraightCommand(10, .4, this));
 			main.add(new TurnCommand(90, .4, this));
 			main.add(new MoveToPointCommand(4, 5, .4, this));
+			
+			ArrayList<Command> arms = new ArrayList<>();
+			arms.add(new MoveBackArmCommand(true, 90, 1.0, this));
+			arms.add(new MoveFeederArmCommand(true, 90, .4, this));
+			arms.add(new MoveBackArmCommand(false, 0, 1.0, this));
+			arms.add(new MoveFeederArmCommand(false, 0, .4, this));
 
+			ArrayList<Command> feederAndLights = new ArrayList<>();
+			feederAndLights.add(new FeederCommand(6, this));
+ 			feederAndLights.add(new LightsCommand(true, this));
+ 			feederAndLights.add(new DelayCommand(1));
+ 			feederAndLights.add(new LightsCommand(false, this));
+ 			feederAndLights.add(new DelayCommand(1));
+ 			feederAndLights.add(new LightsCommand(true, this));
+ 			feederAndLights.add(new DelayCommand(1));
+ 			feederAndLights.add(new LightsCommand(false, this));
+ 			feederAndLights.add(new DelayCommand(1));
+ 			feederAndLights.add(new LightsCommand(true, this));
+ 			feederAndLights.add(new DelayCommand(1));
+ 			feederAndLights.add(new LightsCommand(false, this));
+
+
+			
+			int[] threadStarts = {0, 2, 1};
+			Thread[] threads = {null, new Thread(new RunCommands(arms)), new Thread(new RunCommands(feederAndLights))};
+			
 			int i = 0;
 			while(isAutonomous() && !isDisabled() && i < main.size()) {
-//				try {
-//					for(int start = 1; start < threadStarts.length; start++)
-//						if (threadStarts[start] == i)
-//							threads[i].start();
-//					main.get(i).execute();
-//					i++;
-//				}
-//				catch(NullPointerException e) {}
+				try {
+					for(int start = 1; start < threadStarts.length; start++)
+						if (threadStarts[start] == i)
+							threads[i].start();
+					main.get(i).execute();
+					i++;
+				}
+				catch(NullPointerException e) {}
 				main.get(i).execute();
 				i++;
 			}
 			
 			//Starts any other threads
-//			for(int start = 1; start < threadStarts.length; start++) {
-//				if (threadStarts[start] >= i){
-//					threads[i].start();
-//				}
-//					
-//			}
+			for(int start = 1; start < threadStarts.length; start++) {
+				if (threadStarts[start] >= i){
+					threads[i].start();
+				}
+					
+			}
 
-//		} 
+		} 
 //		catch (IOException e) {} 
 //		catch (ClassNotFoundException e) {} 
 		

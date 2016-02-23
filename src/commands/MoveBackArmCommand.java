@@ -12,24 +12,29 @@ public class MoveBackArmCommand implements Command{
 	private AnalogGyro gyro;
 	private boolean direction; //true is up, false is down
 	private double angle;
+	private double timeout;
 	private double speed = 0.3;
 	
 	public void edit() {
-		String[] labels = {"Direction", "Angle", "Speed"};
-		String[] values = {Boolean.toString(direction), Double.toString(angle), Double.toString(speed)};
+		String[] labels = {"Direction", "Angle", "Speed", "Timeout"};
+		String[] values = {direction ? "up" : "down", Double.toString(angle), Double.toString(speed), Double.toString(timeout)};
 		EditDialog d = new EditDialog(labels,values);		
 		
-		direction = values[0] == "up";
+		direction = values[0].equals("up");
 		angle = Double.parseDouble(values[1]);
 		speed = Double.parseDouble(values[2]);
+		timeout = Double.parseDouble(values[3]);
+
 	}
 
 	public void execute() throws NullPointerException {
+		long startTime = System.currentTimeMillis();
+
 		if(direction)
-			while(gyro.getAngle() < angle)
+			while(gyro.getAngle() < angle && gyro.getAngle() < 180 && startTime > System.currentTimeMillis())
 				robot.setBackArm(speed);
 		else
-			while(gyro.getAngle() > angle)
+			while(gyro.getAngle() > angle && gyro.getAngle() > 0 && startTime > System.currentTimeMillis())
 				robot.setBackArm(-speed);
 	}
 
@@ -46,9 +51,11 @@ public class MoveBackArmCommand implements Command{
 	 * @param ang The angle to move the arm to.
 	 * @param r The robot.
 	 */
-	public MoveBackArmCommand(boolean dir, double ang, VisualRobot r) {
+	public MoveBackArmCommand(boolean dir, double ang, double spd, VisualRobot r) {
 		direction = dir;
+		speed = spd;
 		angle = ang;
+		timeout = 3000;
 		setRobot(r);
 	}
 }
