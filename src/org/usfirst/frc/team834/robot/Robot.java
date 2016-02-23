@@ -243,9 +243,9 @@ public class Robot extends VisualRobot{
 		
 		
 		if(xbox.getRawButton(5)) 
-			motors[6].set(.6);
+			motors[6].set(.8);
 		else if(xbox.getRawButton(6)) 
-			motors[6].set(-.6);
+			motors[6].set(-.8);
 		else{
 			motors[6].set(0);
 		}
