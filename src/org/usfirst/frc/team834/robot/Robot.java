@@ -156,7 +156,7 @@ public class Robot extends VisualRobot{
 
 	
 	public void autonomous() {
-//		try {
+		try {
 //			File f = new File("/home/lvuser/blah.autr"); //Select file
 //			ObjectInputStream ois;
 //			ois = new ObjectInputStream(new FileInputStream(f));
@@ -234,6 +234,7 @@ public class Robot extends VisualRobot{
 			}
 
 		} 
+		catch(Exception e){}
 //		catch (IOException e) {} 
 //		catch (ClassNotFoundException e) {} 
 		
