@@ -43,7 +43,6 @@ public class Robot extends VisualRobot{
 	 * 5: feeder arm
 	 * 6: Back arm
 	 * 7: Scissor
-	 * 8: Winch (not there)
 	 */
 	Talon winch;
 	
@@ -78,8 +77,7 @@ public class Robot extends VisualRobot{
 		robotGyro = new ADXRS450_Gyro();
 
 		
-		
-		rightEncoder = new Encoder(0,1);
+		rightEncoder = new Encoder(0, 1);
 		leftEncoder = new Encoder(2,3);
 		lightSensor = new DigitalInput(4);
 		scissorsEncoder = new Encoder(5, 6);
@@ -95,7 +93,7 @@ public class Robot extends VisualRobot{
 				motors[i].setInverted(true);
 			}
 		}
-		
+		winch = new Talon(0);
 		robot = new RobotDrive(motors[0], motors[1], motors[2], motors[3]);
 
 //		image = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
@@ -120,10 +118,18 @@ public class Robot extends VisualRobot{
 		rightEncoder.setDistancePerPulse(3.02*Math.PI); //inches
 		leftEncoder.setDistancePerPulse(3.02*Math.PI);
 		scissorsEncoder.setDistancePerPulse(1/8);
-//		
+		
+		rightEncoder.reset();
+		leftEncoder.reset();
+		scissorsEncoder.reset();
+		
 		robotGyro.calibrate();
+		backArmGyro.calibrate();
+		feederArmGyro.calibrate();
+
 		backArmGyro.initGyro();
-		feederArmGyro.initGyro();
+		feederArmGyro.initGyro();;
+		
 	}	
 
 	public void setLeftSide(double speed) {
@@ -242,7 +248,9 @@ public class Robot extends VisualRobot{
 	}
 	
 	public void teleOpInit() {
-//		robotGyro.reset();
+		robotGyro.reset();;
+		feederArmGyro.reset();
+		backArmGyro.reset();
 //		NIVision.IMAQdxStartAcquisition(session);
 
 	}
@@ -250,12 +258,12 @@ public class Robot extends VisualRobot{
 	public void teleOpPeriodic() {
 		robot.tankDrive(leftJoystick, rightJoystick);
 
-		if(xbox.getRawButton(1)) 
-			motors[4].set(1);
+		if(xbox.getRawButton(6) || xbox.getRawButton(5)) 
+			motors[4].set(-1);
 		else if(!lightSensor.get()) 
 			motors[4].set(0);
 		else{
-			motors[4].set(-1);
+			motors[4].set(1);
 
 		}
 		
@@ -268,29 +276,39 @@ public class Robot extends VisualRobot{
 		}
 		
 		
-		if(xbox.getRawButton(5)) 
+		if(xbox.getRawButton(2)) 
 			motors[6].set(.8);
-		else if(xbox.getRawButton(6)) 
-			motors[6].set(-.8);
+		else if(xbox.getRawButton(1)) 
+			motors[6].set(-.5);
 		else{
 			motors[6].set(0);
 		}
 		
-		if(xbox.getRawButton(8)) 
+		if(xbox.getRawButton(7) && scissorsEncoder.getDistance() <= 1) 
 			motors[7].set(1);
-		else if(xbox.getRawButton(7)) 
+		else if(xbox.getRawButton(8)) 
 			motors[7].set(-1);
 		else{
 			motors[7].set(0);
 		}
 
+		if(rightJoystick.getRawButton(10)) {
+			winch.set(-.3);
+		}
+		else if(rightJoystick.getRawButton(11)) {
+			winch.set(.3);
+		}
+		else {
+			winch.set(0);
+		}
+		
 		
 		SmartDashboard.putString("DB/String 0", "RightEncoder: " + Double.toString(rightEncoder.getDistance()));
 		SmartDashboard.putString("DB/String 1", "LeftEncoder: " + Double.toString(leftEncoder.getDistance()));
 		SmartDashboard.putString("DB/String 2", "RobotGyro: " + Double.toString(robotGyro.getAngle()));
 		SmartDashboard.putString("DB/String 3", "FrontGyro: " + Double.toString(feederArmGyro.getAngle()));
 		SmartDashboard.putString("DB/String 4", "BackGyro: " + Double.toString(backArmGyro.getAngle()));
-		SmartDashboard.putString("DB/String 5", "LightSensort: " + Boolean.toString(lightSensor.get()));
+		SmartDashboard.putString("DB/String 5", "LightSensor: " + Boolean.toString(lightSensor.get()));
 		
 //		try{
 //			NIVision.IMAQdxGrab(session, image, 1);
@@ -350,10 +368,6 @@ public class Robot extends VisualRobot{
 	public void setScissors(double speed)
 	{
 		motors[7].set(speed);
-	}
-	public void setWinch(double speed)
-	{
-		motors[8].set(speed);
 	}
 
 	public void setBlueLights(boolean on) {
