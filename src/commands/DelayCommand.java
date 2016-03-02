@@ -17,9 +17,7 @@ public class DelayCommand implements Command {
 	}
 
 	public void execute() throws NullPointerException {
-
 		Timer.delay(time);
-
 	}
 
 	public void setRobot(VisualRobot r) {

@@ -62,7 +62,7 @@ public class MoveToPointCommand implements Command {
 
 	public void setRobot(VisualRobot r) {
 		robot = (Robot)r;
-		gyro = (GyroBase)robot.getSensors().get("gyro");
+		gyro = (GyroBase) robot.getSensors().get("gyro");
 		LEncoder = (Encoder) robot.getSensors().get("leftEncoder");
 		REncoder = (Encoder) robot.getSensors().get("rightEncoder");
 	}
