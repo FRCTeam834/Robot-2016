@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Untitled Document</title>
+</head>
+
+<body>
+
+<h1>Build-an-Auton Tutorial</h1>
+<table id="toc" style="border:solid black 1px">
+<tr><td style="border:solid black 1px; font-size:24px">Table of Contents</td></tr>
+<tr><td style="border:solid black 1px"><a href="#info">Info</a></td></tr>
+<tr><td style="border:solid black 1px"><a href="#ccom">Creating a Command</a></td></tr>
+<tr><td style="border:solid black 1px"><a href="#editing">Editing a Command</a></td></tr>
+<tr><td style="border:solid black 1px"><a href="#threading">Threading</a></td></tr>
+<tr><td style="border:solid black 1px"><a href="#saving">Saving</a></td></tr>
+<tr><td style="border:solid black 1px"><a href="#opening">Opening</a></td></tr>
+<tr><td style="border:solid black 1px"><a href="#exporting">Exporting</a></td></tr>
+</table>
+<p>
+Welcome to the Build-an-Auton tutorial. In this tutorial, we'll go through how to create simple programs that the robot will execute.
+</p>
+
+<h3 id="info">Info</h3>
+When you open Build-an-Auton, you'll see a timeline, along with several buttons for creating and deleting commands and threads.
+<ul>
+<li>The timeline will be used as a guideline as to when to execute commands.</li>
+<li>The commands will be used for making the robot do things like move, turn, etc.</li>
+<li>The threads will be used to run multiple commands at the same time.</li>
+</ul>
+
+<h3 id="ccom">Creating a Command</h3>
+<p>
+Firstly, you'll want to click the "Command" button next to "Add:". A window should pop up prompting you to choose a command to run. In this case, we'll choose the "MoveStraightCommand" which makes the robot move straight.
+Once you hit OK, you'll notice that three small, connected boxes will appear somewhere around the timeline.
+Clicking on the top box (the one with the name of the command) and moving your mouse will allow you to move the command boxes around.
+Clicking on the bottom left box (the one that says "Delete") will delete the command.
+Clicking on the bottom right box (the one that says "Edit") will open a window allowing you to edit the different properties that go along with the selected command.
+</p>
+
+<h3 id="editing">Editing a Command</h3>
+<p>
+Go ahead and click on the "Edit" button. You will see a box with two fields, distance and speed, come up. For this tutorial, let's input "5.0" as distance, and "0.75" for speed (speed must be between -1 and 1).
+After clicking "Done", the window will disappear and the entered values will be saved.
+</p>
+
+<h3 id="threading">Threading</h3>
+<p>
+Now click the "Thread" button next to "Add:". A window will pop up asking for a command to run with. Basically, this is asking if you want to start running this thread at the same time as a certain command. For this tutorial, we'll just type in "1" (the move command we made).
+You'll notice that a new timeline has been created. You'll also notice that if you move the move command around, the timeline will move with it.
+This is used for running multiple commands at the same time.
+Now, create a new "TurnCommand", the same way that you made the "MoveCommand" earlier.
+Drag the newly created turn command onto the second timeline.
+</p>
+
+<h3 id="saving">Saving</h3>
+<p>
+Now, you'll want to click "File" on the bar at the top. A drop-down menu should come up. Select "save" from these options.
+Double click on "Desktop", and enter a name in the "Save As" field. In this tutorial, we'll name it "MoveExample".
+Click "Save".
+This has saved the entire program as a raw binary file on the desktop to be opened later.
+</p>
+
+<h3 id="opening">Opening</h3>
+<p>
+To make sure that this worked, go to the "File" bar at the top, and select "Load".
+Under the "File Format" drop-down, select "All Files".
+Now, double click on "Desktop", select "MoveExample", and click "Open".
+You'll see that Build-an-Auton has reopened the program that you just saved.
+</p>
+
+<h3 id="export">Exporting</h3>
+<p>
+Now comes the (un)fun part: exporting the program to the robot.
+I'll finish this tutorial once I figure out how the heck exporting works. -Ben
+</p>
+
+</body>
+</html>
