@@ -120,6 +120,8 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 						commands.get(i).edit();
 						workArea.repaint();	
 						workArea.requestFocus();
+						workArea.setLocation(workArea.getX() + 5, workArea.getY() + 5);
+						workArea.setLocation(workArea.getX() - 5, workArea.getY() - 5);
 						return;
 					}
 					if(commands.get(i).getDelPortion().contains(e.getPoint())) {
@@ -385,8 +387,9 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 			while(focus != -1) {
 			try{
 				Thread.sleep(10);
-				int mousex = workArea.getMousePosition().x;
-				int mousey = workArea.getMousePosition().y;
+				int mousex = MouseInfo.getPointerInfo().getLocation().x - workArea.getLocationOnScreen().x;//workArea.getMousePosition().x;
+				int mousey = MouseInfo.getPointerInfo().getLocation().y - workArea.getLocationOnScreen().y;//workArea.getMousePosition().y;
+				//System.out.println(workArea.getMousePosition().x + ", " + workArea.getMousePosition().y);
 				
 				
 				block.setX(mousex - xOffset);
@@ -429,7 +432,7 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 				
 
 			}
-			catch(Exception e){}
+			catch(Exception e){e.printStackTrace();}
 			
 			}
 
