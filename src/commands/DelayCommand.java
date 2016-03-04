@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DelayCommand implements Command {	
+	private static final long serialVersionUID = 2282893700588213588L;
 	private double time;
 	public void edit() {
 		String[] labels = {"Time"};
