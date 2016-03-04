@@ -2,10 +2,15 @@
 package org.usfirst.frc.team834.robot;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Vector;
+
+import org.usfirst.frc.team834.robot.Robot.ParticleReport;
 
 import com.ni.vision.NIVision;
 import com.ni.vision.NIVision.Image;
+import com.ni.vision.NIVision.Range;
 import com.ni.vision.VisionException;
 
 import base.Command;
@@ -13,6 +18,26 @@ import commands.*;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends VisualRobot{
+	
+	public class ParticleReport implements Comparator<ParticleReport>, Comparable<ParticleReport>{
+		double PercentAreaToImageArea;
+		double Area;
+		double ConvexHullArea;
+		double BoundingRectLeft;
+		double BoundingRectTop;
+		double BoundingRectRight;
+		double BoundingRectBottom;
+		
+		public int compareTo(ParticleReport r)
+		{
+			return (int)(r.Area - this.Area);
+		}
+		
+		public int compare(ParticleReport r1, ParticleReport r2)
+		{
+			return (int)(r1.Area - r2.Area);
+		}
+	};
 	
 	private ADXRS450_Gyro robotGyro = new ADXRS450_Gyro();
 	private AnalogGyro backArmGyro = new AnalogGyro(0);
@@ -45,16 +70,24 @@ public class Robot extends VisualRobot{
 	Joystick rightJoystick = new Joystick(1);
 	Joystick xbox = new Joystick(2);
 	Joystick buttons = new Joystick(3);
-	Image image;
-	int session;
 	
 	HashMap<String, SensorBase> sensors = new HashMap<>();
 
+	
+	//Vision Stuff added
 	boolean cam = false;
 	boolean toggleCam = false;
-	
-	
-	
+	Image image;
+	Image binaryImage;
+	int session;
+
+	NIVision.ParticleFilterCriteria2 criteria[] = new NIVision.ParticleFilterCriteria2[1];
+	NIVision.ParticleFilterOptions2 filterOptions = new NIVision.ParticleFilterOptions2(0,0,1,1);
+
+	NIVision.Range HUE_RANGE = new NIVision.Range(128, 170);
+	NIVision.Range SAT_RANGE = new NIVision.Range(128, 256);
+	NIVision.Range VAL_RANGE = new NIVision.Range(128, 256);
+
 	public void robotInit() {
 		
 		sensors.put("rightEncoder", rightEncoder);
@@ -80,11 +113,6 @@ public class Robot extends VisualRobot{
 		robot = new RobotDrive(motors[0], motors[1], motors[2], motors[3]);
 		robot.setSafetyEnabled(false);
 
-		image = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
-		
-        session = NIVision.IMAQdxOpenCamera("cam0",
-                NIVision.IMAQdxCameraControlMode.CameraControlModeController);
-        NIVision.IMAQdxConfigureGrab(session);
 
 		rightEncoder.setDistancePerPulse(1.0/(3.02*Math.PI * 4.0)); //inches
 		leftEncoder.setDistancePerPulse(1.0/(3.02*Math.PI * 4.0));
@@ -99,7 +127,17 @@ public class Robot extends VisualRobot{
 		feederArmGyro.calibrate();
 		
 		backArmGyro.initGyro();
-		feederArmGyro.initGyro();;
+		feederArmGyro.initGyro();
+		
+		image = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
+		binaryImage = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_U8, 0);
+		
+        session = NIVision.IMAQdxOpenCamera("cam0",
+                NIVision.IMAQdxCameraControlMode.CameraControlModeController);
+        NIVision.IMAQdxConfigureGrab(session);
+		criteria[0] = new NIVision.ParticleFilterCriteria2(NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA, .5, 100.0, 0, 0);
+
+		NIVision.Range HUE_RANGE = new NIVision.Range(250, 10);
 		
 	}	
 
@@ -216,11 +254,13 @@ public class Robot extends VisualRobot{
 		robotGyro.reset();;
 		feederArmGyro.reset();
 		backArmGyro.reset();
-//		NIVision.IMAQdxStartAcquisition(session);
 
 	}
 
 	public void teleOpPeriodic() {
+		Timer.delay(.005);
+
+		
 		robot.tankDrive(leftJoystick, rightJoystick);
 
 		if(xbox.getRawButton(6) || xbox.getRawButton(5)) 
@@ -276,12 +316,41 @@ public class Robot extends VisualRobot{
 		SmartDashboard.putString("DB/String 5", "Light Sensor: " + Boolean.toString(lightSensor.get()));	
 		SmartDashboard.putString("DB/String 6", Double.toString(scissorsEncoder.getDistance()));
 
-		Timer.delay(.05);
 		try{
 			NIVision.IMAQdxGrab(session, image, 1);
 		}
 		catch(VisionException e){
 		}
+		NIVision.imaqColorThreshold(binaryImage, image, 255, NIVision.ColorMode.HSV, HUE_RANGE, SAT_RANGE, VAL_RANGE);
+
+		int numParticles = NIVision.imaqCountParticles(binaryImage, 1);
+		SmartDashboard.putNumber("Masked particles", numParticles);
+		
+		
+		float areaMin = (float)SmartDashboard.getNumber("Area min %", .5);
+		criteria[0].lower = areaMin;
+		numParticles = NIVision.imaqCountParticles(binaryImage, 1);
+		SmartDashboard.putNumber("Filtered particles", numParticles);
+		
+		Vector<ParticleReport> particles = new Vector<ParticleReport>();
+		for(int particleIndex = 0; particleIndex < numParticles; particleIndex++)
+		{
+			ParticleReport par = new ParticleReport();
+			par.PercentAreaToImageArea = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA);
+			par.Area = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_AREA);
+			par.ConvexHullArea = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_CONVEX_HULL_AREA);
+			par.BoundingRectTop = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_TOP);
+			par.BoundingRectLeft = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_LEFT);
+			par.BoundingRectBottom = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_BOTTOM);
+			par.BoundingRectRight = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_RIGHT);
+			particles.add(par);
+		}
+		particles.sort(null);
+		double areaToConvexHullArea = ConvexHullAreaScore(particles.elementAt(0));
+		SmartDashboard.putNumber("Convex Hull Area", areaToConvexHullArea);
+
+		
+		
 		CameraServer.getInstance().setImage(image);
 
 		if(rightJoystick.getRawButton(2)) {
@@ -343,4 +412,15 @@ public class Robot extends VisualRobot{
 	public void setWhiteLights(boolean on) {
 		lights2.set(on ? Relay.Value.kForward : Relay.Value.kOff);
 	}
+	
+	double ratioToScore(double ratio)
+	{
+		return (Math.max(0, Math.min(100*(1-Math.abs(1-ratio)), 100)));
+	}
+
+	double ConvexHullAreaScore(ParticleReport report)
+	{
+		return ratioToScore((report.Area/report.ConvexHullArea)*1.18);
+	}
+
 }
