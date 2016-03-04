@@ -133,8 +133,7 @@ public class Robot extends VisualRobot{
 
 	
 	public void autonomous() {
-//			File f = new File("/home/lvuser/blah.autr"); //Select file
-//			ObjectInputStream ois;
+  //			ObjectInputStream ois;
 //			ois = new ObjectInputStream(new FileInputStream(f));
 //			int numThreads = ois.readInt();
 //			int[] threadStarts = new int[numThreads];
