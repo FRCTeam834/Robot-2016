@@ -7,6 +7,7 @@ import base.Command;
 import edu.wpi.first.wpilibj.Timer;
 
 public class ShootCommand implements Command{
+	private static final long serialVersionUID = 6001066665785081362L;
 	private Robot robot;
 	private double time;
 	private final double SPEED = -1.0;

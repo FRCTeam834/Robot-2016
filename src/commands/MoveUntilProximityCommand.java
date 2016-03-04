@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class MoveUntilProximityCommand implements Command {
+	private static final long serialVersionUID = 6389464834749212619L;
 	//Variable to represent the robot.
 	private Robot robot;
 	//The speed at which the robot should travel, the distane the robot should travel, and the c factor.

@@ -1,6 +1,10 @@
 //Robot for 2016 Stronghold.
 package org.usfirst.frc.team834.robot;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -70,6 +74,11 @@ public class Robot extends VisualRobot{
 	Joystick rightJoystick = new Joystick(1);
 	Joystick xbox = new Joystick(2);
 	Joystick buttons = new Joystick(3);
+	int[] topBtnIDs = { };
+	int[] midBtnIDs = { };
+	int[] botBtnIDs = { };
+
+	
 	
 	HashMap<String, SensorBase> sensors = new HashMap<>();
 
@@ -137,7 +146,6 @@ public class Robot extends VisualRobot{
         NIVision.IMAQdxConfigureGrab(session);
 		criteria[0] = new NIVision.ParticleFilterCriteria2(NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA, .5, 100.0, 0, 0);
 
-		NIVision.Range HUE_RANGE = new NIVision.Range(250, 10);
 		
 	}	
 
@@ -170,9 +178,14 @@ public class Robot extends VisualRobot{
 	}
 
 	
-	public void autonomous() {
-  //			ObjectInputStream ois;
-//			ois = new ObjectInputStream(new FileInputStream(f));
+	public void autonomous() {	
+		
+		File file = new File("/home/lvuser/blah.autr"); //Select file
+
+//		try {
+//		
+//			ObjectInputStream ois;
+//			ois = new ObjectInputStream(new FileInputStream(file));
 //			int numThreads = ois.readInt();
 //			int[] threadStarts = new int[numThreads];
 //			Thread[] threads = new Thread[numThreads];
@@ -192,12 +205,11 @@ public class Robot extends VisualRobot{
 //			
 //			for(Command c: main)
 //				c.setRobot(this);
+		
 
 			ArrayList<Command> main = new ArrayList<>();
-			main.add(new DelayCommand(5));
-			main.add(new MoveStraightCommand(80, .3, this));
-			main.add(new TurnCommand(90, .3, this));
-			main.add(new MoveToPointCommand(-40, 80, .3, this));
+			main.add(new MoveStraightCommand(255, .8, this));
+			main.add(new MoveToPointCommand(140, 64, .8, this));
 			
 //			ArrayList<Command> arms = new ArrayList<>();
 //			arms.add(new MoveBackArmCommand(true, 90, 1.0, this));
@@ -220,20 +232,20 @@ public class Robot extends VisualRobot{
 // 			feederAndLights.add(new LightsCommand(false, this));
 
 
-//			
+			
 //			int[] threadStarts = {0, 2, 1};
 //			Thread[] threads = {null, new Thread(new RunCommands(arms)), new Thread(new RunCommands(feederAndLights))};
-//			
+
 			int i = 0;
 			while(isAutonomous() && !isDisabled() && i < main.size()) {
-//				try {
+				try {
 //					for(int start = 1; start < threadStarts.length; start++)
 //						if (threadStarts[start] == i)
 //							threads[i].start();
 //					main.get(i).execute();
 //					i++;
-//				}
-//				catch(NullPointerException e) {}
+				}
+				catch(NullPointerException e) {e.printStackTrace();}
 				main.get(i).execute();
 				i++;
 			}
@@ -245,7 +257,11 @@ public class Robot extends VisualRobot{
 //				}
 //					
 //			}
-
+//			
+//		} 
+//		catch(IOException e) { e.printStackTrace();} 
+//		catch(ClassNotFoundException e1) {e1.printStackTrace();}
+//		catch(ClassCastException e) {e.printStackTrace();}
 		
 		
 	}

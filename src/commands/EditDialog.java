@@ -12,7 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class EditDialog extends JDialog implements ActionListener {
+public class EditDialog extends JDialog implements ActionListener  {
 		JLabel[] labels;
 		JTextField[] fields;
 		String[] values;

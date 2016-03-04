@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class MoveToPointCommand implements Command {
+
+	private static final long serialVersionUID = 550991352194183010L;
 	private Robot robot;
 	private double displacementX, displacementY, speed;
 	private GyroBase gyro;

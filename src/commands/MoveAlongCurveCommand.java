@@ -7,6 +7,8 @@ import base.Command;
 import edu.wpi.first.wpilibj.GyroBase;
 
 public class MoveAlongCurveCommand implements Command {
+	private static final long serialVersionUID = 6241191079543041229L;
+
 	private Robot robot;
 	private boolean direction; //true is cw, false is ccw
 	private double radius, speed, angle;

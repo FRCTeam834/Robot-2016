@@ -6,6 +6,9 @@ import edu.wpi.first.wpilibj.GyroBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TurnCommand implements Command {
+
+	private static final long serialVersionUID = -9196407551785663521L;
+	
 	private double angle, speed;
 	private VisualRobot robot;
 	private GyroBase gyro;

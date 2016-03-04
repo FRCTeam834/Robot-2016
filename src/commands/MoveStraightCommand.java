@@ -10,6 +10,9 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.GyroBase;
 
 public class MoveStraightCommand implements Command {
+
+	private static final long serialVersionUID = -9199930939935475592L;
+	
 	//Variable to represent the robot.
 	private VisualRobot robot;
 	//Left and right encoders used to get distance travelled by the wheels.

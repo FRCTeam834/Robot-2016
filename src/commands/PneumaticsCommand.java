@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class PneumaticsCommand implements Command {
+	
+	private static final long serialVersionUID = 5041876206361082524L;
 	private Robot robot;
 	private boolean isOpen;
 

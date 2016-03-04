@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 public class MoveBackArmCommand implements Command{
+	private static final long serialVersionUID = 396817677970190459L;
+
 	private Robot robot;
 	private AnalogGyro gyro;
 	private boolean direction; //true is up, false is down

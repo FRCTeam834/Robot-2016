@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class LightsCommand implements Command {
+	private static final long serialVersionUID = 293302428028478245L;
 	//Variable to represent the robot.
 	private Robot robot;
 	//Boolean to determine whether or not the lights should be on.

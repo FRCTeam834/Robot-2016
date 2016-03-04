@@ -8,6 +8,9 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 
 public class FeederCommand implements Command {
+
+	private static final long serialVersionUID = -5204996672793803316L;
+
 	private Robot robot;
 	private DigitalInput lightSensor;
 	private double timeout;
