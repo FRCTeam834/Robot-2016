@@ -10,11 +10,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Vector;
 
-import org.usfirst.frc.team834.robot.Robot.ParticleReport;
-
 import com.ni.vision.NIVision;
 import com.ni.vision.NIVision.Image;
-import com.ni.vision.NIVision.Range;
 import com.ni.vision.VisionException;
 
 import base.Command;
@@ -73,10 +70,10 @@ public class Robot extends VisualRobot{
 	Joystick leftJoystick = new Joystick(0);
 	Joystick rightJoystick = new Joystick(1);
 	Joystick xbox = new Joystick(2);
-	Joystick buttons = new Joystick(3);
-	int[] topBtnIDs = { };
-	int[] midBtnIDs = { };
-	int[] botBtnIDs = { };
+	Joystick switches = new Joystick(3);
+	int[] topBtnIDs = {9, 15 };
+	int[] midBtnIDs = {3, 13, 16 };
+	int[] botBtnIDs = {11, 12 };
 
 	
 	
@@ -179,8 +176,10 @@ public class Robot extends VisualRobot{
 
 	
 	public void autonomous() {	
-		
-		File file = new File("/home/lvuser/blah.autr"); //Select file
+//		int autonID = (switches.getRawButton(midBtnIDs[0]) ? 1:0) +
+//					  (switches.getRawButton(midBtnIDs[0]) ? 2:0) +
+//					  (switches.getRawButton(midBtnIDs[0]) ? 4:0);
+//		File file = new File("/home/lvuser/blah.autr"); //Select file
 
 //		try {
 //		
@@ -209,7 +208,13 @@ public class Robot extends VisualRobot{
 
 			ArrayList<Command> main = new ArrayList<>();
 			main.add(new MoveStraightCommand(255, .8, this));
+			
+			if (switches.getRawButton(midBtnIDs[0]))
 			main.add(new MoveToPointCommand(140, 64, .8, this));
+			main.add(new ShootCommand(4.0, this));
+			
+			ArrayList<Command> feeder = new ArrayList<>();
+			feeder.add(new MoveFeederArmCommand(true, 90, .6, this));
 			
 //			ArrayList<Command> arms = new ArrayList<>();
 //			arms.add(new MoveBackArmCommand(true, 90, 1.0, this));
@@ -233,31 +238,28 @@ public class Robot extends VisualRobot{
 
 
 			
-//			int[] threadStarts = {0, 2, 1};
-//			Thread[] threads = {null, new Thread(new RunCommands(arms)), new Thread(new RunCommands(feederAndLights))};
+			int[] threadStarts = {0, 0, 1};
+			Thread[] threads = {null, new Thread(new RunCommands(feeder))};
 
 			int i = 0;
 			while(isAutonomous() && !isDisabled() && i < main.size()) {
 				try {
-//					for(int start = 1; start < threadStarts.length; start++)
-//						if (threadStarts[start] == i)
-//							threads[i].start();
-//					main.get(i).execute();
-//					i++;
+					for(int start = 1; start < threadStarts.length; start++)
+						if (threadStarts[start] == i)
+							threads[i].start();
+					main.get(i).execute();
 				}
 				catch(NullPointerException e) {e.printStackTrace();}
-				main.get(i).execute();
-				i++;
 			}
 			
-//			//Starts any other threads
-//			for(int start = 1; start < threadStarts.length; start++) {
-//				if (threadStarts[start] >= i){
-//					threads[i].start();
-//				}
-//					
-//			}
-//			
+			//Starts any other threads
+			for(int start = 1; start < threadStarts.length; start++) {
+				if (threadStarts[start] >= i){
+					threads[i].start();
+				}
+					
+			}
+			
 //		} 
 //		catch(IOException e) { e.printStackTrace();} 
 //		catch(ClassNotFoundException e1) {e1.printStackTrace();}
@@ -313,10 +315,10 @@ public class Robot extends VisualRobot{
 			motors[7].set(0);
 		}
 
-		if(rightJoystick.getRawButton(10)) {
+		if(switches.getRawButton(2)) {
 			motors[8].set(-1);
 		}
-		else if(rightJoystick.getRawButton(11)) {
+		else if(switches.getRawButton(14)) {
 			motors[8].set(1);
 		}
 		else {
@@ -340,13 +342,13 @@ public class Robot extends VisualRobot{
 		NIVision.imaqColorThreshold(binaryImage, image, 255, NIVision.ColorMode.HSV, HUE_RANGE, SAT_RANGE, VAL_RANGE);
 
 		int numParticles = NIVision.imaqCountParticles(binaryImage, 1);
-		SmartDashboard.putNumber("Masked particles", numParticles);
+		SmartDashboard.putString("DB/String 9", "Number Unfiltered: "+numParticles);
 		
 		
 		float areaMin = (float)SmartDashboard.getNumber("Area min %", .5);
 		criteria[0].lower = areaMin;
 		numParticles = NIVision.imaqCountParticles(binaryImage, 1);
-		SmartDashboard.putNumber("Filtered particles", numParticles);
+		SmartDashboard.putString("DB/String 8", "Number filtered"+numParticles);
 		
 		Vector<ParticleReport> particles = new Vector<ParticleReport>();
 		for(int particleIndex = 0; particleIndex < numParticles; particleIndex++)
@@ -363,7 +365,7 @@ public class Robot extends VisualRobot{
 		}
 		particles.sort(null);
 		double areaToConvexHullArea = ConvexHullAreaScore(particles.elementAt(0));
-		SmartDashboard.putNumber("Convex Hull Area", areaToConvexHullArea);
+		SmartDashboard.putString("DB/String 7", "ConvexArea: " + Double.toString(areaToConvexHullArea));
 
 		
 		

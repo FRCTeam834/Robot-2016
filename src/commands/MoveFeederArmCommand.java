@@ -31,7 +31,7 @@ public class MoveFeederArmCommand implements Command {
 	public void execute() throws NullPointerException {
 		long startTime = System.currentTimeMillis();
 		if(direction)
-			while(gyro.getAngle() < angle && gyro.getAngle() > 150 && System.currentTimeMillis() - startTime > timeout)
+			while(gyro.getAngle() < angle && gyro.getAngle() < 150 && System.currentTimeMillis() - startTime > timeout)
 				robot.setBackArm(speed);
 		else
 			while(gyro.getAngle() > angle && gyro.getAngle() > 0 && System.currentTimeMillis() - startTime > timeout)
