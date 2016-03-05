@@ -41,6 +41,10 @@ public class MoveAlongCurveCommand implements Command {
 				robot.setLeftSide(speed);
 				robot.setRightSide(speed * (radius / (radius + WIDTH)));
 			}
+		
+		robot.setLeftSide(0.0);
+		robot.setRightSide(0.0);
+
 	}
 
 

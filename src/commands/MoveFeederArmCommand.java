@@ -5,6 +5,8 @@ import org.usfirst.frc.team834.robot.*;
 import base.Command;
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class MoveFeederArmCommand implements Command {
 
@@ -15,7 +17,7 @@ public class MoveFeederArmCommand implements Command {
 	private boolean direction; //true is up, false is down
 	private int timeout;
 	private double angle;
-	private double speed = 0.3;
+	private double speed;
 	
 	public void edit() {
 		String[] labels = {"Direction", "Angle", "Speed", "Timeout"};
@@ -30,12 +32,23 @@ public class MoveFeederArmCommand implements Command {
 
 	public void execute() throws NullPointerException {
 		long startTime = System.currentTimeMillis();
-		if(direction)
-			while(gyro.getAngle() < angle && gyro.getAngle() < 150 && System.currentTimeMillis() - startTime > timeout)
-				robot.setBackArm(speed);
-		else
-			while(gyro.getAngle() > angle && gyro.getAngle() > 0 && System.currentTimeMillis() - startTime > timeout)
-				robot.setBackArm(-speed);
+		if(direction) {
+			SmartDashboard.putString("DB/String 9", "Going up");
+			SmartDashboard.putString("DB/String 8", "Gyro and angle: " + (gyro.getAngle() < angle));
+			SmartDashboard.putString("DB/String 7", "" + (gyro == null));
+			SmartDashboard.putString("DB/String 6", "angle: " + gyro.getAngle());
+			while(gyro.getAngle() < angle && gyro.getAngle() < 150 && System.currentTimeMillis() - startTime < timeout) {
+				robot.setFeederArm(speed);
+				Timer.delay(.005);
+			}
+		}
+		else {
+			while(gyro.getAngle() > angle && gyro.getAngle() > 0 && System.currentTimeMillis() - startTime > timeout) {
+				robot.setFeederArm(-speed);
+				Timer.delay(.005);
+			}
+		}
+		
 	}
 
 	public void setRobot(VisualRobot r) {
@@ -55,7 +68,7 @@ public class MoveFeederArmCommand implements Command {
 		direction = dir;
 		speed = spd;
 		angle = ang;
-		timeout = 3000;
+		timeout = 5000;
 		setRobot(r);
 	}
 }

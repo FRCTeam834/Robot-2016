@@ -136,12 +136,12 @@ public class Robot extends VisualRobot{
 		feederArmGyro.initGyro();
 		
 		image = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
-		binaryImage = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_U8, 0);
+//		binaryImage = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_U8, 0);
 		
         session = NIVision.IMAQdxOpenCamera("cam0",
                 NIVision.IMAQdxCameraControlMode.CameraControlModeController);
         NIVision.IMAQdxConfigureGrab(session);
-		criteria[0] = new NIVision.ParticleFilterCriteria2(NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA, .5, 100.0, 0, 0);
+//		criteria[0] = new NIVision.ParticleFilterCriteria2(NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA, .5, 100.0, 0, 0);
 
 		
 	}	
@@ -205,16 +205,15 @@ public class Robot extends VisualRobot{
 //			for(Command c: main)
 //				c.setRobot(this);
 		
-
+																																	
 			ArrayList<Command> main = new ArrayList<>();
+			main.add(new MoveFeederArmCommand(true, 90, .3, this));
 			main.add(new MoveStraightCommand(255, .8, this));
 			
-			if (switches.getRawButton(midBtnIDs[0]))
+			if (switches.getRawButton(midBtnIDs[0])) {
 			main.add(new MoveToPointCommand(140, 64, .8, this));
 			main.add(new ShootCommand(4.0, this));
-			
-			ArrayList<Command> feeder = new ArrayList<>();
-			feeder.add(new MoveFeederArmCommand(true, 90, .6, this));
+			}
 			
 //			ArrayList<Command> arms = new ArrayList<>();
 //			arms.add(new MoveBackArmCommand(true, 90, 1.0, this));
@@ -236,30 +235,33 @@ public class Robot extends VisualRobot{
 // 			feederAndLights.add(new DelayCommand(1));
 // 			feederAndLights.add(new LightsCommand(false, this));
 
-
 			
-			int[] threadStarts = {0, 0, 1};
-			Thread[] threads = {null, new Thread(new RunCommands(feeder))};
+//			int[] threadStarts = {0, 0};
+//			Thread[] threads = {null, new Thread(new RunCommands(feeder))};
 
 			int i = 0;
 			while(isAutonomous() && !isDisabled() && i < main.size()) {
 				try {
-					for(int start = 1; start < threadStarts.length; start++)
-						if (threadStarts[start] == i)
-							threads[i].start();
+//					for(int start = 1; start < threadStarts.length; start++)
+//						if (threadStarts[start] == i)
+//							threads[i].start();
+//					
+//					System.out.println(i);
 					main.get(i).execute();
+					i++;
+
 				}
-				catch(NullPointerException e) {e.printStackTrace();}
+				catch(NullPointerException e) {SmartDashboard.putString("DB/String 0", "ERROR");}
 			}
 			
 			//Starts any other threads
-			for(int start = 1; start < threadStarts.length; start++) {
-				if (threadStarts[start] >= i){
-					threads[i].start();
-				}
-					
-			}
-			
+//			for(int start = 1; start < threadStarts.length; start++) {
+//				if (threadStarts[start] >= i){
+//					threads[i].start();
+//				}
+//					
+//			}
+//			
 //		} 
 //		catch(IOException e) { e.printStackTrace();} 
 //		catch(ClassNotFoundException e1) {e1.printStackTrace();}
@@ -309,7 +311,7 @@ public class Robot extends VisualRobot{
 		
 		if(xbox.getRawButton(7) && scissorsEncoder.getDistance() >= -1) 
 			motors[7].set(1);
-		else if(xbox.getRawButton(8) && scissorsEncoder.getDistance() <= 400) 
+		else if(xbox.getRawButton(8) && scissorsEncoder.getDistance() <= 500) 
 			motors[7].set(-1);
 		else{
 			motors[7].set(0);
@@ -339,33 +341,33 @@ public class Robot extends VisualRobot{
 		}
 		catch(VisionException e){
 		}
-		NIVision.imaqColorThreshold(binaryImage, image, 255, NIVision.ColorMode.HSV, HUE_RANGE, SAT_RANGE, VAL_RANGE);
-
-		int numParticles = NIVision.imaqCountParticles(binaryImage, 1);
-		SmartDashboard.putString("DB/String 9", "Number Unfiltered: "+numParticles);
+//		NIVision.imaqColorThreshold(binaryImage, image, 255, NIVision.ColorMode.HSV, HUE_RANGE, SAT_RANGE, VAL_RANGE);
+//
+//		int numParticles = NIVision.imaqCountParticles(binaryImage, 1);
+//		SmartDashboard.putString("DB/String 9", "Number Unfiltered: "+numParticles);
 		
-		
-		float areaMin = (float)SmartDashboard.getNumber("Area min %", .5);
-		criteria[0].lower = areaMin;
-		numParticles = NIVision.imaqCountParticles(binaryImage, 1);
-		SmartDashboard.putString("DB/String 8", "Number filtered"+numParticles);
-		
-		Vector<ParticleReport> particles = new Vector<ParticleReport>();
-		for(int particleIndex = 0; particleIndex < numParticles; particleIndex++)
-		{
-			ParticleReport par = new ParticleReport();
-			par.PercentAreaToImageArea = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA);
-			par.Area = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_AREA);
-			par.ConvexHullArea = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_CONVEX_HULL_AREA);
-			par.BoundingRectTop = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_TOP);
-			par.BoundingRectLeft = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_LEFT);
-			par.BoundingRectBottom = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_BOTTOM);
-			par.BoundingRectRight = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_RIGHT);
-			particles.add(par);
-		}
-		particles.sort(null);
-		double areaToConvexHullArea = ConvexHullAreaScore(particles.elementAt(0));
-		SmartDashboard.putString("DB/String 7", "ConvexArea: " + Double.toString(areaToConvexHullArea));
+//		
+//		float areaMin = (float)SmartDashboard.getNumber("Area min %", .5);
+//		criteria[0].lower = areaMin;
+//		numParticles = NIVision.imaqCountParticles(binaryImage, 1);
+//		SmartDashboard.putString("DB/String 8", "Number filtered"+numParticles);
+//		
+//		Vector<ParticleReport> particles = new Vector<ParticleReport>();
+//		for(int particleIndex = 0; particleIndex < numParticles; particleIndex++)
+//		{
+//			ParticleReport par = new ParticleReport();
+//			par.PercentAreaToImageArea = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA);
+//			par.Area = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_AREA);
+//			par.ConvexHullArea = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_CONVEX_HULL_AREA);
+//			par.BoundingRectTop = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_TOP);
+//			par.BoundingRectLeft = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_LEFT);
+//			par.BoundingRectBottom = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_BOTTOM);
+//			par.BoundingRectRight = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_RIGHT);
+//			particles.add(par);
+//		}
+//		particles.sort(null);
+//		double areaToConvexHullArea = ConvexHullAreaScore(particles.elementAt(0));
+//		SmartDashboard.putString("DB/String 7", "ConvexArea: " + Double.toString(areaToConvexHullArea));
 
 		
 		

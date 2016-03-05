@@ -8,6 +8,7 @@ import org.usfirst.frc.team834.robot.VisualRobot;
 import base.Command;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.GyroBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class MoveStraightCommand implements Command {
 
@@ -48,7 +49,6 @@ public class MoveStraightCommand implements Command {
 		while(Math.abs(REncoder.getDistance() + LEncoder.getDistance()) / 2 < distance && robot.isAutonomous() && !robot.isDisabled()) {
 			//Speed of left and right wheels.
 			double lspeed = speed, rspeed = speed;
-			
 			//If the gyro's angle is less than zero, change the right wheel's speed.
 			if(gyro.getAngle() < 0){
 				rspeed -= Math.abs(gyro.getAngle()) * cFactor;
@@ -69,8 +69,11 @@ public class MoveStraightCommand implements Command {
 			robot.setRightSide(rspeed);
 			
 
+			SmartDashboard.putString("DB/String 1", "Distance" + ((REncoder.getDistance() + LEncoder.getDistance()) / 2));
 
 		}
+		robot.setLeftSide(0.0);
+		robot.setRightSide(0.0);
 	}
 	
 	public void setRobot(VisualRobot r) {
