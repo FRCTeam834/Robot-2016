@@ -91,6 +91,9 @@ public class Robot extends VisualRobot{
 //	NIVision.Range SAT_RANGE = new NIVision.Range(128, 256);
 //	NIVision.Range VAL_RANGE = new NIVision.Range(128, 256);
 
+	boolean toggleFeeder = true;
+	boolean feederOn = true;
+			
 	public void robotInit() {
 		
 		sensors.put("rightEncoder", rightEncoder);
@@ -187,7 +190,12 @@ public class Robot extends VisualRobot{
 			ArrayList<Command> main = c.getMain();
 			int[] threadStarts = c.getThreadStarts();
 			Thread[] threads = c.getThreads();
-
+			
+			robotGyro.reset();
+			feederArmGyro.reset();
+			backArmGyro.reset();
+			
+			
 			int i = 0;
 			while(isAutonomous() && !isDisabled() && i < main.size()) {
 				try {
@@ -231,13 +239,23 @@ public class Robot extends VisualRobot{
 		
 		robot.tankDrive(leftJoystick, rightJoystick);
 
-		if(xbox.getRawButton(6)) 
-			motors[4].set(-1);
-		else if(!lightSensor.get()) 
-			motors[4].set(0);
-		else
-			motors[4].set(1);
+		if(feederOn) {
+			if(xbox.getRawButton(6)) 
+				motors[4].set(-1);
+			else if(!lightSensor.get()) 
+				motors[4].set(0);
+			else
+				motors[4].set(1);
+		}
+		
+		if(xbox.getRawButton(5) && toggleFeeder == true) {
+			feederOn = !feederOn;
+		}
+		else {
+			toggleFeeder = false;
 
+		}
+		
 		
 		if(xbox.getRawButton(3)) 
 			motors[5].set(.4);
@@ -279,7 +297,7 @@ public class Robot extends VisualRobot{
 //		SmartDashboard.putString("DB/String 0", Double.toString(rightEncoder.getDistance()));
 //		SmartDashboard.putString("DB/String 1", Double.toString(leftEncoder.getDistance()));
 //		SmartDashboard.putString("DB/String 2", Double.toString(robotGyro.getAngle()));
-//		SmartDashboard.putString("DB/String 3", Double.toString(feederArmGyro.getAngle()));
+		SmartDashboard.putString("DB/String 3", Double.toString(feederArmGyro.getAngle()));
 //		SmartDashboard.putString("DB/String 4", Double.toString(backArmGyro.getAngle()));
 //		SmartDashboard.putString("DB/String 5", "Light Sensor: " + Boolean.toString(lightSensor.get()));	
 //		SmartDashboard.putString("DB/String 6", Double.toString(scissorsEncoder.getDistance()));
