@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import base.Command;
+import commands.DelayCommand;
 import commands.MoveFeederArmCommand;
 import commands.MoveStraightCommand;
 import commands.MoveToPointCommand;
@@ -36,6 +37,8 @@ public class ChooseAuton {
 			threads[1] = new Thread(new RunCommands(moveArms));
 			threadStarts = Arrays.copyOf(threadStarts, 2);
 			threadStarts[1] = 0;
+			
+			main.add(0, new DelayCommand(2));
 		}
 		
 		if(id > 2) {
