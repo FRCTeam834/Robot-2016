@@ -231,14 +231,21 @@ public class Robot extends VisualRobot{
 		
 		robot.tankDrive(leftJoystick, rightJoystick);
 
+//		if(xbox.getRawButton(6)) 
+//			motors[4].set(-1);
+//		else if(!lightSensor.get()) 
+//			motors[4].set(.05);
+//		else
+//			motors[4].set(1);
+//
 		if(xbox.getRawButton(6)) 
 			motors[4].set(-1);
-		else if(!lightSensor.get()) 
-			motors[4].set(.05);
+		else if(xbox.getRawButton(5)) 
+			motors[4].set(.1);
 		else
-			motors[4].set(1);
+			motors[4].set(0.5);
 
-		
+
 		
 		if(xbox.getRawButton(3)) 
 			motors[5].set(.4);
@@ -324,7 +331,7 @@ public class Robot extends VisualRobot{
 		
 		CameraServer.getInstance().setImage(image);
 
-		if(xbox.getRawButton(5)) {
+		if(rightJoystick.getRawButton(2)) {
 			if(toggleCam) {
 				if(cam) {	
 					Thread t = new Thread(new Runnable() {
