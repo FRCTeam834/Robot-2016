@@ -68,7 +68,6 @@ public class MoveStraightCommand implements Command {
 			//Set the left and right wheel speeds.
 			robot.setLeftSide(lspeed);
 			robot.setRightSide(rspeed);
-			Timer.delay(.005);
 
 
 		}
