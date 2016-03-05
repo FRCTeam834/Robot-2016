@@ -231,20 +231,12 @@ public class Robot extends VisualRobot{
 		
 		robot.tankDrive(leftJoystick, rightJoystick);
 
-//		if(xbox.getRawButton(6)) 
-//			motors[4].set(-1);
-//		else if(!lightSensor.get()) 
-//			motors[4].set(.05);
-//		else
-//			motors[4].set(1);
-//
 		if(xbox.getRawButton(6)) 
 			motors[4].set(-1);
-		else if(xbox.getRawButton(5)) 
-			motors[4].set(.1);
+		else if(!lightSensor.get()) 
+			motors[4].set(0);
 		else
-			motors[4].set(0.5);
-
+			motors[4].set(1);
 
 		
 		if(xbox.getRawButton(3)) 
