@@ -207,7 +207,7 @@ public class Robot extends VisualRobot{
 		
 
 			ArrayList<Command> main = new ArrayList<>();
-			main.add(new MoveStraightCommand(255, .8, this));
+			main.add(new MoveStraightCommand(/*255*/ 100, .8, this));
 			
 			if (switches.getRawButton(midBtnIDs[0]))
 			main.add(new MoveToPointCommand(140, 64, .8, this));
@@ -364,8 +364,10 @@ public class Robot extends VisualRobot{
 			particles.add(par);
 		}
 		particles.sort(null);
-		double areaToConvexHullArea = ConvexHullAreaScore(particles.elementAt(0));
-		SmartDashboard.putString("DB/String 7", "ConvexArea: " + Double.toString(areaToConvexHullArea));
+		if(particles.elementAt(0) != null) {
+			double areaToConvexHullArea = ConvexHullAreaScore(particles.elementAt(0));
+			SmartDashboard.putString("DB/String 7", "ConvexArea: " + Double.toString(areaToConvexHullArea));
+		}
 
 		
 		
