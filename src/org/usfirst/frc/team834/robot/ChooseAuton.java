@@ -44,6 +44,16 @@ public class ChooseAuton {
 		if(id > 2) {
 			main.add(new MoveToPointCommand(140, 64, .6, robot));
 			main.add(new ShootCommand(4.0, robot));
+			
+			ArrayList<Command> moveArms = new ArrayList<>();
+			moveArms.add(new MoveFeederArmCommand(false, 120, .4, robot));
+			moveArms.add(new MoveFeederArmCommand(true, 150, .4, robot));
+
+			threads = Arrays.copyOf(threads, 3);
+			threads[2] = new Thread(new RunCommands(moveArms));
+			threadStarts = Arrays.copyOf(threadStarts, 3);
+			threadStarts[2] = 1;
+
 		}
 		
 //		File file = new File("/home/lvuser/blah.autr"); //Select file

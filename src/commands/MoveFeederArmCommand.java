@@ -38,7 +38,7 @@ public class MoveFeederArmCommand implements Command {
 			}
 		}
 		else {
-			while(gyro.getAngle() > angle && gyro.getAngle() > 0 && System.currentTimeMillis() - startTime > timeout) {
+			while(gyro.getAngle() > angle && gyro.getAngle() > 0 && System.currentTimeMillis() - startTime < timeout) {
 				robot.setFeederArm(-speed);
 			}
 		}
