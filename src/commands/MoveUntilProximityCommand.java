@@ -78,8 +78,6 @@ public class MoveUntilProximityCommand implements Command {
 		robot = (Robot)r;
 		ultrasonic = (AnalogInput)r.getSensors().get("ultrasonic");
 		gyro = (GyroBase) robot.getSensors().get("gyro");
-		SmartDashboard.putString("DB/String 9", Boolean.toString((gyro != null)));
-		SmartDashboard.putString("DB/String 8", Boolean.toString((ultrasonic != null)));
 
 	}
 

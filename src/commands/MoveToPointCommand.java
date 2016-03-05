@@ -28,7 +28,8 @@ public class MoveToPointCommand implements Command {
 
 	public void execute() throws NullPointerException {
 		gyro.reset();
-		
+		LEncoder.reset();
+		REncoder.reset();
 		double angle = getAngle(), distance = getDistance();
 		
 		if(angle > 0) {
@@ -37,7 +38,8 @@ public class MoveToPointCommand implements Command {
 				robot.setLeftSide(speed);
 
 			}
-			robot.stop();
+			robot.setLeftSide(0);
+			robot.setRightSide(0);
 		}
 		else if(angle < 0) {
 			while (gyro.getAngle() > angle && !robot.isDisabled() && robot.isAutonomous()) {
@@ -45,7 +47,8 @@ public class MoveToPointCommand implements Command {
 				robot.setLeftSide(-speed);
 
 			}
-			robot.stop();
+			robot.setLeftSide(0);
+			robot.setRightSide(0);
 		}
 		
 		REncoder.reset();

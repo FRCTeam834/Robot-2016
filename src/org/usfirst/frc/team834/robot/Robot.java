@@ -20,25 +20,25 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends VisualRobot{
 	
-	public class ParticleReport implements Comparator<ParticleReport>, Comparable<ParticleReport>{
-		double PercentAreaToImageArea;
-		double Area;
-		double ConvexHullArea;
-		double BoundingRectLeft;
-		double BoundingRectTop;
-		double BoundingRectRight;
-		double BoundingRectBottom;
-		
-		public int compareTo(ParticleReport r)
-		{
-			return (int)(r.Area - this.Area);
-		}
-		
-		public int compare(ParticleReport r1, ParticleReport r2)
-		{
-			return (int)(r1.Area - r2.Area);
-		}
-	};
+//	public class ParticleReport implements Comparator<ParticleReport>, Comparable<ParticleReport>{
+//		double PercentAreaToImageArea;
+//		double Area;
+//		double ConvexHullArea;
+//		double BoundingRectLeft;
+//		double BoundingRectTop;
+//		double BoundingRectRight;
+//		double BoundingRectBottom;
+//		
+//		public int compareTo(ParticleReport r)
+//		{
+//			return (int)(r.Area - this.Area);
+//		}
+//		
+//		public int compare(ParticleReport r1, ParticleReport r2)
+//		{
+//			return (int)(r1.Area - r2.Area);
+//		}
+//	};
 	
 	private ADXRS450_Gyro robotGyro = new ADXRS450_Gyro();
 	private AnalogGyro backArmGyro = new AnalogGyro(0);
@@ -74,11 +74,8 @@ public class Robot extends VisualRobot{
 	int[] topBtnIDs = {9, 15 };
 	int[] midBtnIDs = {3, 13, 16 };
 	int[] botBtnIDs = {11, 12 };
-
-	
 	
 	HashMap<String, SensorBase> sensors = new HashMap<>();
-
 	
 	//Vision Stuff added
 	boolean cam = false;
@@ -87,12 +84,12 @@ public class Robot extends VisualRobot{
 	Image binaryImage;
 	int session;
 
-	NIVision.ParticleFilterCriteria2 criteria[] = new NIVision.ParticleFilterCriteria2[1];
-	NIVision.ParticleFilterOptions2 filterOptions = new NIVision.ParticleFilterOptions2(0,0,1,1);
-
-	NIVision.Range HUE_RANGE = new NIVision.Range(128, 170);
-	NIVision.Range SAT_RANGE = new NIVision.Range(128, 256);
-	NIVision.Range VAL_RANGE = new NIVision.Range(128, 256);
+//	NIVision.ParticleFilterCriteria2 criteria[] = new NIVision.ParticleFilterCriteria2[1];
+//	NIVision.ParticleFilterOptions2 filterOptions = new NIVision.ParticleFilterOptions2(0,0,1,1);
+//
+//	NIVision.Range HUE_RANGE = new NIVision.Range(128, 170);
+//	NIVision.Range SAT_RANGE = new NIVision.Range(128, 256);
+//	NIVision.Range VAL_RANGE = new NIVision.Range(128, 256);
 
 	public void robotInit() {
 		
@@ -108,7 +105,6 @@ public class Robot extends VisualRobot{
 		lights1 = new Relay(0); //turns on LEDs
 		lights2 = new Relay(1); 
 		
-		
 		for(int i = 0; i < motors.length; i++) {
 			
 			motors[i] = new CANTalon(i);
@@ -119,9 +115,8 @@ public class Robot extends VisualRobot{
 		robot = new RobotDrive(motors[0], motors[1], motors[2], motors[3]);
 		robot.setSafetyEnabled(false);
 
-
-		rightEncoder.setDistancePerPulse(1.0/(3.02*Math.PI * 4.0)); //inches
-		leftEncoder.setDistancePerPulse(1.0/(3.02*Math.PI * 4.0));
+		rightEncoder.setDistancePerPulse(1.0/(3.02*Math.PI * 4.0) * 313/240); //inches
+		leftEncoder.setDistancePerPulse(1.0/(3.02*Math.PI * 4.0) * 313/240);
 		scissorsEncoder.setDistancePerPulse(1.0/32.0);
 		
 		rightEncoder.reset();
@@ -141,7 +136,7 @@ public class Robot extends VisualRobot{
         session = NIVision.IMAQdxOpenCamera("cam0",
                 NIVision.IMAQdxCameraControlMode.CameraControlModeController);
         NIVision.IMAQdxConfigureGrab(session);
-		criteria[0] = new NIVision.ParticleFilterCriteria2(NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA, .5, 100.0, 0, 0);
+//		criteria[0] = new NIVision.ParticleFilterCriteria2(NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA, .5, 100.0, 0, 0);
 
 		
 	}	
@@ -204,19 +199,19 @@ public class Robot extends VisualRobot{
 //			
 //			for(Command c: main)
 //				c.setRobot(this);
-		
-
-			ArrayList<Command> main = new ArrayList<>();
-			main.add(new MoveStraightCommand(/*255*/ 100, .8, this));
-			main.add(new MoveToPointCommand(140, 64, .6, this));
-			main.add(new ShootCommand(4.0, this));
+			int autonID = 0;
+			String temp = SmartDashboard.getString("DB/String 9");
+			try {
+				autonID = Integer.parseInt(temp);
+			} 
+			catch(NumberFormatException e) {}
 			
-			ArrayList<Command> feeder = new ArrayList<>();
-			feeder.add(new MoveFeederArmCommand(true, 130, .6, this));
-
+			ChooseAuton c = new ChooseAuton(this);
+			c.chooseAuton(autonID);
 			
-			int[] threadStarts = {0, 0};
-			Thread[] threads = {null, new Thread(new RunCommands(feeder))};
+			ArrayList<Command> main = c.getMain();
+			int[] threadStarts = c.getThreadStarts();
+			Thread[] threads = c.getThreads();
 
 			int i = 0;
 			while(isAutonomous() && !isDisabled() && i < main.size()) {
@@ -287,18 +282,20 @@ public class Robot extends VisualRobot{
 			motors[6].set(0);
 		
 		
-		if(xbox.getRawButton(7) && scissorsEncoder.getDistance() >= -1) 
+		if(xbox.getRawButton(7) && scissorsEncoder.getDistance() >= -100) 
 			motors[7].set(1);
-		else if(xbox.getRawButton(8) && scissorsEncoder.getDistance() <= 400) 
+		else if(xbox.getRawButton(8) && scissorsEncoder.getDistance() <= 500) {
 			motors[7].set(-1);
+			motors[8].set(1);
+		}
 		else{
 			motors[7].set(0);
 		}
 
-		if(switches.getRawButton(2)) {
+		if(rightJoystick.getRawButton(10)) {
 			motors[8].set(-1);
 		}
-		else if(switches.getRawButton(14)) {
+		else if(rightJoystick.getRawButton(11)) {
 			motors[8].set(1);
 		}
 		else {
@@ -306,13 +303,13 @@ public class Robot extends VisualRobot{
 		}
 		
 		
-		SmartDashboard.putString("DB/String 0", Double.toString(rightEncoder.getDistance()));
-		SmartDashboard.putString("DB/String 1", Double.toString(leftEncoder.getDistance()));
-		SmartDashboard.putString("DB/String 2", Double.toString(robotGyro.getAngle()));
-		SmartDashboard.putString("DB/String 3", Double.toString(feederArmGyro.getAngle()));
-		SmartDashboard.putString("DB/String 4", Double.toString(backArmGyro.getAngle()));
-		SmartDashboard.putString("DB/String 5", "Light Sensor: " + Boolean.toString(lightSensor.get()));	
-		SmartDashboard.putString("DB/String 6", Double.toString(scissorsEncoder.getDistance()));
+//		SmartDashboard.putString("DB/String 0", Double.toString(rightEncoder.getDistance()));
+//		SmartDashboard.putString("DB/String 1", Double.toString(leftEncoder.getDistance()));
+//		SmartDashboard.putString("DB/String 2", Double.toString(robotGyro.getAngle()));
+//		SmartDashboard.putString("DB/String 3", Double.toString(feederArmGyro.getAngle()));
+//		SmartDashboard.putString("DB/String 4", Double.toString(backArmGyro.getAngle()));
+//		SmartDashboard.putString("DB/String 5", "Light Sensor: " + Boolean.toString(lightSensor.get()));	
+//		SmartDashboard.putString("DB/String 6", Double.toString(scissorsEncoder.getDistance()));
 
 		try{
 			NIVision.IMAQdxGrab(session, image, 1);
@@ -322,7 +319,7 @@ public class Robot extends VisualRobot{
 //		NIVision.imaqColorThreshold(binaryImage, image, 255, NIVision.ColorMode.HSV, HUE_RANGE, SAT_RANGE, VAL_RANGE);
 //
 //		int numParticles = NIVision.imaqCountParticles(binaryImage, 1);
-//		SmartDashboard.putString("DB/String 9", "Number Unfiltered: "+numParticles);
+//		SmartDashboard.putString("DB/String 6", "Number Unfiltered: "+numParticles);
 //		
 //		
 //		float areaMin = (float)SmartDashboard.getNumber("Area min %", .5);
@@ -413,14 +410,14 @@ public class Robot extends VisualRobot{
 		lights2.set(on ? Relay.Value.kForward : Relay.Value.kOff);
 	}
 	
-	double ratioToScore(double ratio)
-	{
-		return (Math.max(0, Math.min(100*(1-Math.abs(1-ratio)), 100)));
-	}
-
-	double ConvexHullAreaScore(ParticleReport report)
-	{
-		return ratioToScore((report.Area/report.ConvexHullArea)*1.18);
-	}
-
+//	double ratioToScore(double ratio)
+//	{
+//		return (Math.max(0, Math.min(100*(1-Math.abs(1-ratio)), 100)));
+//	}
+//
+//	double ConvexHullAreaScore(ParticleReport report)
+//	{
+//		return ratioToScore((report.Area/report.ConvexHullArea)*1.18);
+//	}
+//
 }

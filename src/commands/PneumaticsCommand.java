@@ -27,7 +27,6 @@ public class PneumaticsCommand implements Command {
 
 	public void execute() throws NullPointerException {
 		robot.shift(isOpen);
-		SmartDashboard.putString("DB/String 9", Boolean.toString(isOpen));
 	}
 
 	public void setRobot(VisualRobot r) {
