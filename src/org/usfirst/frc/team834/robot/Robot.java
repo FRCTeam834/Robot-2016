@@ -234,7 +234,7 @@ public class Robot extends VisualRobot{
 		if(xbox.getRawButton(6)) 
 			motors[4].set(-1);
 		else if(!lightSensor.get()) 
-			motors[4].set(0);
+			motors[4].set(.05);
 		else
 			motors[4].set(1);
 
@@ -261,7 +261,6 @@ public class Robot extends VisualRobot{
 			motors[7].set(1);
 		else if(xbox.getRawButton(8) && scissorsEncoder.getDistance() <= 500) {
 			motors[7].set(-1);
-			motors[8].set(1);
 		}
 		else{
 			motors[7].set(0);
