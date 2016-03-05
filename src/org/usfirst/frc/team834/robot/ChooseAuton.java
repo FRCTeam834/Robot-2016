@@ -41,7 +41,7 @@ public class ChooseAuton {
 		}
 		if(id > 1) {
 			ArrayList<Command> moveArms = new ArrayList<>();
-			moveArms.add(new MoveFeederArmCommand(true, 120, .6, robot));
+			moveArms.add(new MoveFeederArmCommand(true, 140, .6, robot));
 			threads = Arrays.copyOf(threads, 2);
 			threads[1] = new Thread(new RunCommands(moveArms));
 			threadStarts = Arrays.copyOf(threadStarts, 2);
@@ -52,7 +52,7 @@ public class ChooseAuton {
 		
 		if(id > 2) {
 			main.add(new MoveToPointCommand(140, 64, .6, robot));
-			main.add(new MoveFeederArmCommand(true, 120, .6, robot));
+			main.add(new MoveFeederArmCommand(true, 140, .6, robot));
 			main.add(new ShootCommand(4.0, robot));
 			
 			ArrayList<Command> moveArms = new ArrayList<>();
@@ -133,6 +133,11 @@ public class ChooseAuton {
 		}
 		
 		switch(positionID) {
+		case 2:
+			main.add(new MoveStraightCommand(120, .8, robot));
+			main.add(new MoveFeederArmCommand(false, 100, .6, robot));
+
+
 			
 		}
 	}

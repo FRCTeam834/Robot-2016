@@ -195,7 +195,6 @@ public class Robot extends VisualRobot{
 			feederArmGyro.reset();
 			backArmGyro.reset();
 			
-			
 			int i = 0;
 			while(isAutonomous() && !isDisabled() && i < main.size()) {
 				try {
@@ -245,7 +244,7 @@ public class Robot extends VisualRobot{
 			else if(!lightSensor.get()) 
 				motors[4].set(0);
 			else
-				motors[4].set(1);
+				motors[4].set(.8);
 		}
 		
 		if(xbox.getRawButton(5) && toggleFeeder == true) {
@@ -297,7 +296,7 @@ public class Robot extends VisualRobot{
 //		SmartDashboard.putString("DB/String 0", Double.toString(rightEncoder.getDistance()));
 //		SmartDashboard.putString("DB/String 1", Double.toString(leftEncoder.getDistance()));
 //		SmartDashboard.putString("DB/String 2", Double.toString(robotGyro.getAngle()));
-		SmartDashboard.putString("DB/String 3", Double.toString(feederArmGyro.getAngle()));
+//		SmartDashboard.putString("DB/String 3", Double.toString(feederArmGyro.getAngle()));
 //		SmartDashboard.putString("DB/String 4", Double.toString(backArmGyro.getAngle()));
 //		SmartDashboard.putString("DB/String 5", "Light Sensor: " + Boolean.toString(lightSensor.get()));	
 //		SmartDashboard.putString("DB/String 6", Double.toString(scissorsEncoder.getDistance()));
