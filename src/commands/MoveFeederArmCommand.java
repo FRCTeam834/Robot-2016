@@ -45,7 +45,7 @@ public class MoveFeederArmCommand implements Command {
 
 			}
 		}
-		
+		robot.setFeederArm(0.0);
 	}
 
 	public void setRobot(VisualRobot r) {
