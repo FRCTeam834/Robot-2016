@@ -207,14 +207,14 @@ public class Robot extends VisualRobot{
 		
 
 			ArrayList<Command> main = new ArrayList<>();
-//			if (switches.getRawButton(3)){
-//				main.add(new MoveFeederArmCommand(true, 140, .4, this));
-//			}
-			main.add(new MoveStraightCommand(150, .8, this));
-//			main.add(new MoveToPointCommand(100, 48, .8, this));
-//			main.add(new ShootCommand(4.0, this));
+			main.add(new MoveStraightCommand(/*255*/ 100, .8, this));
 			
-			//ArrayList<Command> feeder = new ArrayList<>();
+			if (switches.getRawButton(midBtnIDs[0]))
+			main.add(new MoveToPointCommand(140, 64, .8, this));
+			main.add(new ShootCommand(4.0, this));
+			
+			ArrayList<Command> feeder = new ArrayList<>();
+			feeder.add(new MoveFeederArmCommand(true, 90, .6, this));
 			
 //			ArrayList<Command> arms = new ArrayList<>();
 //			arms.add(new MoveBackArmCommand(true, 90, 1.0, this));
@@ -237,29 +237,31 @@ public class Robot extends VisualRobot{
 // 			feederAndLights.add(new LightsCommand(false, this));
 
 
-//			
-//			int[] threadStarts = {0, 0};
-//			Thread[] threads = {null, new Thread(new RunCommands(feeder))};
+			
+			int[] threadStarts = {0, 0};
+			Thread[] threads = {null, new Thread(new RunCommands(feeder))};
 
 			int i = 0;
 			while(isAutonomous() && !isDisabled() && i < main.size()) {
 				try {
-//					for(int start = 1; start < threadStarts.length; start++) {
-//						if (threadStarts[start] == i)
-//							threads[start].start();
-//					}
+					for(int start = 1; start < threadStarts.length; start++)
+						if (threadStarts[start] == i)
+							threads[start].start();
 					main.get(i).execute();
 				}
 				catch(NullPointerException e) {e.printStackTrace();}
+				finally {
+					i++;
+				}
 			}
 			
 			//Starts any other threads
-//			for(int start = 1; start < threadStarts.length; start++) {
-//				if (threadStarts[start] >= i){
-//					threads[i].start();
-//				}
-//					
-//			}
+			for(int start = 1; start < threadStarts.length; start++) {
+				if (threadStarts[start] >= i){
+					threads[i].start();
+				}
+					
+			}
 			
 //		} 
 //		catch(IOException e) { e.printStackTrace();} 
@@ -340,35 +342,35 @@ public class Robot extends VisualRobot{
 		}
 		catch(VisionException e){
 		}
-//		NIVision.imaqColorThreshold(binaryImage, image, 255, NIVision.ColorMode.HSV, HUE_RANGE, SAT_RANGE, VAL_RANGE);
-//
-//		int numParticles = NIVision.imaqCountParticles(binaryImage, 1);
-//		SmartDashboard.putString("DB/String 9", "Number Unfiltered: "+numParticles);
-//		
-//		
-//		float areaMin = (float)SmartDashboard.getNumber("Area min %", .5);
-//		criteria[0].lower = areaMin;
-//		numParticles = NIVision.imaqCountParticles(binaryImage, 1);
-//		SmartDashboard.putString("DB/String 8", "Number filtered"+numParticles);
-//		
-//		Vector<ParticleReport> particles = new Vector<ParticleReport>();
-//		for(int particleIndex = 0; particleIndex < numParticles; particleIndex++)
-//		{
-//			ParticleReport par = new ParticleReport();
-//			par.PercentAreaToImageArea = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA);
-//			par.Area = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_AREA);
-//			par.ConvexHullArea = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_CONVEX_HULL_AREA);
-//			par.BoundingRectTop = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_TOP);
-//			par.BoundingRectLeft = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_LEFT);
-//			par.BoundingRectBottom = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_BOTTOM);
-//			par.BoundingRectRight = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_RIGHT);
-//			particles.add(par);
-//		}
-//		particles.sort(null);
-//		if(particles.elementAt(0) != null) {
-//			double areaToConvexHullArea = ConvexHullAreaScore(particles.elementAt(0));
-//			SmartDashboard.putString("DB/String 7", "ConvexArea: " + Double.toString(areaToConvexHullArea));
-//		}
+		NIVision.imaqColorThreshold(binaryImage, image, 255, NIVision.ColorMode.HSV, HUE_RANGE, SAT_RANGE, VAL_RANGE);
+
+		int numParticles = NIVision.imaqCountParticles(binaryImage, 1);
+		SmartDashboard.putString("DB/String 9", "Number Unfiltered: "+numParticles);
+		
+		
+		float areaMin = (float)SmartDashboard.getNumber("Area min %", .5);
+		criteria[0].lower = areaMin;
+		numParticles = NIVision.imaqCountParticles(binaryImage, 1);
+		SmartDashboard.putString("DB/String 8", "Number filtered"+numParticles);
+		
+		Vector<ParticleReport> particles = new Vector<ParticleReport>();
+		for(int particleIndex = 0; particleIndex < numParticles; particleIndex++)
+		{
+			ParticleReport par = new ParticleReport();
+			par.PercentAreaToImageArea = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA);
+			par.Area = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_AREA);
+			par.ConvexHullArea = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_CONVEX_HULL_AREA);
+			par.BoundingRectTop = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_TOP);
+			par.BoundingRectLeft = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_LEFT);
+			par.BoundingRectBottom = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_BOTTOM);
+			par.BoundingRectRight = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_RIGHT);
+			particles.add(par);
+		}
+		particles.sort(null);
+		if(particles.elementAt(0) != null) {
+			double areaToConvexHullArea = ConvexHullAreaScore(particles.elementAt(0));
+			SmartDashboard.putString("DB/String 7", "ConvexArea: " + Double.toString(areaToConvexHullArea));
+		}
 
 		
 		

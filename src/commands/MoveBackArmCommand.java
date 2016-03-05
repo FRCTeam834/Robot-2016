@@ -57,7 +57,7 @@ public class MoveBackArmCommand implements Command{
 		direction = dir;
 		speed = spd;
 		angle = ang;
-		timeout = 5000;
+		timeout = 3000;
 		setRobot(r);
 	}
 }
