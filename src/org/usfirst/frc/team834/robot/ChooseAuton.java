@@ -42,7 +42,7 @@ public class ChooseAuton {
 		}
 		
 		if(id > 2) {
-			main.add(new MoveToPointCommand(140, 64, .6, robot));
+			main.add(new MoveToPointCommand(132, 60, .6, robot));
 			main.add(new ShootCommand(4.0, robot));
 		}
 		
