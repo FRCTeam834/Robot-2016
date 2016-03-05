@@ -174,31 +174,6 @@ public class Robot extends VisualRobot{
 //		int autonID = (switches.getRawButton(midBtnIDs[0]) ? 1:0) +
 //					  (switches.getRawButton(midBtnIDs[0]) ? 2:0) +
 //					  (switches.getRawButton(midBtnIDs[0]) ? 4:0);
-//		File file = new File("/home/lvuser/blah.autr"); //Select file
-
-//		try {
-//		
-//			ObjectInputStream ois;
-//			ois = new ObjectInputStream(new FileInputStream(file));
-//			int numThreads = ois.readInt();
-//			int[] threadStarts = new int[numThreads];
-//			Thread[] threads = new Thread[numThreads];
-//
-//			
-//			threadStarts[0] = ois.readInt();
-//			ArrayList<Command> main = (ArrayList<Command>) ois.readObject();
-//
-//			
-//			for(int thread = 1; thread < numThreads; thread++ ) {
-//				threadStarts[thread] = ois.readInt();
-//				ArrayList<Command> commands= (ArrayList<Command>) ois.readObject();
-//				for(Command c: commands)
-//					c.setRobot(this);
-//				threads[thread] = new Thread(new RunCommands(commands));
-//			}
-//			
-//			for(Command c: main)
-//				c.setRobot(this);
 			int autonID = 0;
 			String temp = SmartDashboard.getString("DB/String 9");
 			try {
