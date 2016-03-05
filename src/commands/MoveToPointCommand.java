@@ -35,7 +35,6 @@ public class MoveToPointCommand implements Command {
 			while (gyro.getAngle() < angle && !robot.isDisabled() && robot.isAutonomous()) {
 				robot.setRightSide(-speed);
 				robot.setLeftSide(speed);
-				SmartDashboard.putString("DB/String 2", Double.toString(gyro.getAngle()));
 
 			}
 			robot.stop();
@@ -44,7 +43,6 @@ public class MoveToPointCommand implements Command {
 			while (gyro.getAngle() > angle && !robot.isDisabled() && robot.isAutonomous()) {
 				robot.setRightSide(speed);
 				robot.setLeftSide(-speed);
-				SmartDashboard.putString("DB/String 2", Double.toString(gyro.getAngle()));
 
 			}
 			robot.stop();

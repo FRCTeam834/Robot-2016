@@ -8,6 +8,7 @@ import org.usfirst.frc.team834.robot.VisualRobot;
 import base.Command;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.GyroBase;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class MoveStraightCommand implements Command {
@@ -67,9 +68,8 @@ public class MoveStraightCommand implements Command {
 			//Set the left and right wheel speeds.
 			robot.setLeftSide(lspeed);
 			robot.setRightSide(rspeed);
-			
+			Timer.delay(.005);
 
-			SmartDashboard.putString("DB/String 1", "Distance" + ((REncoder.getDistance() + LEncoder.getDistance()) / 2));
 
 		}
 		robot.setLeftSide(0.0);

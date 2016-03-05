@@ -33,19 +33,13 @@ public class MoveFeederArmCommand implements Command {
 	public void execute() throws NullPointerException {
 		long startTime = System.currentTimeMillis();
 		if(direction) {
-			SmartDashboard.putString("DB/String 9", "Going up");
-			SmartDashboard.putString("DB/String 8", "Gyro and angle: " + (gyro.getAngle() < angle));
-			SmartDashboard.putString("DB/String 7", "" + (gyro == null));
-			SmartDashboard.putString("DB/String 6", "angle: " + gyro.getAngle());
 			while(gyro.getAngle() < angle && gyro.getAngle() < 150 && System.currentTimeMillis() - startTime < timeout) {
 				robot.setFeederArm(speed);
-				Timer.delay(.005);
 			}
 		}
 		else {
 			while(gyro.getAngle() > angle && gyro.getAngle() > 0 && System.currentTimeMillis() - startTime > timeout) {
 				robot.setFeederArm(-speed);
-				Timer.delay(.005);
 			}
 		}
 		
