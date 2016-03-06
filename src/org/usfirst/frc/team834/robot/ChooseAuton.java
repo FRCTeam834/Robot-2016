@@ -118,6 +118,7 @@ public class ChooseAuton {
 		
 		if(obstacleID==-1) {
 			chooseAuton(positionID);
+			return;
 		}
 		
 		if(obstacleID == 0 && positionID == 0) {
