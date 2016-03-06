@@ -177,19 +177,23 @@ public class Robot extends VisualRobot{
 //		int autonID = (switches.getRawButton(midBtnIDs[0]) ? 1:0) +
 //					  (switches.getRawButton(midBtnIDs[0]) ? 2:0) +
 //					  (switches.getRawButton(midBtnIDs[0]) ? 4:0);
-			int autonID = 0;
-			String temp = SmartDashboard.getString("DB/String 9");
+		
+			int obstacleID = 0;
+			int positionID = 0;
+			
+			String temp1 = SmartDashboard.getString("DB/String 8");
+			String temp2 = SmartDashboard.getString("DB/String 9");
+
 			try {
-				autonID = Integer.parseInt(temp);
+				obstacleID = Integer.parseInt(temp1);
+				positionID = Integer.parseInt(temp2);
 			} 
 			catch(NumberFormatException e) {}
 			
-			if(temp.equals("")) {
-				
-			}
 			
 			ChooseAuton c = new ChooseAuton(this);
-			c.chooseAuton(autonID);
+			c.chooseAuton(obstacleID, positionID);
+
 			
 			ArrayList<Command> main = c.getMain();
 			int[] threadStarts = c.getThreadStarts();

@@ -115,6 +115,15 @@ public class ChooseAuton {
 	 * For Position: Lowbar is one, towards center add one until 5
 	 */
 	public void chooseAuton(int obstacleID, int positionID) {
+		
+		if(obstacleID==-1) {
+			chooseAuton(positionID);
+		}
+		
+		if(obstacleID == 0 && positionID == 0) {
+			return;
+		}
+		
 		switch(obstacleID) {
 		case 0: 
 			break;
@@ -141,8 +150,7 @@ public class ChooseAuton {
 			main.add(new MoveStraightCommand(120, .6, robot));
 			break;
 		case 8:
-			main.add(new MoveStraightCommand(220, .8, robot));
-
+			main.add(new MoveStraightCommand(120, .8, robot));
 			ArrayList<Command> moveArms2 = new ArrayList<>();
 			moveArms2.add(new MoveFeederArmCommand(true, 130, .6, robot));
 			threads = Arrays.copyOf(threads, 2);
@@ -167,13 +175,11 @@ public class ChooseAuton {
 			case 2:	
 				main.add(new MoveStraightCommand(120, .8, robot));
 				main.add(new MoveToPointCommand(70, 32, .8, robot));
-
 				break;
 			case 3:	
 				main.add(new MoveStraightCommand(100, .8, robot));
 				main.add(new MoveAlongCurveCommand(true, 36, .8, 330, robot));
 				main.add(new MoveStraightCommand(30, .8, robot));
-
 				break;
 			case 4:	
 				main.add(new MoveToPointCommand(131, 85, .8, robot));
@@ -183,6 +189,7 @@ public class ChooseAuton {
 			case 5:
 				main.add(new MoveStraightCommand(120, .8, robot));
 				main.add(new MoveToPointCommand(35, 40, .8, robot));
+				break;
 		}
 		
 		ArrayList<Command> moveArmsDown = new ArrayList<>();
