@@ -34,14 +34,12 @@ public class MoveFeederArmCommand implements Command {
 		long startTime = System.currentTimeMillis();
 		if(direction) {
 			while(gyro.getAngle() < angle && gyro.getAngle() < 150 && System.currentTimeMillis() - startTime < timeout) {
-				SmartDashboard.putString("DB/String 0", gyro.getAngle() + "");
 				robot.setFeederArm(speed);
 			}
 		}
 		else {
 			while(gyro.getAngle() > angle && gyro.getAngle() > 0 && System.currentTimeMillis() - startTime < timeout) {
 				robot.setFeederArm(-speed);
-				SmartDashboard.putString("DB/String 0", gyro.getAngle() + "");
 
 			}
 		}

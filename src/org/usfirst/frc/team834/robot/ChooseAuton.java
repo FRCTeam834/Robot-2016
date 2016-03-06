@@ -36,7 +36,7 @@ public class ChooseAuton {
 	 * 5: Portcullis
 	 */
 	public void chooseAuton(int id) {
-	
+		main = new ArrayList<Command>();
 		if(id > 0) {
 			main.add(new MoveStraightCommand(220, .8, robot));
 		}
@@ -121,13 +121,11 @@ public class ChooseAuton {
 			return;
 		}
 		
-		if(obstacleID == 0 && positionID == 0) {
+		if(obstacleID == 0) {
 			return;
 		}
 		
 		switch(obstacleID) {
-		case 0: 
-			break;
 		case 1:
 			main.add(new MoveBackArmCommand(true, 150, .6, robot));
 			main.add(new MoveFeederArmCommand(false, 130, .6, robot));
@@ -150,16 +148,6 @@ public class ChooseAuton {
 			main.add(new MoveFeederArmCommand(true, 150, .6, robot));
 			main.add(new MoveStraightCommand(120, .6, robot));
 			break;
-		case 8:
-			main.add(new MoveStraightCommand(120, .8, robot));
-			ArrayList<Command> moveArms2 = new ArrayList<>();
-			moveArms2.add(new MoveFeederArmCommand(true, 130, .6, robot));
-			threads = Arrays.copyOf(threads, 2);
-			threads[1] = new Thread(new RunCommands(moveArms2));
-			threadStarts = Arrays.copyOf(threadStarts, 2);
-			threadStarts[1] = 0;
-			main.add(0, new DelayCommand(2));
-			break;
 		default:
 			main.add(new MoveStraightCommand(120, .8, robot));
 		}
@@ -169,7 +157,7 @@ public class ChooseAuton {
 		switch(positionID) {
 			case 1:	
 				main.add(new MoveStraightCommand(100, .8, robot));
-				main.add(new MoveFeederArmCommand(true, 150, .6, robot));
+				main.add(new MoveFeederArmCommand(true, 150, .4, robot));
 				main.add(new MoveToPointCommand(140, 64, .8, robot));
 				break;
 

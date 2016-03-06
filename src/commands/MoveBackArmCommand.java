@@ -34,10 +34,10 @@ public class MoveBackArmCommand implements Command{
 
 		if(direction)
 			while(gyro.getAngle() > -angle && gyro.getAngle() > -180 &&  System.currentTimeMillis() - startTime < timeout)
-				robot.setBackArm(speed);
+				robot.setBackArm(-speed);
 		else
 			while(gyro.getAngle() < -angle && gyro.getAngle() < 0 && System.currentTimeMillis()- startTime < timeout )
-				robot.setBackArm(-speed);
+				robot.setBackArm(speed);
 		
 		robot.setFeederArm(0.0);
 	}
