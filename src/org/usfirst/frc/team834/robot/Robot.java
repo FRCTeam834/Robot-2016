@@ -305,7 +305,6 @@ public class Robot extends VisualRobot{
 		}
 		
 		
-		SmartDashboard.putString("DB/String 0", "Feeder on: " + Boolean.toString(feederOn));
 //		SmartDashboard.putString("DB/String 0", Double.toString(rightEncoder.getDistance()));
 //		SmartDashboard.putString("DB/String 1", Double.toString(leftEncoder.getDistance()));
 //		SmartDashboard.putString("DB/String 2", Double.toString(robotGyro.getAngle()));
