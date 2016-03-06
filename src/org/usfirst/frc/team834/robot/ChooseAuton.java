@@ -37,7 +37,7 @@ public class ChooseAuton {
 	public void chooseAuton(int id) {
 	
 		if(id > 0) {
-			main.add(new MoveStraightCommand(240, .8, robot));
+			main.add(new MoveStraightCommand(220, .8, robot));
 		}
 		if(id > 1) {
 			ArrayList<Command> moveArms = new ArrayList<>();
@@ -51,19 +51,19 @@ public class ChooseAuton {
 		}
 		
 		if(id > 2) {
-//			main.add(new MoveToPointCommand(140, 64, .6, robot));
+			main.add(new MoveToPointCommand(140, 64, .6, robot));
 			main.add(new TurnCommand(90 - Math.atan2(140, 64) * 180 / Math.PI, .6, robot));
-			main.add(new MoveStraightCommand(Math.pow(130*130+60*60, .5), .6, robot));
+			main.add(new MoveStraightCommand(Math.pow(145, .5), .6, robot));
 			main.add(new MoveFeederArmCommand(true, 130, .6, robot));
 			main.add(new ShootCommand(4.0, robot));
 			
 			ArrayList<Command> moveArms = new ArrayList<>();
-			moveArms.add(new MoveFeederArmCommand(false, 100, .6, robot));
-
-			threads = Arrays.copyOf(threads, 3);
-			threads[2] = new Thread(new RunCommands(moveArms));
-			threadStarts = Arrays.copyOf(threadStarts, 3);
-			threadStarts[2] = 2;
+//			moveArms.add(new MoveFeederArmCommand(false, 100, .6, robot));
+//
+//			threads = Arrays.copyOf(threads, 3);
+//			threads[2] = new Thread(new RunCommands(moveArms));
+//			threadStarts = Arrays.copyOf(threadStarts, 3);
+//			threadStarts[2] = 3;
 
 		}
 		
@@ -115,7 +115,8 @@ public class ChooseAuton {
 	public void chooseAuton(int obstacleID, int positionID) {
 		switch(obstacleID) {
 		case 1:
-			main.add(new MoveBackArmCommand(true, 210, .6, robot));
+			main.add(new MoveBackArmCommand(true, 150, .6, robot));
+			main.add(new MoveFeederArmCommand(false, 130, .6, robot));
 			main.add(new MoveStraightCommand(140, -.6, robot));
 			main.add(new TurnCommand(180, .5, robot));
 			break;
@@ -135,10 +136,7 @@ public class ChooseAuton {
 		}
 		
 		switch(positionID) {
-		case 2:
-			main.add(new MoveStraightCommand(120, .8, robot));
-			main.add(new MoveFeederArmCommand(false, 100, .6, robot));
-
+				
 
 			
 		}
