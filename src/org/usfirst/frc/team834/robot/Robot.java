@@ -184,6 +184,10 @@ public class Robot extends VisualRobot{
 			} 
 			catch(NumberFormatException e) {}
 			
+			if(temp.equals("")) {
+				
+			}
+			
 			ChooseAuton c = new ChooseAuton(this);
 			c.chooseAuton(autonID);
 			
@@ -242,7 +246,7 @@ public class Robot extends VisualRobot{
 			if(xbox.getRawButton(6)) 
 				motors[4].set(-1);
 			else if(!lightSensor.get()) 
-				motors[4].set(0.05);
+				motors[4].set(0.15);
 			else
 				motors[4].set(.8);
 		}
