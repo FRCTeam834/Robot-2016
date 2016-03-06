@@ -65,7 +65,7 @@ public class MoveFeederArmCommand implements Command {
 		direction = dir;
 		speed = spd;
 		angle = ang;
-		timeout = 1000;
+		timeout = 3000;
 		setRobot(r);
 	}
 }
