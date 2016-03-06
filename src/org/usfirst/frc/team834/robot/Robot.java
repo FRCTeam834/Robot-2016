@@ -242,7 +242,7 @@ public class Robot extends VisualRobot{
 			if(xbox.getRawButton(6)) 
 				motors[4].set(-1);
 			else if(!lightSensor.get()) 
-				motors[4].set(0);
+				motors[4].set(0.05);
 			else
 				motors[4].set(.8);
 		}
@@ -297,6 +297,7 @@ public class Robot extends VisualRobot{
 		}
 		
 		
+		SmartDashboard.putString("DB/String 0", "Feeder on: " + Boolean.toString(feederOn));
 //		SmartDashboard.putString("DB/String 0", Double.toString(rightEncoder.getDistance()));
 //		SmartDashboard.putString("DB/String 1", Double.toString(leftEncoder.getDistance()));
 //		SmartDashboard.putString("DB/String 2", Double.toString(robotGyro.getAngle()));
