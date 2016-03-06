@@ -191,8 +191,7 @@ public class ChooseAuton {
 		threads = Arrays.copyOf(threads, threads.length + 1);
 		threads[threadStarts.length-1] = new Thread(new RunCommands(moveArmsDown));
 		threadStarts = Arrays.copyOf(threadStarts, threadStarts.length + 1);
-		threadStarts[threadStarts.length-1] = thread;
-
+		threadStarts[threadStarts.length-1] = main.size()-1;
 		
 		main.add(new ShootCommand(4, robot));
 	}
