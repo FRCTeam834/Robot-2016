@@ -38,7 +38,7 @@ public class ChooseAuton {
 	public void chooseAuton(int id) {
 	
 		if(id > 0) {
-			main.add(new MoveStraightCommand(220, .8, robot));
+			main.add(new MoveStraightCommand(240, .8, robot));
 		}
 		if(id > 1) {
 			ArrayList<Command> moveArms = new ArrayList<>();
