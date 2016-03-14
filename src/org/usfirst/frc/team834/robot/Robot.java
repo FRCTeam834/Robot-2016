@@ -178,12 +178,6 @@ public class Robot extends VisualRobot{
 		robotGyro.reset();
 		feederArmGyro.reset();
 		backArmGyro.reset();
-
-		new MoveStraightCommand(220, .8, this).execute();
-		
-		int autonID = (switches.getRawButton(midBtnIDs[0]) ? 1:0) +
-					  (switches.getRawButton(midBtnIDs[0]) ? 2:0) +
-					  (switches.getRawButton(midBtnIDs[0]) ? 4:0);
 		
 		int obstacleID = 0;
 		int positionID = 0;
@@ -222,17 +216,7 @@ public class Robot extends VisualRobot{
 			finally {
 				i++;
 			}
-		}
-		
-		//Starts any other threads
-		for(int start = 1; start < threadStarts.length; start++) {
-			if (threadStarts[start] >= i){
-				threads[i].start();
-			}
-				
-		}
-			
-		
+		}	
 		
 	}
 	
@@ -316,11 +300,9 @@ public class Robot extends VisualRobot{
 //		SmartDashboard.putString("DB/String 5", "Light Sensor: " + Boolean.toString(lightSensor.get()));	
 //		SmartDashboard.putString("DB/String 6", Double.toString(scissorsEncoder.getDistance()));
 
+		
 		try{
 			NIVision.IMAQdxGrab(session, image, 1);
-		}
-		catch(VisionException e){
-		}
 //		NIVision.imaqColorThreshold(binaryImage, image, 255, NIVision.ColorMode.HSV, HUE_RANGE, SAT_RANGE, VAL_RANGE);
 //
 //		int numParticles = NIVision.imaqCountParticles(binaryImage, 1);
@@ -388,7 +370,10 @@ public class Robot extends VisualRobot{
 		else {
 			toggleCam = true;
 		}
-		
+		}
+		catch(VisionException e){
+		}
+
 	}
 
 	public void setIntake(double speed)
