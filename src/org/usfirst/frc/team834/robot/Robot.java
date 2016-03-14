@@ -178,11 +178,6 @@ public class Robot extends VisualRobot{
 		robotGyro.reset();
 		feederArmGyro.reset();
 		backArmGyro.reset();
-
-		
-		int autonID = (switches.getRawButton(midBtnIDs[0]) ? 1:0) +
-					  (switches.getRawButton(midBtnIDs[0]) ? 2:0) +
-					  (switches.getRawButton(midBtnIDs[0]) ? 4:0);
 		
 		int obstacleID = 0;
 		int positionID = 0;
@@ -221,17 +216,7 @@ public class Robot extends VisualRobot{
 			finally {
 				i++;
 			}
-		}
-		
-		//Starts any other threads
-		for(int start = 1; start < threadStarts.length; start++) {
-			if (threadStarts[start] >= i){
-				threads[i].start();
-			}
-				
-		}
-			
-		
+		}	
 		
 	}
 	
