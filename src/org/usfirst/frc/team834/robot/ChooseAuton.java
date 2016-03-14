@@ -14,6 +14,7 @@ import commands.MoveBackArmCommand;
 import commands.MoveFeederArmCommand;
 import commands.MoveStraightCommand;
 import commands.MoveToPointCommand;
+import commands.MoveUntilProximityCommand;
 import commands.ShootCommand;
 import commands.TurnCommand;
 
@@ -55,7 +56,7 @@ public class ChooseAuton {
 			main.add(new MoveToPointCommand(130, 64, .6, robot));
 //			main.add(new TurnCommand(90 - Math.atan2(140, 64) * 180 / Math.PI, .6, robot));
 //			main.add(new MoveStraightCommand(Math.pow(145, .5), .6, robot));
-			main.add(new MoveFeederArmCommand(true, 130, .6, robot));
+
 			main.add(new ShootCommand(4.0, robot));
 			
 			ArrayList<Command> moveArms = new ArrayList<>();
@@ -121,47 +122,47 @@ public class ChooseAuton {
 			return;
 		}
 		
-		if(obstacleID == 0) {
+		else if(obstacleID == 0) {
 			return;
 		}
-		
-		switch(obstacleID) {
-		case 1:
-			main.add(new MoveBackArmCommand(true, 150, .6, robot));
-			main.add(new MoveFeederArmCommand(false, 130, .6, robot));
-			main.add(new MoveStraightCommand(120, -.6, robot));
-			main.add(new TurnCommand(180, .5, robot));
-			break;
-		case 2:
-			main.add(new MoveStraightCommand(60, -.6, robot));
-			ArrayList<Command> moveArms = new ArrayList<>();
-			moveArms.add(new MoveBackArmCommand(true, 150, .6, robot));
-			threads[1] = new Thread(new RunCommands(moveArms));
-			threadStarts = Arrays.copyOf(threadStarts, 2);
-			threadStarts[1] = 0;
-			
-			main.add(new DelayCommand(1));
-			main.add(new MoveStraightCommand(60, -.6, robot));
-			break;
-			
-		case 3: 
-			main.add(new MoveFeederArmCommand(true, 150, .6, robot));
-			main.add(new MoveStraightCommand(120, .6, robot));
-			break;
-		default:
-			main.add(new MoveStraightCommand(120, .8, robot));
+		else {
+			switch(obstacleID) {
+			case 1: //Portcullis
+				main.add(new MoveBackArmCommand(true, 150, .6, robot));
+				main.add(new MoveFeederArmCommand(true, 130, .6, robot));
+				main.add(new MoveStraightCommand(120, -.6, robot));
+				main.add(new TurnCommand(180, .5, robot));
+				break;
+			case 2: //Cheval de Frise
+				main.add(new MoveStraightCommand(60, -.6, robot));
+				ArrayList<Command> moveArms = new ArrayList<>();
+				moveArms.add(new MoveBackArmCommand(true, 150, .6, robot));
+				threads[1] = new Thread(new RunCommands(moveArms));
+				threadStarts = Arrays.copyOf(threadStarts, 2);
+				threadStarts[1] = 0;
+				
+				main.add(new DelayCommand(1));
+				main.add(new MoveStraightCommand(60, -.6, robot));
+				break;
+				
+			case 3: //Low Bar
+				main.add(new MoveFeederArmCommand(true, 150, .6, robot));
+				main.add(new MoveStraightCommand(120, .6, robot));
+				break;
+			default: //Anything else
+				main.add(new MoveStraightCommand(120, .8, robot));
+			}
 		}
-		main.add(new MoveFeederArmCommand(false, 15, .6, robot));
-		main.add(new MoveBackArmCommand(false, 15, .6, robot));
-		main.add(new DelayCommand(.5));
 		switch(positionID) {
 			case 1:	
+//				main.add(new MoveUntilProximityCommand(64, .8, robot));
 				main.add(new MoveStraightCommand(100, .8, robot));
 				main.add(new MoveFeederArmCommand(true, 150, .4, robot));
 				main.add(new MoveToPointCommand(140, 64, .8, robot));
 				break;
 
 			case 2:	
+//				main.add(new MoveUntilProximityCommand(32, .8, robot));
 				main.add(new MoveStraightCommand(120, .8, robot));
 				main.add(new MoveToPointCommand(70, 32, .8, robot));
 				break;

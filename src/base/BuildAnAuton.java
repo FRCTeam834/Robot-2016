@@ -209,6 +209,7 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 			Object[] options = { 
 				"Choose a Command", 
 				MoveStraightCommand.class.toString().substring(15),
+				MoveUntilProximityCommand.class.toString().substring(15),
 				MoveAlongCurveCommand.class.toString().substring(15),
 				MoveToPointCommand.class.toString().substring(15),
 				TurnCommand.class.toString().substring(15),
@@ -217,7 +218,8 @@ public class BuildAnAuton extends JFrame implements ActionListener {
 				MoveFeederArmCommand.class.toString().substring(15),
 				MoveBackArmCommand.class.toString().substring(15),
 				ShootCommand.class.toString().substring(15),
-				FeederCommand.class.toString().substring(15)
+				FeederCommand.class.toString().substring(15),
+
 			};
 			String o;
 			Object temp = JOptionPane.showInputDialog(null, "Choose a command to add", "Choose a command to add", 1, null, options, options[0]);

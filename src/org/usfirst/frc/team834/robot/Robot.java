@@ -181,61 +181,57 @@ public class Robot extends VisualRobot{
 
 		new MoveStraightCommand(220, .8, this).execute();
 		
-//		int autonID = (switches.getRawButton(midBtnIDs[0]) ? 1:0) +
-//					  (switches.getRawButton(midBtnIDs[0]) ? 2:0) +
-//					  (switches.getRawButton(midBtnIDs[0]) ? 4:0);
+		int autonID = (switches.getRawButton(midBtnIDs[0]) ? 1:0) +
+					  (switches.getRawButton(midBtnIDs[0]) ? 2:0) +
+					  (switches.getRawButton(midBtnIDs[0]) ? 4:0);
 		
-//			int obstacleID = 0;
-//			int positionID = 0;
-//			
-//			String temp1 = SmartDashboard.getString("DB/String 8");
-//			String temp2 = SmartDashboard.getString("DB/String 9");
-//
-//			try {
-//				obstacleID = Integer.parseInt(temp1);
-//				positionID = Integer.parseInt(temp2);
-//			} 
-//			catch(NumberFormatException e) {}
-//			
-//			
-//			ChooseAuton c = new ChooseAuton(this);
-//			c.chooseAuton(obstacleID, positionID);
-//
-//			
-//			ArrayList<Command> main = c.getMain();
-//			int[] threadStarts = c.getThreadStarts();
-//			Thread[] threads = c.getThreads();
-//			
-//			robotGyro.reset();
-//			feederArmGyro.reset();
-//			backArmGyro.reset();
-//			
-//			int i = 0;
-//			while(isAutonomous() && !isDisabled() && i < main.size()) {
-//				try {
-//					for(int start = 1; start < threadStarts.length; start++)
-//						if (threadStarts[start] == i)
-//							threads[start].start();
-//					main.get(i).execute();
-//				}
-//				catch(NullPointerException e) {e.printStackTrace();}
-//				finally {
-//					i++;
-//				}
-//			}
-//			
-//			//Starts any other threads
-//			for(int start = 1; start < threadStarts.length; start++) {
-//				if (threadStarts[start] >= i){
-//					threads[i].start();
-//				}
-//					
-//			}
+		int obstacleID = 0;
+		int positionID = 0;
+		
+		String temp1 = SmartDashboard.getString("DB/String 8");
+		String temp2 = SmartDashboard.getString("DB/String 9");
+
+		try {
+			obstacleID = Integer.parseInt(temp1);
+			positionID = Integer.parseInt(temp2);
+		} 
+		catch(NumberFormatException e) {}
+		
+		
+		ChooseAuton c = new ChooseAuton(this);
+		c.chooseAuton(obstacleID, positionID);
+
+		
+		ArrayList<Command> main = c.getMain();
+		int[] threadStarts = c.getThreadStarts();
+		Thread[] threads = c.getThreads();
+		
+		robotGyro.reset();
+		feederArmGyro.reset();
+		backArmGyro.reset();
+		
+		int i = 0;
+		while(isAutonomous() && !isDisabled() && i < main.size()) {
+			try {
+				for(int start = 1; start < threadStarts.length; start++)
+					if (threadStarts[start] == i)
+						threads[start].start();
+				main.get(i).execute();
+			}
+			catch(NullPointerException e) {e.printStackTrace();}
+			finally {
+				i++;
+			}
+		}
+		
+		//Starts any other threads
+		for(int start = 1; start < threadStarts.length; start++) {
+			if (threadStarts[start] >= i){
+				threads[i].start();
+			}
+				
+		}
 			
-//		} 
-//		catch(IOException e) { e.printStackTrace();} 
-//		catch(ClassNotFoundException e1) {e1.printStackTrace();}
-//		catch(ClassCastException e) {e.printStackTrace();}
 		
 		
 	}
