@@ -49,6 +49,7 @@ public class Robot extends VisualRobot{
 	private DigitalInput lightSensor = new DigitalInput(4);
 	private Encoder scissorsEncoder = new Encoder(5, 6);
 
+	private Ultrasonic ultrasonic = new Ultrasonic(7, 8); //7 is output, 8 is input
 	
 	private Relay lights1; //turns on LEDs
 	private Relay lights2; 
@@ -103,6 +104,8 @@ public class Robot extends VisualRobot{
 		sensors.put("feederArmGyro", feederArmGyro);
 		sensors.put("tripwire", lightSensor);
 		sensors.put("scissorsEncoder", scissorsEncoder);
+		sensors.put("ultrasonic", ultrasonic);
+		ultrasonic.setAutomaticMode(true);
 		
 		
 		lights1 = new Relay(0); //turns on LEDs
