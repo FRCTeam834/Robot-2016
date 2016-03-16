@@ -3,9 +3,37 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>BuildAnAuton</title>
+
 </head>
 
 <body>
+
+<table style="background-color:#AFF0FF;font-family:Arial">
+<tr>
+<td style="background-color:blue;vertical-align:text-top">
+<img src="https://slsd-wikis.wikispaces.com/space/showlogo/1236203029/logo.png" style="padding-left:10px;padding-right:10px;padding-top:10px;padding-bottom:10px"/>
+</td>
+<td style="padding-left:10px">
+
+<div id="swag" style="font-size:36pt">DAN QIAN SUCKS</div>
+<script>
+var colors = "red,orange,yellow,green,blue,purple,pink";
+var str = "DAN QIAN SUCKS";
+
+window.setInterval(function(){
+	document.getElementById("swag").innerHTML = "";
+	var index = 0;
+	for(var i = 0; i < str.length; i++)
+	{
+		document.getElementById("swag").innerHTML += "<b style='color:" + colors.split(',')[index % colors.split(',').length] + "'>" + str[i] + "</b>";
+		if(str[i] != ' ')
+			index++;
+	}
+	var temp = colors.split(',')[colors.split(',').length - 1];
+	colors = colors.replace("," + temp, "");
+	colors = temp + "," + colors;
+}, 100);
+</script>
 
 <h1>Build-an-Auton Tutorial</h1>
 <table id="toc" style="border:solid black 1px">
@@ -169,6 +197,9 @@ The shoot command is used for shooting the ball.
 The feeder command is used for spinning the feeder.
 <li><b>Timeout</b> - The amount of time to spin the feeder for.</li>
 </p>
+</td>
+</tr>
+</table>
 
 </body>
 </html>
