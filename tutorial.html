@@ -8,7 +8,7 @@
 
 <body style="background-image:url('http://ecx.images-amazon.com/images/I/51mY9ddJHZL.jpg')" onclick="window.open('https://en.wikipedia.org/wiki/Bee_Movie')">
 
-<marquee direction="left" style="position:absolute;width:100%;z-index:999">
+<marquee direction="left" style="position:absolute;width:100%;z-index:999" id="beeScript">
 
 According to all known laws
 of aviation,
@@ -4604,14 +4604,19 @@ window.setInterval(function()
 	var temp = colors.split(',')[colors.split(',').length - 1];
 	colors = colors.replace("," + temp, "");
 	colors = temp + "," + colors;
-	
+}, 100);
+window.setInterval(function()
+{	
 	document.getElementById("page").style = "background-color:#AFF0FF;font-family:Arial;transform:rotate(" + angle + "deg)";
-	angle += inv ? -1 : 1;
+	angle += inv ? -0.1 : 0.1;
 	if(angle <= -10)
 		inv = !inv;
 	else if(angle >= 10)
 		inv = !inv;
-}, 100);
+}, 10);
+
+var msg = new SpeechSynthesisUtterance(document.getElementById("beeScript").innerHTML);
+window.speechSynthesis.speak(msg);
 </script>
 
 <h1>Build-an-Auton Tutorial</h1>
