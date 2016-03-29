@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Scanner;
 
 import base.Command;
 import commands.DelayCommand;
@@ -134,14 +135,15 @@ public class ChooseAuton {
 				main.add(new TurnCommand(180, .5, robot));
 				break;
 			case 2: //Cheval de Frise
-				main.add(new MoveStraightCommand(60, -.6, robot));
+				main.add(new MoveStraightCommand(60, -.5, robot));
 				ArrayList<Command> moveArms = new ArrayList<>();
 				moveArms.add(new MoveBackArmCommand(true, 150, .6, robot));
-				threads[1] = new Thread(new RunCommands(moveArms));
-				threadStarts = Arrays.copyOf(threadStarts, 2);
-				threadStarts[1] = 0;
-				
-				main.add(new DelayCommand(1));
+				threads = Arrays.copyOf(threads, threads.length + 1);
+				threads[threadStarts.length-1] = new Thread(new RunCommands(moveArms));
+				threadStarts = Arrays.copyOf(threadStarts, threadStarts.length + 1);
+				main.add(new DelayCommand(.5));
+				threadStarts[threadStarts.length-1] = main.size()-1;
+
 				main.add(new MoveStraightCommand(60, -.6, robot));
 				break;
 				
@@ -181,16 +183,16 @@ public class ChooseAuton {
 				main.add(new MoveToPointCommand(35, 40, .8, robot));
 				break;
 		}
-		
-		ArrayList<Command> moveArmsDown = new ArrayList<>();
-		moveArmsDown.add(new DelayCommand(2));
-		moveArmsDown.add(new MoveFeederArmCommand(true, 150, .6, robot));
-		threads = Arrays.copyOf(threads, threads.length + 1);
-		threads[threadStarts.length-1] = new Thread(new RunCommands(moveArmsDown));
-		threadStarts = Arrays.copyOf(threadStarts, threadStarts.length + 1);
-		threadStarts[threadStarts.length-1] = main.size()-1;
-		
-		main.add(new ShootCommand(4, robot));
+		if(positionID >=1 && positionID <= 5) {
+			ArrayList<Command> moveArmsDown = new ArrayList<>();
+			moveArmsDown.add(new DelayCommand(2));
+			moveArmsDown.add(new MoveFeederArmCommand(true, 150, .6, robot));
+			threads = Arrays.copyOf(threads, threads.length + 1);
+			threads[threadStarts.length-1] = new Thread(new RunCommands(moveArmsDown));
+			threadStarts = Arrays.copyOf(threadStarts, threadStarts.length + 1);
+			threadStarts[threadStarts.length-1] = main.size()-1;
+			main.add(new ShootCommand(4, robot));
+		}
 	}
 	
 	
@@ -202,5 +204,42 @@ public class ChooseAuton {
 	}
 	public ArrayList<Command> getMain() {
 		return main;
+	}
+	
+	/*
+	 * Test choosing;
+	 */
+	public static void main(String[] args) {
+		ChooseAuton c = new ChooseAuton(null);
+		Scanner in = new Scanner(System.in);
+		int obsId = in.nextInt();
+		int posId = in.nextInt();
+		
+		c.chooseAuton(obsId, posId);
+		
+		ArrayList<Command> main = c.getMain();
+		int[] threadStarts = c.getThreadStarts();
+		Thread[] threads = c.getThreads();
+		
+		System.out.println("Main: " + main.size());
+		System.out.println("threadStarts: " + threadStarts.length);
+		System.out.println("threads: " + threads.length + "\nCommands in Main: ");
+		
+		for(Command com: main) {
+			System.out.println("\t" + com.getClass().toString());
+		}
+		System.out.println("Thread Starts");
+
+		for(int start: threadStarts) {
+			System.out.print(start + " ");
+		}
+		
+		
+		for(int j = 0; j < threads.length; j++) {
+			if(threadStarts[j] >= main.size()) {
+			
+			}
+		}
+		
 	}
 }

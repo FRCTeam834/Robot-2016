@@ -69,6 +69,6 @@ public class MoveAlongCurveCommand implements Command {
 		radius = rad;
 		speed = s;
 		angle = ang;
-		setRobot(r);
+		if(r!=null) setRobot(r);
 	}
 }

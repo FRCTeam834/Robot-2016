@@ -95,6 +95,6 @@ public class MoveStraightCommand implements Command {
 	public MoveStraightCommand(double dist, double s, VisualRobot r) {
 		distance = dist;
 		speed = s;
-		setRobot(r);
+		if(r!=null) setRobot(r);
 	}
 }

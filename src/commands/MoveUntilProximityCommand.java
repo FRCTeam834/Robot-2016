@@ -94,7 +94,7 @@ public class MoveUntilProximityCommand implements Command {
 	public MoveUntilProximityCommand(double dist, double s, VisualRobot r) {
 		distance = dist;
 		speed = s;
-		setRobot(r);
+		if(r!=null) setRobot(r);
 	}
 	
 }

@@ -61,7 +61,7 @@ public class TurnCommand implements Command {
 			speed = -1.0;
 		else
 			speed = s;
-		setRobot(r);
+		if(r!=null) setRobot(r);
 	}
 
 	

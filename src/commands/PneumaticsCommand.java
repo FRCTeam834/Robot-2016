@@ -43,7 +43,7 @@ public class PneumaticsCommand implements Command {
 	 */
 	public PneumaticsCommand(boolean o, VisualRobot r) {
 		isOpen = o;
-		setRobot(r);
+		if(r!=null) setRobot(r);
 	}
 }
 

@@ -43,7 +43,7 @@ public class FeederCommand implements Command {
 	public FeederCommand(double t, VisualRobot r)
 	{
 		timeout = t;
-		setRobot(r);
+		if(r!=null) setRobot(r);
 	}
 
 }

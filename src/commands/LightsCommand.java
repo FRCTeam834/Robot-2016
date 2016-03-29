@@ -53,7 +53,7 @@ public class LightsCommand implements Command {
 	 */
 	public LightsCommand(boolean o, VisualRobot r) {
 		on = o;
-		setRobot(r);
+		if(r!=null) setRobot(r);
 	}
 
 }

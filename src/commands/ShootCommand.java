@@ -35,6 +35,6 @@ public class ShootCommand implements Command{
 	public ShootCommand(double t, VisualRobot r)
 	{
 		time = t;
-		setRobot(r);
+		if(r!=null) setRobot(r);
 	}
 }

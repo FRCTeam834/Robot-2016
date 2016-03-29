@@ -93,6 +93,6 @@ public class MoveToPointCommand implements Command {
 		displacementY = dy;
 		speed = s;
 		if(r!= null)
-		setRobot(r);
+		if(r!=null) setRobot(r);
 	}
 }
