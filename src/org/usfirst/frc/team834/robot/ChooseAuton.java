@@ -116,7 +116,7 @@ public class ChooseAuton {
 	 * 8: LowBar
 	 * For Position: Lowbar is one, towards center add one until 5
 	 */
-	public void chooseAuton(int obstacleID, int positionID) {
+	public void chooseAuton(int obstacleID, int positionID, boolean isLeft) {
 		
 		if(obstacleID==-1) {
 			chooseAuton(positionID);
@@ -156,6 +156,8 @@ public class ChooseAuton {
 			}
 		}
 		switch(positionID) {
+			case 0:
+				return;
 			case 1:	
 //				main.add(new MoveUntilProximityCommand(64, .8, robot));
 				main.add(new MoveStraightCommand(100, .8, robot));
@@ -164,14 +166,29 @@ public class ChooseAuton {
 				break;
 
 			case 2:	
-//				main.add(new MoveUntilProximityCommand(32, .8, robot));
-				main.add(new MoveStraightCommand(120, .8, robot));
-				main.add(new MoveToPointCommand(70, 32, .8, robot));
+				if(isLeft) {
+	//				main.add(new MoveUntilProximityCommand(32, .8, robot));
+					main.add(new MoveStraightCommand(120, .8, robot));
+					main.add(new MoveToPointCommand(70, 32, .8, robot));
+				}
+				else {
+					main.add(new MoveToPointCommand(174.2, 129, .8, robot));
+					main.add(new TurnCommand(-53.43256595, .8, robot));
+					main.add(new MoveToPointCommand(60.5236, 33.533, .8, robot));
+				}
 				break;
 			case 3:	
-				main.add(new MoveStraightCommand(100, .8, robot));
-				main.add(new MoveAlongCurveCommand(true, 36, .8, 330, robot));
-				main.add(new MoveStraightCommand(30, .8, robot));
+				if(isLeft) {
+
+					main.add(new MoveStraightCommand(100, .8, robot));
+					main.add(new MoveAlongCurveCommand(true, 36, .8, 330, robot));
+					main.add(new MoveStraightCommand(30, .8, robot));
+				}
+				else {
+						main.add(new MoveToPointCommand(118.6, 130, .8, robot));
+						main.add(new TurnCommand(-42.36324157, .8, robot));
+						main.add(new MoveToPointCommand(52.345, 31.898, .8, robot));
+				}
 				break;
 			case 4:	
 				main.add(new MoveToPointCommand(131, 85, .8, robot));
@@ -215,7 +232,7 @@ public class ChooseAuton {
 		int obsId = in.nextInt();
 		int posId = in.nextInt();
 		
-		c.chooseAuton(obsId, posId);
+		c.chooseAuton(obsId, posId, true);
 		
 		ArrayList<Command> main = c.getMain();
 		int[] threadStarts = c.getThreadStarts();

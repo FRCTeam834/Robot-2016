@@ -196,7 +196,7 @@ public class Robot extends VisualRobot{
 		
 		
 		ChooseAuton c = new ChooseAuton(this);
-		c.chooseAuton(obstacleID, positionID);
+		c.chooseAuton(obstacleID, positionID, false);
 
 		
 		ArrayList<Command> main = c.getMain();
