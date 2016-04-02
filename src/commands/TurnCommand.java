@@ -22,7 +22,6 @@ public class TurnCommand implements Command {
 		String[] labels = {"Angle", "Speed"};
 		String[] values = {Double.toString(angle), Double.toString(speed)};
 		EditDialog f = new EditDialog(labels, values);
-		
 		angle = Double.parseDouble(values[0]);
 		
 		if(Math.abs(Double.parseDouble(values[1])) <= 1.0) {
@@ -38,9 +37,9 @@ public class TurnCommand implements Command {
 			while (angle > 0 ? gyro.getAngle() < angle : gyro.getAngle() > angle && !robot.isDisabled() && robot.isAutonomous()) {
 				robot.setRightSide(angle > 0 ? -speed : speed);
 				robot.setLeftSide(angle > 0 ? speed : -speed);
-				SmartDashboard.putString("DB/String 2", Double.toString(gyro.getAngle()));
 			}
-			robot.stop();
+			robot.setRightSide(0.0);
+			robot.setLeftSide(0.0);
 		}
 	}
 	

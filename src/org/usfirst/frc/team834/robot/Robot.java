@@ -49,7 +49,6 @@ public class Robot extends VisualRobot{
 	private DigitalInput lightSensor = new DigitalInput(4);
 	private Encoder scissorsEncoder = new Encoder(5, 6);
 
-	private Ultrasonic ultrasonic = new Ultrasonic(7, 8); //7 is output, 8 is input
 	
 	private Relay lights1; //turns on LEDs
 	private Relay lights2; 
@@ -104,8 +103,6 @@ public class Robot extends VisualRobot{
 		sensors.put("feederArmGyro", feederArmGyro);
 		sensors.put("tripwire", lightSensor);
 		sensors.put("scissorsEncoder", scissorsEncoder);
-		sensors.put("ultrasonic", ultrasonic);
-		ultrasonic.setAutomaticMode(true);
 		
 		
 		lights1 = new Relay(0); //turns on LEDs
@@ -118,6 +115,8 @@ public class Robot extends VisualRobot{
 				motors[i].setInverted(true);
 			}
 		}
+		motors[5].setInverted(true);
+		motors[4].setInverted(true);
 		robot = new RobotDrive(motors[0], motors[1], motors[2], motors[3]);
 		robot.setSafetyEnabled(false);
 
@@ -137,7 +136,6 @@ public class Robot extends VisualRobot{
 		feederArmGyro.initGyro();
 		
 		image = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
-		binaryImage = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_U8, 0);
 		
         session = NIVision.IMAQdxOpenCamera("cam0",
                 NIVision.IMAQdxCameraControlMode.CameraControlModeController);
@@ -161,9 +159,6 @@ public class Robot extends VisualRobot{
 		motors[3].set(speed);
 	}
 	
-	//public void setLights(boolean on) {
-	//	lights.set(on ? Relay.Value.kForward : Relay.Value.kOff);
-	//}
 	
 	public void shift(boolean on) {
 	}
@@ -181,6 +176,8 @@ public class Robot extends VisualRobot{
 		robotGyro.reset();
 		feederArmGyro.reset();
 		backArmGyro.reset();
+		
+		this.setFeederArm(0.0);
 		
 		int obstacleID = 0;
 		int positionID = 0;
@@ -215,7 +212,7 @@ public class Robot extends VisualRobot{
 						threads[start].start();
 				main.get(i).execute();
 			}
-			catch(NullPointerException e) {e.printStackTrace();}
+			catch(NullPointerException e) {SmartDashboard.putString("DB/String 5", e.getLocalizedMessage());}
 			finally {
 				i++;
 			}
@@ -224,25 +221,33 @@ public class Robot extends VisualRobot{
 	}
 	
 	public void teleOpInit() {
-		robotGyro.reset();;
-		feederArmGyro.reset();
-		backArmGyro.reset();
 
 	}
 
 	public void teleOpPeriodic() {
-		Timer.delay(.005);
-
+		Timer.delay(.05);
 		
 		robot.tankDrive(leftJoystick, rightJoystick);
 
+
+		if(leftJoystick.getMagnitude() >= .2 || rightJoystick.getMagnitude() >= .2)
+			setBlueLights(true);
+		else 
+			setBlueLights(false);
+		
+		
 		if(feederOn) {
-			if(xbox.getRawButton(6)) 
-				motors[4].set(-1);
-			else if(!lightSensor.get()) 
-				motors[4].set(0.15);
-			else
+			if(xbox.getRawButton(6)) {
+				motors[4].set(-.75);
+				setWhiteLights(false);
+			}
+			else if(!lightSensor.get()) {
+				motors[4].set(0.08);
+				setWhiteLights(true);
+			}
+			else {
 				motors[4].set(.8);
+			}
 		}
 		else {
 			motors[4].set(0);
@@ -376,6 +381,7 @@ public class Robot extends VisualRobot{
 		}
 		catch(VisionException e){
 		}
+		
 
 	}
 

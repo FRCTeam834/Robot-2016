@@ -18,6 +18,7 @@ import commands.MoveToPointCommand;
 import commands.MoveUntilProximityCommand;
 import commands.ShootCommand;
 import commands.TurnCommand;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ChooseAuton {
 	Thread[] threads = {null};
@@ -129,12 +130,12 @@ public class ChooseAuton {
 		else {
 			switch(obstacleID) {
 			case 1: //Portcullis
-				main.add(new MoveBackArmCommand(true, 150, .6, robot));
-				main.add(new MoveFeederArmCommand(true, 130, .6, robot));
+				main.add(new MoveBackArmCommand(true, 130, .3, robot));
+				main.add(new MoveFeederArmCommand(true, 130, .5, robot));
 				main.add(new MoveStraightCommand(120, -.6, robot));
 				main.add(new TurnCommand(180, .5, robot));
 				break;
-			case 2: //Cheval de Frise
+			case 2: //Cheval de Frise DO NOT USE, Experimental
 				main.add(new MoveStraightCommand(60, -.5, robot));
 				ArrayList<Command> moveArms = new ArrayList<>();
 				moveArms.add(new MoveBackArmCommand(true, 150, .6, robot));
@@ -148,11 +149,11 @@ public class ChooseAuton {
 				break;
 				
 			case 3: //Low Bar
-				main.add(new MoveFeederArmCommand(true, 150, .6, robot));
+				main.add(new MoveFeederArmCommand(true, 130, .5, robot));
 				main.add(new MoveStraightCommand(120, .6, robot));
 				break;
 			default: //Anything else
-				main.add(new MoveStraightCommand(120, .8, robot));
+				main.add(new MoveStraightCommand(120, .6, robot));
 			}
 		}
 		switch(positionID) {
@@ -160,52 +161,52 @@ public class ChooseAuton {
 				return;
 			case 1:	
 //				main.add(new MoveUntilProximityCommand(64, .8, robot));
-				main.add(new MoveStraightCommand(100, .8, robot));
-				main.add(new MoveFeederArmCommand(true, 150, .4, robot));
-				main.add(new MoveToPointCommand(140, 64, .8, robot));
+				main.add(new MoveStraightCommand(100, .6, robot));
+//				main.add(new MoveFeederArmCommand(true, 150, .4, robot));
+				main.add(new MoveToPointCommand(140, 64, .6, robot));
 				break;
 
 			case 2:	
 				if(isLeft) {
 	//				main.add(new MoveUntilProximityCommand(32, .8, robot));
-					main.add(new MoveStraightCommand(120, .8, robot));
-					main.add(new MoveToPointCommand(70, 32, .8, robot));
+					main.add(new MoveStraightCommand(130, .6, robot));
+					main.add(new MoveToPointCommand(70, 32, .6, robot));
 				}
 				else {
-					main.add(new MoveToPointCommand(174.2, 129, .8, robot));
-					main.add(new TurnCommand(-53.43256595, .8, robot));
-					main.add(new MoveToPointCommand(60.5236, 33.533, .8, robot));
+					main.add(new MoveToPointCommand(174.2, 129, .6, robot));
+					main.add(new TurnCommand(-53.43256595, .6, robot));
+					main.add(new MoveToPointCommand(-60.5236, 33.533, .6, robot));
 				}
 				break;
 			case 3:	
 				if(isLeft) {
 
-					main.add(new MoveStraightCommand(100, .8, robot));
-					main.add(new MoveAlongCurveCommand(true, 36, .8, 330, robot));
-					main.add(new MoveStraightCommand(30, .8, robot));
+					main.add(new MoveStraightCommand(100, .6, robot));
+					main.add(new MoveAlongCurveCommand(true, 36, .6, 330, robot));
+					main.add(new MoveStraightCommand(30, .6, robot));
 				}
 				else {
-						main.add(new MoveToPointCommand(118.6, 130, .8, robot));
-						main.add(new TurnCommand(-42.36324157, .8, robot));
-						main.add(new MoveToPointCommand(52.345, 31.898, .8, robot));
+					main.add(new MoveToPointCommand(118.6, 130, .6, robot));
+					main.add(new TurnCommand(-42.36324157, .6, robot));
+					main.add(new MoveToPointCommand(-52.345, 31.898, .6, robot));
 				}
 				break;
 			case 4:	
-				main.add(new MoveToPointCommand(131, 85, .8, robot));
-				main.add(new TurnCommand(Math.atan(131/85) * 180/Math.PI - 90 -60, .6, robot));
-				main.add(new MoveStraightCommand(72, .8, robot));
+				main.add(new MoveToPointCommand(65, 147, .6, robot));
+				main.add(new TurnCommand(-Math.atan(65/147)-60, .6, robot));
+				main.add(new MoveStraightCommand(60, .6, robot));
 				break;
 			case 5:
-				main.add(new MoveStraightCommand(120, .8, robot));
-				main.add(new MoveToPointCommand(35, 40, .8, robot));
+				main.add(new MoveStraightCommand(147, .6, robot));
+				main.add(new MoveToPointCommand(-35, 20, .6, robot));
 				break;
 		}
 		if(positionID >=1 && positionID <= 5) {
 			ArrayList<Command> moveArmsDown = new ArrayList<>();
-			moveArmsDown.add(new DelayCommand(2));
 			moveArmsDown.add(new MoveFeederArmCommand(true, 150, .6, robot));
 			threads = Arrays.copyOf(threads, threads.length + 1);
-			threads[threadStarts.length-1] = new Thread(new RunCommands(moveArmsDown));
+			threads[threads.length-1] = new Thread(new RunCommands(moveArmsDown));
+			
 			threadStarts = Arrays.copyOf(threadStarts, threadStarts.length + 1);
 			threadStarts[threadStarts.length-1] = main.size()-1;
 			main.add(new ShootCommand(4, robot));
@@ -232,7 +233,7 @@ public class ChooseAuton {
 		int obsId = in.nextInt();
 		int posId = in.nextInt();
 		
-		c.chooseAuton(obsId, posId, true);
+		c.chooseAuton(obsId, posId, false);
 		
 		ArrayList<Command> main = c.getMain();
 		int[] threadStarts = c.getThreadStarts();
@@ -250,13 +251,26 @@ public class ChooseAuton {
 		for(int start: threadStarts) {
 			System.out.print(start + " ");
 		}
-		
-		
-		for(int j = 0; j < threads.length; j++) {
-			if(threadStarts[j] >= main.size()) {
-			
-			}
+		System.out.println();
+
+		for(Thread t: threads) {
+			System.out.println(t==null);
 		}
 		
+		int i = 0;
+		while(i < main.size()) {
+			try {
+				for(int start = 1; start < threadStarts.length; start++)
+					if (threadStarts[start] == i) {
+						threads[start].start();
+					}
+				main.get(i).execute();
+			}
+			catch(NullPointerException e) {e.printStackTrace();}
+			finally {
+				i++;
+			}
+		}	
+
 	}
 }

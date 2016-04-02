@@ -31,7 +31,7 @@ public class MoveToPointCommand implements Command {
 		LEncoder.reset();
 		REncoder.reset();
 		double angle = getAngle(), distance = getDistance();
-		
+		SmartDashboard.putString("DB/String 0", angle + "");
 		if(angle > 0) {
 			while (gyro.getAngle() < angle && !robot.isDisabled() && robot.isAutonomous()) {
 				robot.setRightSide(-speed);
@@ -92,7 +92,6 @@ public class MoveToPointCommand implements Command {
 		displacementX = dx;
 		displacementY = dy;
 		speed = s;
-		if(r!= null)
 		if(r!=null) setRobot(r);
 	}
 }
