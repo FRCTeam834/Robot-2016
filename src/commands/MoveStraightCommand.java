@@ -44,7 +44,7 @@ public class MoveStraightCommand implements Command {
 		REncoder.reset();
 		LEncoder.reset();
 		gyro.reset();
-		cFactor = speed / 45.0;
+		cFactor = speed / 25.0;
 
 		//While loop to end once the desired distance is travelled.
 		while(Math.abs(REncoder.getDistance() + LEncoder.getDistance()) / 2 < distance && robot.isAutonomous() && !robot.isDisabled()) {

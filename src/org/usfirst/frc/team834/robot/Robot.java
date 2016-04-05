@@ -181,19 +181,22 @@ public class Robot extends VisualRobot{
 		
 		int obstacleID = 0;
 		int positionID = 0;
+		int leftOrRight = 0;
 		
-		String temp1 = SmartDashboard.getString("DB/String 8");
-		String temp2 = SmartDashboard.getString("DB/String 9");
-
+		String temp1 = SmartDashboard.getString("DB/String 8", "0");
+		String temp2 = SmartDashboard.getString("DB/String 9", "0");
+		String temp3 = SmartDashboard.getString("DB/String 7", "0");
+		
 		try {
 			obstacleID = Integer.parseInt(temp1);
 			positionID = Integer.parseInt(temp2);
+			leftOrRight = Integer.parseInt(temp3);
 		} 
 		catch(NumberFormatException e) {}
 		
 		
 		ChooseAuton c = new ChooseAuton(this);
-		c.chooseAuton(obstacleID, positionID, false);
+		c.chooseAuton(obstacleID, positionID, leftOrRight == 0 ? false : true);
 
 		
 		ArrayList<Command> main = c.getMain();
@@ -221,6 +224,7 @@ public class Robot extends VisualRobot{
 	}
 	
 	public void teleOpInit() {
+		setWhiteLights(true);
 
 	}
 
@@ -238,12 +242,10 @@ public class Robot extends VisualRobot{
 		
 		if(feederOn) {
 			if(xbox.getRawButton(6)) {
-				motors[4].set(-.75);
-				setWhiteLights(false);
+				motors[4].set(-.6);
 			}
 			else if(!lightSensor.get()) {
 				motors[4].set(0.08);
-				setWhiteLights(true);
 			}
 			else {
 				motors[4].set(.8);
@@ -264,18 +266,18 @@ public class Robot extends VisualRobot{
 		
 		
 		if(xbox.getRawButton(3)) 
-			motors[5].set(.4);
+			motors[5].set(.6);
 		else if(xbox.getRawButton(4)) 
-			motors[5].set(-.4);
+			motors[5].set(-.6);
 		else
 			motors[5].set(0);
 		
 		
 		
 		if(xbox.getRawButton(2)) 
-			motors[6].set(.3);
+			motors[6].set(.4);
 		else if(xbox.getRawButton(1)) 
-			motors[6].set(-.3);
+			motors[6].set(-.4);
 		else
 			motors[6].set(0);
 		

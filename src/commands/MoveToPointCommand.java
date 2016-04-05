@@ -34,8 +34,8 @@ public class MoveToPointCommand implements Command {
 		SmartDashboard.putString("DB/String 0", angle + "");
 		if(angle > 0) {
 			while (gyro.getAngle() < angle && !robot.isDisabled() && robot.isAutonomous()) {
-				robot.setRightSide(-speed);
-				robot.setLeftSide(speed);
+				robot.setRightSide(-speed * .8);
+				robot.setLeftSide(speed * .8);
 
 			}
 			robot.setLeftSide(0);
@@ -43,20 +43,38 @@ public class MoveToPointCommand implements Command {
 		}
 		else if(angle < 0) {
 			while (gyro.getAngle() > angle && !robot.isDisabled() && robot.isAutonomous()) {
-				robot.setRightSide(speed);
-				robot.setLeftSide(-speed);
+				robot.setRightSide(speed * .8);
+				robot.setLeftSide(-speed * .8);
 
 			}
 			robot.setLeftSide(0);
 			robot.setRightSide(0);
 		}
 		
+		gyro.reset();
 		REncoder.reset();
 		LEncoder.reset();
-		while(LEncoder.getDistance() < distance && REncoder.getDistance() < distance && !robot.isDisabled() && robot.isAutonomous())
-		{
-			robot.setLeftSide(speed);
-			robot.setRightSide(speed);
+		double cFactor=speed/30;
+		
+		while(Math.abs(REncoder.getDistance() + LEncoder.getDistance()) / 2 < distance && robot.isAutonomous() && !robot.isDisabled()) {
+
+			double lspeed = speed, rspeed = speed;
+			
+			if(gyro.getAngle() < 0){
+				rspeed -= Math.abs(gyro.getAngle()) * cFactor;
+				if(rspeed < 0)
+					rspeed = 0;
+	
+			}
+			else if(gyro.getAngle() > 0) {
+				lspeed -= Math.abs(gyro.getAngle()) * cFactor;
+	
+				if(lspeed < 0)
+					lspeed = 0;
+			}
+			//Set the left and right wheel speeds.
+			robot.setLeftSide(lspeed);
+			robot.setRightSide(rspeed);
 		}
 		robot.setLeftSide(0);
 		robot.setRightSide(0);
