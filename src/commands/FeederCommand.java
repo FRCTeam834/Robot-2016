@@ -14,7 +14,7 @@ public class FeederCommand implements Command {
 	private Robot robot;
 	private DigitalInput lightSensor;
 	private double timeout;
-	private final double SPEED = 1.0;
+	private final double SPEED = .6;
 	
 	public void edit() {
 		String[] labels = {"Timeout"};
@@ -27,7 +27,7 @@ public class FeederCommand implements Command {
 	public void execute() throws NullPointerException {
 		double startTime = Timer.getMatchTime();
 		robot.setIntake(SPEED);
-		while(!lightSensor.get() ||  Timer.getMatchTime() - startTime < timeout) {
+		while(lightSensor.get() ||  Timer.getMatchTime() - startTime < timeout) {
 			
 		}
 		robot.setIntake(0.0);

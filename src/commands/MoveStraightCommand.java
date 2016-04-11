@@ -47,23 +47,16 @@ public class MoveStraightCommand implements Command {
 		cFactor = speed / 25.0;
 
 		//While loop to end once the desired distance is travelled.
-		while(Math.abs(REncoder.getDistance() + LEncoder.getDistance()) / 2 < distance && robot.isAutonomous() && !robot.isDisabled()) {
+		while(Math.abs(REncoder.getDistance() + LEncoder.getDistance()) / 2 < Math.abs(distance) && robot.isAutonomous() && !robot.isDisabled()) {
 			//Speed of left and right wheels.
 			double lspeed = speed, rspeed = speed;
 			//If the gyro's angle is less than zero, change the right wheel's speed.
 			if(gyro.getAngle() < 0){
 				rspeed -= Math.abs(gyro.getAngle()) * cFactor;
-				
-			//If the gyro's angle is more than zero, change the left wheel's speed.
-				if(rspeed < 0)
-					rspeed = 0;
-
 			}
+			//If the gyro's angle is more than zero, change the left wheel's speed
 			else if(gyro.getAngle() > 0) {
 				lspeed -= Math.abs(gyro.getAngle()) * cFactor;
-
-				if(lspeed < 0)
-					lspeed = 0;
 			}
 			//Set the left and right wheel speeds.
 			robot.setLeftSide(lspeed);

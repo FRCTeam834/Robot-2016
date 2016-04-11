@@ -10,6 +10,7 @@ import java.util.Scanner;
 
 import base.Command;
 import commands.DelayCommand;
+import commands.FeederCommand;
 import commands.MoveAlongCurveCommand;
 import commands.MoveBackArmCommand;
 import commands.MoveFeederArmCommand;
@@ -39,37 +40,35 @@ public class ChooseAuton {
 	 * 5: Portcullis
 	 */
 	public void chooseAuton(int id) {
-		main = new ArrayList<Command>();
-		if(id > 0) {
-			main.add(new MoveStraightCommand(220, .8, robot));
-		}
-		if(id > 1) {
-			ArrayList<Command> moveArms = new ArrayList<>();
-			moveArms.add(new MoveFeederArmCommand(true, 130, .6, robot));
-			threads = Arrays.copyOf(threads, 2);
-			threads[1] = new Thread(new RunCommands(moveArms));
-			threadStarts = Arrays.copyOf(threadStarts, 2);
-			threadStarts[1] = 0;
-			
-			main.add(0, new DelayCommand(2));
-		}
+		main.add(new DelayCommand(1));
+
+		main.add(new MoveStraightCommand(220, .8, robot));
+		ArrayList<Command> moveArms = new ArrayList<>();
+		moveArms.add(new MoveFeederArmCommand(true, 130, .6, robot));
+		threads = Arrays.copyOf(threads, 2);
+		threads[1] = new Thread(new RunCommands(moveArms));
+		threadStarts = Arrays.copyOf(threadStarts, 2);
+		threadStarts[1] = 0;
 		
-		if(id > 2) {
-			main.add(new MoveToPointCommand(130, 64, .6, robot));
-//			main.add(new TurnCommand(90 - Math.atan2(140, 64) * 180 / Math.PI, .6, robot));
-//			main.add(new MoveStraightCommand(Math.pow(145, .5), .6, robot));
-
-			main.add(new ShootCommand(4.0, robot));
-			
-			ArrayList<Command> moveArms = new ArrayList<>();
-//			moveArms.add(new MoveFeederArmCommand(false, 100, .6, robot));
-//
-//			threads = Arrays.copyOf(threads, 3);
-//			threads[2] = new Thread(new RunCommands(moveArms));
-//			threadStarts = Arrays.copyOf(threadStarts, 3);
-//			threadStarts[2] = 3;
-
-		}
+		main.add(new MoveToPointCommand(130, 64, .6, robot));
+		main.add(new ShootCommand(2.0, robot));
+		main.add(new MoveStraightCommand(-144, .8, robot));
+		main.add(new TurnCommand(Math.atan(64.0/130.0)*(180.0*Math.PI) + 90.0, .8, robot));
+		main.add(new MoveStraightCommand(180, .8, robot));
+		main.add(new MoveToPointCommand(-10, 60, .8, robot));
+		
+		ArrayList<Command> feeder = new ArrayList<>();
+		moveArms.add(new FeederCommand(2, robot));
+		threads = Arrays.copyOf(threads, 3);
+		threads[2] = new Thread(new RunCommands(feeder));
+		threadStarts = Arrays.copyOf(threadStarts, 3);
+		threadStarts[2] = main.size()-1;
+		
+		main.add(new TurnCommand(-180, .8, robot));
+		main.add(new MoveAlongCurveCommand(true, 185, .8, 72, robot));
+		main.add(new MoveStraightCommand(10, .6, robot));
+		main.add(new ShootCommand(2.0, robot));
+		
 		
 
 
@@ -192,7 +191,7 @@ public class ChooseAuton {
 				break;
 			case 4:	
 				main.add(new MoveToPointCommand(60, 136, .8, robot));
-				main.add(new TurnCommand(-Math.atan(60/136)-80, .6, robot));
+				main.add(new TurnCommand(-Math.atan(60.0/136.0)*(180.0/Math.PI) -63, .6, robot));
 				main.add(new MoveStraightCommand(60, .8, robot));
 				break;
 			case 5:
@@ -259,13 +258,14 @@ public class ChooseAuton {
 		int i = 0;
 		while(i < main.size()) {
 			try {
-				for(int start = 1; start < threadStarts.length; start++)
+				for(int start = 1; start < threadStarts.length; start++){ 
 					if (threadStarts[start] == i) {
 						threads[start].start();
 					}
+				}
 				main.get(i).execute();
 			}
-			catch(NullPointerException e) {e.printStackTrace();}
+			catch(Exception e) {e.printStackTrace();}
 			finally {
 				i++;
 			}
