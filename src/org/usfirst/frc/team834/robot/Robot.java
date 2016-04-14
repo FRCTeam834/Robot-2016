@@ -49,7 +49,7 @@ public class Robot extends VisualRobot{
 	private DigitalInput lightSensor = new DigitalInput(4);
 	private Encoder scissorsEncoder = new Encoder(5, 6);
 
-	
+	private KinectVision vision = KinectVision.INSTANCE;
 	private Relay lights1; //turns on LEDs
 	private Relay lights2; 
 	
@@ -95,6 +95,10 @@ public class Robot extends VisualRobot{
 	boolean feederOn = true;
 			
 	public void robotInit() {
+		vision.init();
+		vision.startDashboardFeed();
+		
+		
 		
 		sensors.put("rightEncoder", rightEncoder);
 		sensors.put("leftEncoder", leftEncoder);
