@@ -49,7 +49,7 @@ public class Robot extends VisualRobot{
 	private DigitalInput lightSensor = new DigitalInput(4);
 	private Encoder scissorsEncoder = new Encoder(5, 6);
 
-	private KinectVision vision = KinectVision.INSTANCE;
+	public KinectVision vision = KinectVision.INSTANCE;
 	private Relay lights1; //turns on LEDs
 	private Relay lights2; 
 	
@@ -78,11 +78,11 @@ public class Robot extends VisualRobot{
 	HashMap<String, SensorBase> sensors = new HashMap<>();
 	
 	//Vision Stuff added
-	boolean cam = false;
-	boolean toggleCam = false;
-	Image image;
-	Image binaryImage;
-	int session;
+//	boolean cam = false;
+//	boolean toggleCam = false;
+//	Image image;
+//	Image binaryImage;
+//	int session;
 
 //	NIVision.ParticleFilterCriteria2 criteria[] = new NIVision.ParticleFilterCriteria2[1];
 //	NIVision.ParticleFilterOptions2 filterOptions = new NIVision.ParticleFilterOptions2(0,0,1,1);
@@ -95,8 +95,8 @@ public class Robot extends VisualRobot{
 	boolean feederOn = true;
 			
 	public void robotInit() {
-		vision.init();
-		vision.startDashboardFeed();
+//		vision.init();
+//		vision.startDashboardFeed();
 		
 		
 		
@@ -124,8 +124,8 @@ public class Robot extends VisualRobot{
 		robot = new RobotDrive(motors[0], motors[1], motors[2], motors[3]);
 		robot.setSafetyEnabled(false);
 
-		rightEncoder.setDistancePerPulse(1.0/(3.02*Math.PI * 4.0) * 313/240); //inches
-		leftEncoder.setDistancePerPulse(1.0/(3.02*Math.PI * 4.0) * 313/240);
+		rightEncoder.setDistancePerPulse(1.0/(3.02*Math.PI * 4.0) * 313/240 * 6.4/7.0); //inches
+		leftEncoder.setDistancePerPulse(1.0/(3.02*Math.PI * 4.0) * 313/240 * 6.4/7.0);
 		scissorsEncoder.setDistancePerPulse(1.0/32.0);
 		
 		rightEncoder.reset();
@@ -139,11 +139,6 @@ public class Robot extends VisualRobot{
 		backArmGyro.initGyro();
 		feederArmGyro.initGyro();
 		
-		image = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
-		
-        session = NIVision.IMAQdxOpenCamera("cam0",
-                NIVision.IMAQdxCameraControlMode.CameraControlModeController);
-        NIVision.IMAQdxConfigureGrab(session);
 //		criteria[0] = new NIVision.ParticleFilterCriteria2(NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA, .5, 100.0, 0, 0);
 
 		
@@ -185,7 +180,7 @@ public class Robot extends VisualRobot{
 		
 		int obstacleID = 0;
 		int positionID = 0;
-		int leftOrRight = 0;
+		boolean leftOrRight = false;
 		
 		String temp1 = SmartDashboard.getString("DB/String 8", "0");
 		String temp2 = SmartDashboard.getString("DB/String 9", "0");
@@ -194,13 +189,13 @@ public class Robot extends VisualRobot{
 		try {
 			obstacleID = Integer.parseInt(temp1);
 			positionID = Integer.parseInt(temp2);
-			leftOrRight = Integer.parseInt(temp3);
+			leftOrRight = temp3 .equals("left");
 		} 
 		catch(NumberFormatException e) {}
 		
 		
 		ChooseAuton c = new ChooseAuton(this);
-		c.chooseAuton(obstacleID, positionID, leftOrRight == 0 ? false : true);
+		c.chooseAuton(obstacleID, positionID, leftOrRight);
 
 		
 		ArrayList<Command> main = c.getMain();
@@ -286,10 +281,10 @@ public class Robot extends VisualRobot{
 			motors[6].set(0);
 		
 		
-		if(xbox.getRawButton(7) && scissorsEncoder.getDistance() >= -100) 
-			motors[7].set(1);
-		else if(xbox.getRawButton(8) && scissorsEncoder.getDistance() <= 500) {
+		if(xbox.getRawButton(8)/* && scissorsEncoder.getDistance() >= -100*/) 
 			motors[7].set(-1);
+		else if(xbox.getRawButton(7) /*&& scissorsEncoder.getDistance() <= 500*/) {
+			motors[7].set(1);
 		}
 		else{
 			motors[7].set(0);
@@ -304,19 +299,20 @@ public class Robot extends VisualRobot{
 		else {
 			motors[8].set(0);
 		}
-		
-		
-//		SmartDashboard.putString("DB/String 0", Double.toString(rightEncoder.getDistance()));
-//		SmartDashboard.putString("DB/String 1", Double.toString(leftEncoder.getDistance()));
+//		
+//		SmartDashboard.putString("DB/String 0", Double.toString(vision.getDegreesToGoal()));
+//		SmartDashboard.putString("DB/String 0", Double.toString(scissorsEncoder.get()));
+		SmartDashboard.putString("DB/String 1", Double.toString(rightEncoder.getDistance()));
+		SmartDashboard.putString("DB/String 2", Double.toString(leftEncoder.getDistance()));
+//		SmartDashboard.putString("DB/String 3", Double.toString(rightEncoder.get()));
+//		SmartDashboard.putString("DB/String 4", Double.toString(leftEncoder.get()));
+
 //		SmartDashboard.putString("DB/String 2", Double.toString(robotGyro.getAngle()));
 //		SmartDashboard.putString("DB/String 3", Double.toString(feederArmGyro.getAngle()));
 //		SmartDashboard.putString("DB/String 4", Double.toString(backArmGyro.getAngle()));
 //		SmartDashboard.putString("DB/String 5", "Light Sensor: " + Boolean.toString(lightSensor.get()));	
-//		SmartDashboard.putString("DB/String 6", Double.toString(scissorsEncoder.getDistance()));
-
-		
-		try{
-			NIVision.IMAQdxGrab(session, image, 1);
+//		try{
+//			NIVision.IMAQdxGrab(session, image, 1);
 //		NIVision.imaqColorThreshold(binaryImage, image, 255, NIVision.ColorMode.HSV, HUE_RANGE, SAT_RANGE, VAL_RANGE);
 //
 //		int numParticles = NIVision.imaqCountParticles(binaryImage, 1);
@@ -346,49 +342,49 @@ public class Robot extends VisualRobot{
 //			double areaToConvexHullArea = ConvexHullAreaScore(particles.elementAt(0));
 //			SmartDashboard.putString("DB/String 7", "ConvexArea: " + Double.toString(areaToConvexHullArea));
 //		}
-
-		
-		
-		CameraServer.getInstance().setImage(image);
-
-		if(rightJoystick.getRawButton(2)) {
-			if(toggleCam) {
-				if(cam) {	
-					Thread t = new Thread(new Runnable() {
-						public void run() {		
-							NIVision.IMAQdxCloseCamera(session);
-					        session = NIVision.IMAQdxOpenCamera("cam1",
-					                NIVision.IMAQdxCameraControlMode.CameraControlModeController);
-					        NIVision.IMAQdxConfigureGrab(session);
-						}
-						
-					});
-			        t.start();
-				}
-				else {
-					Thread t = new Thread(new Runnable() {
-						public void run() {		
-							NIVision.IMAQdxCloseCamera(session);
-					        session = NIVision.IMAQdxOpenCamera("cam0",
-					                NIVision.IMAQdxCameraControlMode.CameraControlModeController);
-					        NIVision.IMAQdxConfigureGrab(session);
-						}
-						
-					});
-			        t.start();
-				}
-				cam = !cam;
-			}
-			toggleCam = false;
-		}
-		else {
-			toggleCam = true;
-		}
-		}
-		catch(VisionException e){
-		}
-		
-
+//
+//		
+//		
+//		CameraServer.getInstance().setImage(image);
+//
+//		if(rightJoystick.getRawButton(2)) {
+//			if(toggleCam) {
+//				if(cam) {	
+//					Thread t = new Thread(new Runnable() {
+//						public void run() {		
+//							NIVision.IMAQdxCloseCamera(session);
+//					        session = NIVision.IMAQdxOpenCamera("cam1",
+//					                NIVision.IMAQdxCameraControlMode.CameraControlModeController);
+//					        NIVision.IMAQdxConfigureGrab(session);
+//						}
+//						
+//					});
+//			        t.start();
+//				}
+//				else {
+//					Thread t = new Thread(new Runnable() {
+//						public void run() {		
+//							NIVision.IMAQdxCloseCamera(session);
+//					        session = NIVision.IMAQdxOpenCamera("cam0",
+//					                NIVision.IMAQdxCameraControlMode.CameraControlModeController);
+//					        NIVision.IMAQdxConfigureGrab(session);
+//						}
+//						
+//					});
+//			        t.start();
+//				}
+//				cam = !cam;
+//			}
+//			toggleCam = false;
+//		}
+//		else {
+//			toggleCam = true;
+//		}
+//		}
+//		catch(VisionException e){
+//		}
+//		
+//
 	}
 
 	public void setIntake(double speed)

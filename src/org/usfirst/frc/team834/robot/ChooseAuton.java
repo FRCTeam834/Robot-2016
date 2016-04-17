@@ -19,6 +19,7 @@ import commands.MoveToPointCommand;
 import commands.MoveUntilProximityCommand;
 import commands.ShootCommand;
 import commands.TurnCommand;
+import commands.TurnToGoalCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ChooseAuton {
@@ -42,7 +43,7 @@ public class ChooseAuton {
 	public void chooseAuton(int id) {
 		main.add(new DelayCommand(1));
 
-		main.add(new MoveStraightCommand(220, .8, robot));
+		main.add(new MoveStraightCommand(232.5, .9, robot));
 		ArrayList<Command> moveArms = new ArrayList<>();
 		moveArms.add(new MoveFeederArmCommand(true, 130, .6, robot));
 		threads = Arrays.copyOf(threads, 2);
@@ -50,15 +51,15 @@ public class ChooseAuton {
 		threadStarts = Arrays.copyOf(threadStarts, 2);
 		threadStarts[1] = 0;
 		
-		main.add(new MoveToPointCommand(130, 64, .6, robot));
+		main.add(new MoveToPointCommand(160, 70, .8, robot));
 		main.add(new ShootCommand(2.0, robot));
-		main.add(new MoveStraightCommand(-144, .8, robot));
+		main.add(new MoveStraightCommand(144, -.8, robot));
 		main.add(new TurnCommand(Math.atan(64.0/130.0)*(180.0*Math.PI) + 90.0, .8, robot));
 		main.add(new MoveStraightCommand(180, .8, robot));
 		main.add(new MoveToPointCommand(-10, 60, .8, robot));
 		
 		ArrayList<Command> feeder = new ArrayList<>();
-		moveArms.add(new FeederCommand(2, robot));
+		feeder.add(new FeederCommand(2, robot));
 		threads = Arrays.copyOf(threads, 3);
 		threads[2] = new Thread(new RunCommands(feeder));
 		threadStarts = Arrays.copyOf(threadStarts, 3);
@@ -118,7 +119,10 @@ public class ChooseAuton {
 	 */
 	public void chooseAuton(int obstacleID, int positionID, boolean isLeft) {
 		
-		if(obstacleID==-1) {
+		if(obstacleID==-2) {
+			main.add(new TurnToGoalCommand(2, robot));
+		}
+		else if(obstacleID==-1) {
 			chooseAuton(positionID);
 			return;
 		}
@@ -131,7 +135,7 @@ public class ChooseAuton {
 			case 1: //Portcullis
 				main.add(new MoveBackArmCommand(true, 130, .3, robot));
 				main.add(new MoveFeederArmCommand(true, 130, .5, robot));
-				main.add(new MoveStraightCommand(120, -.8, robot));
+				main.add(new MoveStraightCommand(130, -.8, robot));
 				main.add(new TurnCommand(180, .5, robot));
 				break;
 			case 2: //Cheval de Frise DO NOT USE, Experimental
@@ -152,10 +156,9 @@ public class ChooseAuton {
 				main.add(new MoveStraightCommand(120, .8, robot));
 				break;
 			default: //Anything else
-				main.add(new MoveStraightCommand(120, .8, robot));
+				main.add(new MoveStraightCommand(130, .8, robot));
 			}
-		}
-		switch(positionID) {
+			switch(positionID) {
 			case 0:
 				return;
 			case 1:	
@@ -172,8 +175,8 @@ public class ChooseAuton {
 					main.add(new MoveToPointCommand(70, 36, .8, robot));
 				}
 				else {
-					main.add(new MoveToPointCommand(174.2, 129, .8, robot));
-					main.add(new TurnCommand(-53.43256595, .6, robot));
+					main.add(new MoveToPointCommand(180.2, 135, .8, robot));
+					main.add(new TurnCommand(-42.43256595, .6, robot));
 					main.add(new MoveToPointCommand(-60.5236, 36, .8, robot));
 				}
 				break;
@@ -185,7 +188,7 @@ public class ChooseAuton {
 				}
 				else {
 					main.add(new MoveToPointCommand(118.6, 130, .8, robot));
-					main.add(new TurnCommand(-42.36324157, .6, robot));
+					main.add(new TurnCommand(-30, .6, robot));
 					main.add(new MoveToPointCommand(-52.345, 33, .8, robot));
 				}
 				break;
@@ -209,6 +212,9 @@ public class ChooseAuton {
 			threadStarts[threadStarts.length-1] = main.size()-1;
 			main.add(new ShootCommand(4, robot));
 		}
+
+		}
+		
 	}
 	
 	
