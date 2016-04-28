@@ -16,12 +16,10 @@ import commands.MoveBackArmCommand;
 import commands.MoveFeederArmCommand;
 import commands.MoveStraightCommand;
 import commands.MoveToPointCommand;
-import commands.MoveUntilProximityCommand;
 import commands.ShootCommand;
 import commands.TurnCommand;
 import commands.TurnToGoalCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 public class ChooseAuton {
 	Thread[] threads = {null};
 	int[] threadStarts = {0};
@@ -117,8 +115,8 @@ public class ChooseAuton {
 	 * 8: LowBar
 	 * For Position: Lowbar is one, towards center add one until 5
 	 */
-	public void chooseAuton(int obstacleID, int positionID, boolean isLeft) {
-		
+	public void chooseAuton(int obstacleID, int positionID) {
+		SmartDashboard.putString("DB/String 0", obstacleID +  "  " + positionID);
 		if(obstacleID==-2) {
 			main.add(new TurnToGoalCommand(2, robot));
 		}
@@ -169,28 +167,24 @@ public class ChooseAuton {
 				break;
 
 			case 2:	
-				if(isLeft) {
-	//				main.add(new MoveUntilProximityCommand(32, .8, robot));
-					main.add(new MoveStraightCommand(130, .8, robot));
-					main.add(new MoveToPointCommand(70, 36, .8, robot));
-				}
-				else {
-					main.add(new MoveToPointCommand(180.2, 135, .8, robot));
-					main.add(new TurnCommand(-42.43256595, .6, robot));
-					main.add(new MoveToPointCommand(-60.5236, 36, .8, robot));
-				}
+				main.add(new MoveStraightCommand(130, .8, robot));
+				main.add(new MoveToPointCommand(70, 36, .8, robot));
+				
+//				else {
+//					main.add(new MoveToPointCommand(180.2, 135, .8, robot));
+//					main.add(new TurnCommand(-42.43256595, .6, robot));
+//					main.add(new MoveToPointCommand(-60.5236, 36, .8, robot));
+//				}
 				break;
 			case 3:	
-				if(isLeft) {
-					main.add(new MoveStraightCommand(100, .8, robot));
-					main.add(new MoveAlongCurveCommand(true, 36, .6, 330, robot));
-					main.add(new MoveStraightCommand(30, .8, robot));
-				}
-				else {
-					main.add(new MoveToPointCommand(118.6, 130, .8, robot));
-					main.add(new TurnCommand(-30, .6, robot));
-					main.add(new MoveToPointCommand(-52.345, 33, .8, robot));
-				}
+//				if(isLeft) {
+//					main.add(new MoveStraightCommand(100, .8, robot));
+//					main.add(new MoveAlongCurveCommand(true, 36, .6, 330, robot));
+//					main.add(new MoveStraightCommand(30, .8, robot));
+//				}
+				main.add(new MoveToPointCommand(118.6, 130, .8, robot));
+				main.add(new TurnCommand(-30, .6, robot));
+				main.add(new MoveToPointCommand(-52.345, 33, .8, robot));
 				break;
 			case 4:	
 				main.add(new MoveToPointCommand(60, 136, .8, robot));
@@ -237,7 +231,7 @@ public class ChooseAuton {
 		int obsId = in.nextInt();
 		int posId = in.nextInt();
 		
-		c.chooseAuton(obsId, posId, false);
+		c.chooseAuton(obsId, posId);
 		
 		ArrayList<Command> main = c.getMain();
 		int[] threadStarts = c.getThreadStarts();

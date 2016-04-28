@@ -188,7 +188,7 @@ public enum KinectVision {
 		
 		videoImage = NIVision.imaqCreateImage(ImageType.IMAGE_U16, 8);
 		videoProcessed = NIVision.imaqCreateImage(ImageType.IMAGE_U8, 8);
-		depthImage = NIVision.imaqCreateImage(ImageType.IMAGE_U16, 0);
+		depthImage = NIVision.imaqCreateImage(ImageType.IMAGE_U16, 0);		
 		
 		dashboardImage = NIVision.imaqCreateImage(ImageType.IMAGE_U16, 0);
 		NIVision.imaqSetImageSize(dashboardImage, 1280, 500);

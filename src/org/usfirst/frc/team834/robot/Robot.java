@@ -53,6 +53,10 @@ public class Robot extends VisualRobot{
 	private Relay lights1; //turns on LEDs
 	private Relay lights2; 
 	
+
+	int LEDCounter = 0;
+	
+	
 	CANTalon[] motors = new CANTalon[9];
 	/* 0: Front Left
 	 * 1: Rear Left
@@ -184,18 +188,16 @@ public class Robot extends VisualRobot{
 		
 		String temp1 = SmartDashboard.getString("DB/String 8", "0");
 		String temp2 = SmartDashboard.getString("DB/String 9", "0");
-		String temp3 = SmartDashboard.getString("DB/String 7", "0");
 		
 		try {
 			obstacleID = Integer.parseInt(temp1);
 			positionID = Integer.parseInt(temp2);
-			leftOrRight = temp3 .equals("left");
 		} 
 		catch(NumberFormatException e) {}
 		
 		
 		ChooseAuton c = new ChooseAuton(this);
-		c.chooseAuton(obstacleID, positionID, leftOrRight);
+		c.chooseAuton(obstacleID, positionID);
 
 		
 		ArrayList<Command> main = c.getMain();
@@ -238,6 +240,22 @@ public class Robot extends VisualRobot{
 		else 
 			setBlueLights(false);
 		
+		if(!lightSensor.get()) {
+			setWhiteLights(true);
+			LEDCounter = 0;
+		}
+		else {
+			if(LEDCounter >= 25) {
+				setWhiteLights(false);
+			}
+			if(LEDCounter >= 50) {
+				setWhiteLights(true);
+				LEDCounter = 0;
+				
+			}
+		}
+		
+		
 		
 		if(feederOn) {
 			if(xbox.getRawButton(6)) {
@@ -245,16 +263,18 @@ public class Robot extends VisualRobot{
 			}
 			else if(!lightSensor.get()) {
 				motors[4].set(0.08);
+
 			}
 			else {
 				motors[4].set(.8);
+
 			}
 		}
 		else {
 			motors[4].set(0);
 		}
 		
-		if(xbox.getRawButton(5) && toggleFeeder == true) {
+		if(xbox.getRawButton(5) && toggleFeeder) {
 			feederOn = !feederOn;
 			toggleFeeder = false;
 		}
@@ -290,6 +310,7 @@ public class Robot extends VisualRobot{
 			motors[7].set(0);
 		}
 
+//		WINCH
 		if(rightJoystick.getRawButton(10)) {
 			motors[8].set(-1);
 		}
@@ -304,8 +325,7 @@ public class Robot extends VisualRobot{
 //		SmartDashboard.putString("DB/String 0", Double.toString(scissorsEncoder.get()));
 		SmartDashboard.putString("DB/String 1", Double.toString(rightEncoder.getDistance()));
 		SmartDashboard.putString("DB/String 2", Double.toString(leftEncoder.getDistance()));
-//		SmartDashboard.putString("DB/String 3", Double.toString(rightEncoder.get()));
-//		SmartDashboard.putString("DB/String 4", Double.toString(leftEncoder.get()));
+		SmartDashboard.putString("DB/String 3", Boolean.toString(toggleFeeder));
 
 //		SmartDashboard.putString("DB/String 2", Double.toString(robotGyro.getAngle()));
 //		SmartDashboard.putString("DB/String 3", Double.toString(feederArmGyro.getAngle()));
@@ -386,7 +406,8 @@ public class Robot extends VisualRobot{
 //		
 //
 	}
-
+	
+	
 	public void setIntake(double speed)
 	{
 		motors[4].set(speed);
