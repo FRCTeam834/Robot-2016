@@ -154,7 +154,7 @@ public class ChooseAuton {
 				main.add(new MoveStraightCommand(120, .8, robot));
 				break;
 			default: //Anything else
-				main.add(new MoveStraightCommand(130, .8, robot));
+				main.add(new MoveStraightCommand(133, .8, robot));
 			}
 			switch(positionID) {
 			case 0:
@@ -182,12 +182,12 @@ public class ChooseAuton {
 //					main.add(new MoveAlongCurveCommand(true, 36, .6, 330, robot));
 //					main.add(new MoveStraightCommand(30, .8, robot));
 //				}
-				main.add(new MoveToPointCommand(118.6, 130, .8, robot));
+				main.add(new MoveToPointCommand(118.6, 133, .8, robot));
 				main.add(new TurnCommand(-30, .6, robot));
 				main.add(new MoveToPointCommand(-52.345, 33, .8, robot));
 				break;
 			case 4:	
-				main.add(new MoveToPointCommand(60, 136, .8, robot));
+				main.add(new MoveToPointCommand(60, 140, .8, robot));
 				main.add(new TurnCommand(-Math.atan(60.0/136.0)*(180.0/Math.PI) -63, .6, robot));
 				main.add(new MoveStraightCommand(60, .8, robot));
 				break;

@@ -225,7 +225,6 @@ public class Robot extends VisualRobot{
 	}
 	
 	public void teleOpInit() {
-		setWhiteLights(true);
 
 	}
 
@@ -245,14 +244,15 @@ public class Robot extends VisualRobot{
 			LEDCounter = 0;
 		}
 		else {
-			if(LEDCounter >= 25) {
+			if(LEDCounter >= 8) {
 				setWhiteLights(false);
 			}
-			if(LEDCounter >= 50) {
+			if(LEDCounter >= 16) {
 				setWhiteLights(true);
 				LEDCounter = 0;
-				
 			}
+			LEDCounter++;
+
 		}
 		
 		
@@ -326,7 +326,7 @@ public class Robot extends VisualRobot{
 		SmartDashboard.putString("DB/String 1", Double.toString(rightEncoder.getDistance()));
 		SmartDashboard.putString("DB/String 2", Double.toString(leftEncoder.getDistance()));
 		SmartDashboard.putString("DB/String 3", Boolean.toString(toggleFeeder));
-
+		System.out.println(feederArmGyro.getAngle());
 //		SmartDashboard.putString("DB/String 2", Double.toString(robotGyro.getAngle()));
 //		SmartDashboard.putString("DB/String 3", Double.toString(feederArmGyro.getAngle()));
 //		SmartDashboard.putString("DB/String 4", Double.toString(backArmGyro.getAngle()));
