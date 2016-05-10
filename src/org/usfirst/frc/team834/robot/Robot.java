@@ -274,9 +274,11 @@ public class Robot extends VisualRobot{
 			motors[4].set(0);
 		}
 		
-		if(xbox.getRawButton(5) && toggleFeeder) {
-			feederOn = !feederOn;
-			toggleFeeder = false;
+		if(xbox.getRawButton(5)) {
+			if(toggleFeeder) {
+				feederOn = !feederOn;
+				toggleFeeder = false;
+			}
 		}
 		else {
 			toggleFeeder = true;
