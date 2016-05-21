@@ -20,26 +20,6 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends VisualRobot{
 	
-//	public class ParticleReport implements Comparator<ParticleReport>, Comparable<ParticleReport>{
-//		double PercentAreaToImageArea;
-//		double Area;
-//		double ConvexHullArea;
-//		double BoundingRectLeft;
-//		double BoundingRectTop;
-//		double BoundingRectRight;
-//		double BoundingRectBottom;
-//		
-//		public int compareTo(ParticleReport r)
-//		{
-//			return (int)(r.Area - this.Area);
-//		}
-//		
-//		public int compare(ParticleReport r1, ParticleReport r2)
-//		{
-//			return (int)(r1.Area - r2.Area);
-//		}
-//	};
-	
 	private ADXRS450_Gyro robotGyro = new ADXRS450_Gyro();
 	private AnalogGyro backArmGyro = new AnalogGyro(0);
 	private AnalogGyro feederArmGyro = new AnalogGyro(1);
@@ -81,26 +61,15 @@ public class Robot extends VisualRobot{
 	
 	HashMap<String, SensorBase> sensors = new HashMap<>();
 	
-	//Vision Stuff added
 //	boolean cam = false;
 //	boolean toggleCam = false;
-//	Image image;
-//	Image binaryImage;
-//	int session;
-
-//	NIVision.ParticleFilterCriteria2 criteria[] = new NIVision.ParticleFilterCriteria2[1];
-//	NIVision.ParticleFilterOptions2 filterOptions = new NIVision.ParticleFilterOptions2(0,0,1,1);
-//
-//	NIVision.Range HUE_RANGE = new NIVision.Range(128, 170);
-//	NIVision.Range SAT_RANGE = new NIVision.Range(128, 256);
-//	NIVision.Range VAL_RANGE = new NIVision.Range(128, 256);
 
 	boolean toggleFeeder = true;
 	boolean feederOn = true;
 			
 	public void robotInit() {
-//		vision.init();
-//		vision.startDashboardFeed();
+		vision.init();
+		vision.startDashboardFeed();
 		
 		
 		
@@ -184,7 +153,7 @@ public class Robot extends VisualRobot{
 		
 		int obstacleID = 0;
 		int positionID = 0;
-		boolean leftOrRight = false;
+//		boolean leftOrRight = false;
 		
 		String temp1 = SmartDashboard.getString("DB/String 8", "0");
 		String temp2 = SmartDashboard.getString("DB/String 9", "0");
@@ -322,50 +291,14 @@ public class Robot extends VisualRobot{
 		else {
 			motors[8].set(0);
 		}
-//		
-//		SmartDashboard.putString("DB/String 0", Double.toString(vision.getDegreesToGoal()));
-//		SmartDashboard.putString("DB/String 0", Double.toString(scissorsEncoder.get()));
+		
+		SmartDashboard.putString("DB/String 0", Double.toString(vision.getDegreesToGoal()));
+		SmartDashboard.putString("DB/String 0", Double.toString(scissorsEncoder.get()));
 		SmartDashboard.putString("DB/String 1", Double.toString(rightEncoder.getDistance()));
 		SmartDashboard.putString("DB/String 2", Double.toString(leftEncoder.getDistance()));
 		SmartDashboard.putString("DB/String 3", Boolean.toString(toggleFeeder));
 		System.out.println(feederArmGyro.getAngle());
-//		SmartDashboard.putString("DB/String 2", Double.toString(robotGyro.getAngle()));
-//		SmartDashboard.putString("DB/String 3", Double.toString(feederArmGyro.getAngle()));
-//		SmartDashboard.putString("DB/String 4", Double.toString(backArmGyro.getAngle()));
-//		SmartDashboard.putString("DB/String 5", "Light Sensor: " + Boolean.toString(lightSensor.get()));	
-//		try{
-//			NIVision.IMAQdxGrab(session, image, 1);
-//		NIVision.imaqColorThreshold(binaryImage, image, 255, NIVision.ColorMode.HSV, HUE_RANGE, SAT_RANGE, VAL_RANGE);
-//
-//		int numParticles = NIVision.imaqCountParticles(binaryImage, 1);
-//		SmartDashboard.putString("DB/String 6", "Number Unfiltered: "+numParticles);
-//		
-//		
-//		float areaMin = (float)SmartDashboard.getNumber("Area min %", .5);
-//		criteria[0].lower = areaMin;
-//		numParticles = NIVision.imaqCountParticles(binaryImage, 1);
-//		SmartDashboard.putString("DB/String 8", "Number filtered"+numParticles);
-//		
-//		Vector<ParticleReport> particles = new Vector<ParticleReport>();
-//		for(int particleIndex = 0; particleIndex < numParticles; particleIndex++)
-//		{
-//			ParticleReport par = new ParticleReport();
-//			par.PercentAreaToImageArea = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA);
-//			par.Area = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_AREA);
-//			par.ConvexHullArea = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_CONVEX_HULL_AREA);
-//			par.BoundingRectTop = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_TOP);
-//			par.BoundingRectLeft = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_LEFT);
-//			par.BoundingRectBottom = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_BOTTOM);
-//			par.BoundingRectRight = NIVision.imaqMeasureParticle(binaryImage, particleIndex, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_RIGHT);
-//			particles.add(par);
-//		}
-//		particles.sort(null);
-//		if(particles.elementAt(0) != null) {
-//			double areaToConvexHullArea = ConvexHullAreaScore(particles.elementAt(0));
-//			SmartDashboard.putString("DB/String 7", "ConvexArea: " + Double.toString(areaToConvexHullArea));
-//		}
-//
-//		
+
 //		
 //		CameraServer.getInstance().setImage(image);
 //
@@ -433,15 +366,4 @@ public class Robot extends VisualRobot{
 	public void setWhiteLights(boolean on) {
 		lights2.set(on ? Relay.Value.kForward : Relay.Value.kOff);
 	}
-	
-//	double ratioToScore(double ratio)
-//	{
-//		return (Math.max(0, Math.min(100*(1-Math.abs(1-ratio)), 100)));
-//	}
-//
-//	double ConvexHullAreaScore(ParticleReport report)
-//	{
-//		return ratioToScore((report.Area/report.ConvexHullArea)*1.18);
-//	}
-//
 }
