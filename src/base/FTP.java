@@ -55,5 +55,4 @@ public class FTP {
 		//Format the FTP url/address.
 		return "ftp://" + userName + "@" + host + remoteFilePath;
 	}
-	
 }

@@ -157,7 +157,7 @@ public class Robot extends VisualRobot{
 		
 		String temp1 = SmartDashboard.getString("DB/String 8", "0");
 		String temp2 = SmartDashboard.getString("DB/String 9", "0");
-		
+				
 		try {
 			obstacleID = Integer.parseInt(temp1);
 			positionID = Integer.parseInt(temp2);
@@ -167,7 +167,6 @@ public class Robot extends VisualRobot{
 		
 		ChooseAuton c = new ChooseAuton(this);
 		c.chooseAuton(obstacleID, positionID);
-
 		
 		ArrayList<Command> main = c.getMain();
 		int[] threadStarts = c.getThreadStarts();
@@ -292,7 +291,6 @@ public class Robot extends VisualRobot{
 			motors[8].set(0);
 		}
 		
-		SmartDashboard.putString("DB/String 0", Double.toString(vision.getDegreesToGoal()));
 		SmartDashboard.putString("DB/String 0", Double.toString(scissorsEncoder.get()));
 		SmartDashboard.putString("DB/String 1", Double.toString(rightEncoder.getDistance()));
 		SmartDashboard.putString("DB/String 2", Double.toString(leftEncoder.getDistance()));

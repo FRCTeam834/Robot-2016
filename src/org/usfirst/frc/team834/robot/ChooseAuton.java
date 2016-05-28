@@ -74,7 +74,7 @@ public class ChooseAuton {
 	}
 	
 	public void chooseAuton(String fName) {
-		File file = new File("/home/lvuser/" + "fName" + ".autr"); //Select file
+		File file = new File("/home/lvuser/" + fName + ".autr"); //Select file
 
 		try {
 		
