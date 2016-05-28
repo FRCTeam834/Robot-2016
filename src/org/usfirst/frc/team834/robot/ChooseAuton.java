@@ -64,7 +64,7 @@ public class ChooseAuton {
 		threadStarts[2] = main.size()-1;
 		
 		main.add(new TurnCommand(-180, .8, robot));
-		main.add(new MoveAlongCurveCommand(true, 185, .8, 72, robot));
+		main.add(new MoveAlongCurveCommand(185, .8, 72, robot));
 		main.add(new MoveStraightCommand(10, .6, robot));
 		main.add(new ShootCommand(2.0, robot));
 		

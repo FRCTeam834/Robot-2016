@@ -10,33 +10,31 @@ public class MoveAlongCurveCommand implements Command {
 	private static final long serialVersionUID = 6241191079543041229L;
 
 	private Robot robot;
-	private boolean direction; //true is cw, false is ccw
 	private double radius, speed, angle;
 	private final double WIDTH = 24.0;
 	private GyroBase gyro;
 	
 	public void edit() {
-		String[] labels = {"Direction", "Radius", "Speed", "Angle"};
-		String[] values = {Boolean.toString(direction), Double.toString(radius), Double.toString(speed), Double.toString(angle)};
+		String[] labels = {"Radius", "Speed", "Angle"};
+		String[] values = {Double.toString(radius), Double.toString(speed), Double.toString(angle)};
 		EditDialog d = new EditDialog(labels,values);		
 		
-		direction = Boolean.parseBoolean(values[0]);
-		radius = Double.parseDouble(values[1]);
-		speed = Double.parseDouble(values[2]);
-		angle = Double.parseDouble(values[3]);
+		radius = Double.parseDouble(values[0]);
+		speed = Double.parseDouble(values[1]);
+		angle = Double.parseDouble(values[2]);
+
 	}
 
 	public void execute() throws NullPointerException {
 		gyro.reset();
-		
-		if(!direction)
-			while(angle > gyro.getAngle())
+		if(angle < 0)
+			while(gyro.getAngle() > angle)
 			{
 				robot.setLeftSide(speed * (radius / (radius + WIDTH)));
 				robot.setRightSide(speed);
 			}
-		else
-			while(angle < gyro.getAngle())
+		else if(angle > 0)
+			while(gyro.getAngle() < angle )
 			{
 				robot.setLeftSide(speed);
 				robot.setRightSide(speed * (radius / (radius + WIDTH)));
@@ -64,11 +62,11 @@ public class MoveAlongCurveCommand implements Command {
 	 * @param ang The angle to move to.
 	 * @param r The robot.
 	 */
-	public MoveAlongCurveCommand(boolean dir, double rad, double s, double ang, VisualRobot r) {
-		direction = dir;
+	public MoveAlongCurveCommand(double rad, double s, double ang, VisualRobot r) {
 		radius = rad;
 		speed = s;
 		angle = ang;
 		if(r!=null) setRobot(r);
 	}
+
 }
