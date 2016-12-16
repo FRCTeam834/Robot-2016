@@ -18,7 +18,7 @@ import commands.MoveStraightCommand;
 import commands.MoveToPointCommand;
 import commands.ShootCommand;
 import commands.TurnCommand;
-import commands.TurnToGoalCommand;
+//import commands.TurnToGoalCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class ChooseAuton {
 	Thread[] threads = {null};
@@ -117,10 +117,10 @@ public class ChooseAuton {
 	 */
 	public void chooseAuton(int obstacleID, int positionID) {
 		SmartDashboard.putString("DB/String 0", obstacleID +  "  " + positionID);
-		if(obstacleID==-2) {
+		/*if(obstacleID==-2) {
 			main.add(new TurnToGoalCommand(2, robot));
 		}
-		else if(obstacleID==-1) {
+		else */if(obstacleID==-1) {
 			chooseAuton(positionID);
 			return;
 		}
